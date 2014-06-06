@@ -1,4 +1,4 @@
-Rise Vision Dashboard [![Build Status](http://107.170.20.223:8080/job/Dashboard-Client-Master-Prod/badge/icon)](http://107.170.20.223:8080/job/Dashboard-Client-Master-Prod/)
+Rise Vision Dashboard [![Build Status](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/badge/icon)](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/)
 =====
 
 First Timer?
@@ -34,7 +34,7 @@ Continuous Deployment
 ### Monitoring CI Builds
 
 The Jenkins CI portal is located at
-- [http://107.170.20.223:8080/](http://107.170.20.223:8080/)
+- [http://devtools1.risevision.com:8080](http://devtools1.risevision.com:8080)
 
 Three projects are present:
 - RiseVisionDashboardPR, which builds commits to all branches, including forks specificed in the configuration.
