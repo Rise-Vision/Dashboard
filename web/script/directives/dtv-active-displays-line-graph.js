@@ -10,7 +10,8 @@ angular.module('dashboard')
       },
       templateUrl: 'view/active-displays-line-graph.html',
       link: function (scope, element, attrs) {
-        console.log('activeDisplaysLineGraph',googleBigQueryService,scope, element, attrs);
+        console.log(googleBigQueryService,scope, element, attrs);
+        
       }
     };
   }]);
