@@ -36,15 +36,15 @@ Continuous Deployment
 The Jenkins CI portal is located at
 - [http://devtools1.risevision.com:8080](http://devtools1.risevision.com:8080)
 
-Three projects are present:
+Two projects are present:
 - RiseVisionDashboardPR, which builds commits to all branches, including forks specificed in the configuration.
 - RiseVisionDashboardProd, wich builds all commits to the master and generate a distrubiton(or artifact) specific to production environment
 
 ### Manual Deploy to Production and Staging Server
 
 Open Rundeck via the following address:
-- [***REMOVED***/project/rv-dashboard/jobs](***REMOVED***/project/rv-dashboard/jobs)
-Credentials: ***REMOVED***
+- [http://devtools1.risevision.com:4440/project/rv-dashboard/jobs](http://devtools1.risevision.com:4440/project/rv-dashboard/jobs)
+Credentials: admin/admin
 
 Click on one of the tasks:
 - Deploy to FTP - PR
