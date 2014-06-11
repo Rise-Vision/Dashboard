@@ -16,10 +16,16 @@ angular.module('dashboard')
       return authenticationService.getProfile();
     })
     .then(function(result){
-        $scope.userName = result.name;
-        $scope.userEmail = result.email;
-        $scope.userProfileImgUrl = result.picture;
-        $scope.isAuthenticated = true;
+        //TODO: once delievered, remove the rangle.io domain from below.
+        if(['risevision.com','riseholdings.com','risedisplay.com','risenext.com','rangle.io'].indexOf(result.email.split('@')[1]) < 0 ){
+          $scope.loginErrorMessage = 'Failed to Login: Your Email Domain is Not Allowed to Access This Page.';
+          return authenticationService.logout();
+        }else{
+          $scope.userName = result.name;
+          $scope.userEmail = result.email;
+          $scope.userProfileImgUrl = result.picture;
+          $scope.isAuthenticated = true;
+        }        
     })
     .then(null,function(error){
       console.error(error);      

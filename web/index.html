@@ -14,7 +14,7 @@
   
   
 </head>
-<body ng-app="dashboard" ng-controller="indexController">
+<body ng-app="dashboard" ng-controller="indexController" ng-cloak>
   <nav id="navbar" class="navbar navbar-default navbar-static-top" role="navigation" >
     <div class="container-fluid">
       <div class="navbar-header">
@@ -29,17 +29,13 @@
         <img src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
       </div>      
       <div class="collapse navbar-collapse" >
-          <div class="nav navbar-nav navbar-right" ng-show="isAuthenticated">        
-            Welcome, {{userName}}<br/>
-                     
-              <a href="" ng-click="logout()">
-                <span>Sign Out</span>
-                <i class="icon ion-log-out"></i>              
-             </a>
-            
-          </div>
-          
-          
+        <div class="nav navbar-nav navbar-right" ng-show="isAuthenticated">        
+          Welcome, {{userName}}<br/>
+          <a href="" ng-click="logout()">
+            <span>Sign Out</span>
+            <i class="icon ion-log-out"></i>              
+          </a>            
+        </div>         
       </div>      
     </div>
   </nav>
@@ -51,16 +47,13 @@
           <h4 class="modal-title">Rise Vision Dashboard</h4>
         </div>
         <div class="modal-body">
-            <form class="form col-md-12 center-block">
-                <p class="bg-danger" ng-show="loginErrorMessage">
-                  {{loginErrorMessage}}
-                </p>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg btn-block" ng-click="login()">Sign In With Google Account
-                      <i class="icon" ng-class="{'ion-log-in':!logingIn, 'ion-loading-b':logingIn}"></i>
-                    </button> 
-                </div>
-            </form>
+          <p class="bg-danger" ng-show="loginErrorMessage">
+            {{loginErrorMessage}}
+          </p>
+          <button class="btn btn-primary btn-lg btn-block" ng-click="login()">
+            Sign In With Google
+            <i class="icon" ng-class="{'ion-log-in':!logingIn, 'ion-loading-b':logingIn}"></i>
+          </button> 
         </div>
         <div class="modal-footer">
          <div>Rise Vision ©{{currentYear}}</div>

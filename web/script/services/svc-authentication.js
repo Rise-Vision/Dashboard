@@ -32,7 +32,7 @@ angular.module('dashboard')
   service.login = function(silentCheck) {
     var deferred = $q.defer();
     gapiLoader.get().then(function (gApi) {
-      gApi.auth.authorize({ client_id: CLIENT_ID, scope: SCOPES, immediate: silentCheck}, function (authResult) {
+      gApi.auth.authorize({ client_id: CLIENT_ID, scope: SCOPES, immediate: silentCheck,approval_prompt:'auto'}, function (authResult) {
         if(authResult && !authResult.error){
           token = {
                     access_token: authResult.access_token,
