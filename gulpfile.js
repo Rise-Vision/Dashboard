@@ -40,8 +40,6 @@ var env = process.env.NODE_ENV || "dev",
       "web/components/angular-mocks/angular-mocks.js",
       "web/components/angular-spinner/angular-spinner.js",
       "web/components/angular-ui-router/release/angular-ui-router.js",
-      "web/components/spin.js/spin.js",
-      "web/components/spin.js/jquery.spin.js",
       "web/script/*.js",
       "web/script/*/*.js",
       "web/script/**/*.js",
@@ -85,7 +83,10 @@ gulp.task("lint", function() {
   return gulp.src(appJSFiles)
     .pipe(jshint())
     .pipe(jshint.reporter("jshint-stylish"))
-    .pipe(jshint.reporter("fail"));
+    .pipe(jshint.reporter("fail"))
+    .on("error", function(err) {
+      throw err;
+    });  
 });
 
 gulp.task("watch", function() {
@@ -101,19 +102,19 @@ gulp.task("html", ["lint"], function () {
 });
 
 gulp.task("build-e2e", function () {
- /* gulp.src("test/gapi-mock.js")
+  gulp.src("test/gapi-mock.js")
   .pipe(gulp.dest("dist-e2e/"));
-  */
+  
   gulp.src(viewFiles).pipe(gulp.dest("dist-e2e/view"));
   gulp.src(imgFiles).pipe(gulp.dest("dist-e2e/img"));
 
   return gulp.src(htmlFiles)
-    /*.pipe(htmlreplace({
+    .pipe(htmlreplace({
       e2e: {
         src: ["gapi-mock.js"],
         tpl: "<script type=\"text/javascript\" src=\"%s\"></script>"
       }
-    }))*/
+    }))
     .pipe(usemin({
       js: [uglify({mangle:false})] //disable mangle just for $routeProvider in controllers.js
     }))
@@ -155,7 +156,7 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/script/config"));
 });
 
-gulp.task("build", ["clean", "config", "html", "view", "img", "css"]);
+gulp.task("build", ["clean", "config", "html", "view", "img", "css", "lint"]);
 
 
 gulp.task("test", function() {
@@ -188,6 +189,7 @@ gulp.task("test-ci", function() {
 
 gulp.task("watch-dev", function() {
   gulp.watch(sassFiles, ["sass"]);
+  gulp.watch(testFiles, ["lint"])
 });
 
 gulp.task("watch-dist", function() {

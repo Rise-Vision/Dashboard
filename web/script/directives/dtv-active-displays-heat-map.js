@@ -10,7 +10,7 @@ angular.module('dashboard')
       },
       templateUrl: 'view/active-displays-heat-map.html',
       link: function (scope, element, attrs) {
-        console.log('activeDisplaysHeatMap',googleBigQueryService,scope, element, attrs);
+        console.log(googleBigQueryService,scope, element, attrs);
       }
     };
   }]);

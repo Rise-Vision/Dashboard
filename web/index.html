@@ -1,99 +1,96 @@
 <!DOCTYPE html>
 <html >
 <head>
-	<title>Rise Vision Dashboard</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rise Vision Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-	<!-- Change these URLs when deploying to Production. -->
-	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-	<link href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
-
-	
-	
+  <!-- Change these URLs when deploying to Production. -->
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+  <!-- build:css css/all.min.css -->
+  <link href="css/dashboard.css" rel="stylesheet" type="text/css">
+  <!-- endbuild -->
+  
+  
 </head>
-<body ng-app="dashboard">
-	<nav class="navbar navbar-default navbar-static-top" role="navigation">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span>
-					<div class="icon-bar-container">
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</div>
-				</button>
-				<a class="navbar-brand" ui-sref="products">
-					<img src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
-				</a>
-			</div>			
-			<ul class="nav navbar-nav navbar-right" ng-show="isAuthenticated" ng-cloak>				
-				<li class="dropdown">
-					<a href="" class="dropdown-toggle">
-						<img ng-src="{{user.profile.picture}}" class="profile-pic" width="30" height="30" alt="User" />
-					</a>
-					<ul class="dropdown-menu menu-profile">
-						<li class="dropdown-header dropdown-title">
-							{{user.profile.name}}
-						</li>
-						<li class="dropdown-header">
-							{{user.profile.email}}
-						</li>
-						<li class="divider"></li>
-						<li>
-							<div class="box pull-left">
-								<a href="https://www.google.com/settings" target="_blank">
-									<i class="glyphicons cogwheels"></i>
-									<span>Account Settings</span>
-								</a>
-							</div>
-							<div class="box pull-right">
-								<a href="" ng-click="logout()">
-									<i class="glyphicons log_out"></i>
-									<span>Sign Out</span>
-								</a>
-							</div>
-						</li>
-					</ul>
-				</li>
-			</ul>
-			<ul class="nav navbar-nav navbar-right" ng-hide="isAuthenticated" ng-cloak>
-				<li>
-					<a href="" class="sign-in" ng-click="login()">
-						<span>Sign In</span>
-						<i class="glyphicons log_in"></i>
-					</a>
-				</li>
-			</ul>			
-		</div>
-	</nav>
-	<div ng-view></div>
+<body ng-app="dashboard" ng-controller="indexController" ng-cloak>
+  <nav id="navbar" class="navbar navbar-default navbar-static-top" role="navigation" >
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <div class="icon-bar-container">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </div>
+        </button>
+        <img src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
+      </div>      
+      <div class="collapse navbar-collapse" >
+        <div class="nav navbar-nav navbar-right" ng-show="isAuthenticated">        
+          Welcome, {{userName}}<br/>
+          <a href="" ng-click="logout()">
+            <span>Sign Out</span>
+            <i class="icon ion-log-out"></i>              
+          </a>            
+        </div>         
+      </div>      
+    </div>
+  </nav>
+  <div ng-view ng-show="isAuthenticated"></div>
+  <div tabindex="-1" class="modal" ng-class="{show:!isAuthenticated}" id="loginModal" role="dialog" aria-hidden="true" ng-hide="isAuthenticated" style="background-color: rgba(0, 0, 0, .5)">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">            
+          <h4 class="modal-title">Rise Vision Dashboard</h4>
+        </div>
+        <div class="modal-body">
+          <p class="bg-danger" ng-show="loginErrorMessage">
+            {{loginErrorMessage}}
+          </p>
+          <button class="btn btn-primary btn-lg btn-block" ng-click="login()">
+            Sign In With Google
+            <i class="icon" ng-class="{'ion-log-in':!logingIn, 'ion-loading-b':logingIn}"></i>
+          </button> 
+        </div>
+        <div class="modal-footer">
+         <div>Rise Vision ©{{currentYear}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular-route.min.js"></script>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+  <!-- build:js script/main.min.js -->
+  <script type="text/javascript" src="script/app.js"></script>
+  <script type="text/javascript" src="script/ctr-index.js"></script>
+
+  <script type="text/javascript" src="script/services/svc-google-big-query.js"></script>
+  <script type="text/javascript" src="script/services/svc-authentication.js"></script>
+  <script type="text/javascript" src="script/services/svc-gapi.js"></script>
+  <script type="text/javascript" src="script/services/svc-local-storage.js"></script>
 
 
 
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular.min.js"></script>
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.4/angular-route.min.js"></script>
-	<script type="text/javascript" src="//apis.google.com/js/client.js?onload=handleClientJSLoad"></script>
-	
 
-	<!-- build:js script/main.min.js -->
-	<script type="text/javascript" src="script/app.js"></script>
-	<script type="text/javascript" src="script/ctr-main.js"></script>
+  <script type="text/javascript" src="script/directives/dtv-active-displays-heat-map.js"></script>
+  <script type="text/javascript" src="script/directives/dtv-active-displays-line-graph.js"></script>
+  <!-- endbuild -->
+  
+  
 
-	<script type="text/javascript" src="script/services/svc-google-big-query.js"></script>
-	<script type="text/javascript" src="script/services/svc-authentication.js"></script>
+  <!--build:e2e -->
+  <!-- endbuild -->
 
+  <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientJSLoad"></script>
 
-	<script type="text/javascript" src="script/directives/dtv-active-displays-heat-map.js"></script>
-	<script type="text/javascript" src="script/directives/dtv-active-displays-line-graph.js"></script>
-	<!-- endbuild -->
-	
-	
-
-	<!--build:e2e -->
-	<!-- endbuild -->
 
 </body>
 </html>
