@@ -40,6 +40,7 @@ var env = process.env.NODE_ENV || "dev",
       "web/components/angular-mocks/angular-mocks.js",
       "web/components/angular-spinner/angular-spinner.js",
       "web/components/angular-ui-router/release/angular-ui-router.js",
+      "web/components/lodash/dist/lodash.js",
       "web/script/*.js",
       "web/script/*/*.js",
       "web/script/**/*.js",
@@ -79,7 +80,8 @@ gulp.task("clean", function() {
     .pipe(clean({force: true}));
 });
 
-gulp.task("lint", function() {
+//throw any errors -> intended for ci builds
+gulp.task("lint-throw", function() {
   return gulp.src(appJSFiles)
     .pipe(jshint())
     .pipe(jshint.reporter("jshint-stylish"))
@@ -87,6 +89,12 @@ gulp.task("lint", function() {
     .on("error", function(err) {
       throw err;
     });  
+});
+
+gulp.task("lint", function() {
+  return gulp.src(appJSFiles)
+    .pipe(jshint())
+    .pipe(jshint.reporter("jshint-stylish")); 
 });
 
 gulp.task("watch", function() {
@@ -156,7 +164,7 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/script/config"));
 });
 
-gulp.task("build", ["clean", "config", "html", "view", "img", "css", "lint"]);
+gulp.task("build", ["clean", "config", "html", "view", "img", "css", "lint-throw"]);
 
 
 gulp.task("test", function() {
@@ -199,7 +207,7 @@ gulp.task("watch-dist", function() {
   gulp.watch(sassFiles, ["css"]);
 });
  
-gulp.task("server", ["sass", "watch", "watch-dev"], function() {
+gulp.task("server", ["sass","lint", "watch", "watch-dev"], function() {
   httpServer = connect.server({
     root: "web",
     port: 8000,

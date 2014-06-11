@@ -13,7 +13,7 @@ angular.module('dashboard')
       isUserAuthenticated = false,//holds the user's internal authentication state
       token = localStorageService.get('token'),//if the user already has a token in localstorage, use it
       CLIENT_ID = '810443916453-vjmrchhc179t6na1rgq1v8qdvqtab0h0.apps.googleusercontent.com',
-      SCOPES = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+      SCOPES = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform',
       LOCAL_STORAGE_KEY = 'token';
 
   //is the user authenticated?
@@ -69,9 +69,9 @@ angular.module('dashboard')
   //get the current authorized user's google profile
   service.getProfile = function () {
     var deferred = $q.defer();
-    oauthAPILoader.get().then(function (gApi) {
-      var request = gApi.client.oauth2.userinfo.get({});
-      request.execute(function (resp) {
+    oauthAPILoader.get().then(function (oauth2) {
+      oauth2.userinfo.get({})
+      .execute(function (resp) {
         deferred.resolve(resp);
       });
     });

@@ -9,6 +9,9 @@
     "bootstrap": ">=3",
     "q": "1.0.1",
     "angular-spinner": "~0.4.0",
-    "angular-ui-router": "~0.2.10"
+    "angular-ui-router": "~0.2.10",
+    "lodash": "~2.4.1",
+    "chartjs": "*",
+    "nvd3": "~1.1.15-beta"
   }
 }
