@@ -12,31 +12,61 @@ function handleClientJSLoad() {
 }
 /* jshint ignore:end */
 
+'use strict';
+
 angular.module("gapi", [])
   .factory("oauthAPILoader", ["gapiLoader", "$q", function (gapiLoader, $q) {
     var deferred = $q.defer();
     var promise;
 
-    var factory = {
+    return {
+      //Loads the OAuth v2 client
+      //returns a promise that resolves to the js client
       get: function () {
         if (!promise) {
           promise = deferred.promise;
           gapiLoader.get().then(function (gApi) {
             gApi.client.load("oauth2", "v2", function () {
-                console.log("OAuth2 API is loaded");
-                deferred.resolve(gApi);
+              if(gApi.client && gApi.client.oauth2){
+                deferred.resolve(gApi.client.oauth2);
+              }else{
+                deferred.reject('failed to load OAuth2');
+              }                
             });
           });
         }
         return promise;
       }
-    };
-    return factory;
+    };    
+  }])//oauthAPILoader  
 
-  }])  
-  
+  .factory('bigQueryAPILoader',['gapiLoader','$q',
+    function(gapiLoader,$q){
+      return {
+        //Loads the BigQuery client
+        //returns a promise that resolves to the js client
+        get : function(){
+          var deferred = $q.defer();
+
+          gapiLoader.get()
+          .then(function (gApi){
+            gApi.client.load('bigquery','v2',function(){
+              if(gApi.client && gApi.client.bigquery){
+                deferred.resolve(gApi.client.bigquery);
+              }else{
+                deferred.reject('failed to load big query api');
+              }
+            });
+          });//GET THEN
+          return deferred.promise;
+        }
+      };
+  }])//bigQueryAPILoader
+
   .factory("gapiLoader", ["$q", "$window", function ($q, $window) {
     return {
+      //Loads Google's API JS library into our Angular App politely
+      //returns a promise that resovles to the lib
       get: function () {
         var deferred = $q.defer(), gapiLoaded;
 
@@ -55,4 +85,4 @@ angular.module("gapi", [])
         return deferred.promise;
       }
     };
-  }]);
+  }]);//gapiLoader

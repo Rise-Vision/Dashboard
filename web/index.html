@@ -8,6 +8,8 @@
   <!-- Change these URLs when deploying to Production. -->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
+
   <!-- build:css css/all.min.css -->
   <link href="css/dashboard.css" rel="stylesheet" type="text/css">
   <!-- endbuild -->
@@ -39,7 +41,7 @@
       </div>      
     </div>
   </nav>
-  <div ng-view ng-show="isAuthenticated"></div>
+  <div ng-view ng-if="isAuthenticated"></div>
   <div tabindex="-1" class="modal" ng-class="{show:!isAuthenticated}" id="loginModal" role="dialog" aria-hidden="true" ng-hide="isAuthenticated" style="background-color: rgba(0, 0, 0, .5)">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -69,6 +71,11 @@
   <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
   <!-- build:js script/main.min.js -->
+
+  <script type="text/javascript" src="components/lodash/dist/lodash.js"></script>
+  <script type="text/javascript" src="components/d3/d3.js"></script>
+  <script type="text/javascript" src="components/nvd3/nv.d3.js"></script>
+
   <script type="text/javascript" src="script/app.js"></script>
   <script type="text/javascript" src="script/ctr-index.js"></script>
 
@@ -77,20 +84,11 @@
   <script type="text/javascript" src="script/services/svc-gapi.js"></script>
   <script type="text/javascript" src="script/services/svc-local-storage.js"></script>
 
-
-
-
   <script type="text/javascript" src="script/directives/dtv-active-displays-heat-map.js"></script>
   <script type="text/javascript" src="script/directives/dtv-active-displays-line-graph.js"></script>
   <!-- endbuild -->
-  
-  
-
+  <script type="text/javascript" src="//apis.google.com/js/client.js?onload=handleClientJSLoad"></script>
   <!--build:e2e -->
   <!-- endbuild -->
-
-  <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientJSLoad"></script>
-
-
 </body>
 </html>

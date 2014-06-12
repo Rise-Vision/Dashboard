@@ -1,1 +1,13 @@
-ACTIVE DISPLAYS LINE GRAPH
+
+<div style="text-align: center">
+  <h3>Daily Active Displays</h3>
+  <br>
+  <svg id="chart" style="height: 500px; width: 100%;" ng-hide="showSpinner || errorMessage"></svg>
+  <div ng-if="showSpinner">
+    <h5>Loading....</h5>
+    <i class="icon ion-loading-b" ></i>
+  </div>
+  <div class="bg-danger" ng-show="errorMessage" >
+    <h5>{{errorMessage}}</h5>
+  </div>
+</div>

@@ -4,7 +4,7 @@ angular.module('dashboard')
   .directive('activeDisplaysHeatMap', ['googleBigQueryService',
     function(googleBigQueryService){
       return {
-      restrict: 'E',
+      restrict: 'A',
       scope: {
         'ngModel': '=',
       },

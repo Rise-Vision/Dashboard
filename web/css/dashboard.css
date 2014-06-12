@@ -1,0 +1,19 @@
+#navbar {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #fcfcfc;
+  border-color: #f3f3f3; }
+
+#loginModal .modal-dialog {
+  margin: 87px auto; }
+#loginModal .modal-title {
+  text-align: center; }
+#loginModal .modal-content {
+  background-color: rgba(255, 255, 255, 0.95); }
+  #loginModal .modal-content .modal-body {
+    text-align: center; }
+    #loginModal .modal-content .modal-body .btn-primary {
+      background-color: #2D60AD;
+      border-color: #172F55; }
+  #loginModal .modal-content .modal-footer {
+    margin-top: 0; }
