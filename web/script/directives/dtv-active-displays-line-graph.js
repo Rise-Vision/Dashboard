@@ -27,7 +27,6 @@ angular.module('dashboard')
                                   showYAxis: true,
                                   transitionDuration: 250
                                 });
-                  // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly,
 
                   chart.xAxis
                   .axisLabel('Date')
