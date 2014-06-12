@@ -18,23 +18,21 @@ angular.module('dashboard')
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
+                                .x(function (d) { return d.x; })
+                                .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options({
-                                  margin: {left: 100, bottom: 100},
+                                  margin: {left: 100, bottom: 100,right:50},
                                   showXAxis: true,
                                   showYAxis: true,
                                   transitionDuration: 250
                                 });
 
-                  // chart sub-models (ie. xAxis, yAxis, etc) when accessed directly,
-                  //return themselves, not the parent chart, so need to chain separately
                   chart.xAxis
-                    .axisLabel("Date")
-                    .tickFormat( function(d) {
-                        var date = new Date(d);
-                        return date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate();
-                      });
-
+                  .axisLabel('Date')
+                  .tickFormat(function (d) {
+                    return d3.time.format("%d-%m-%y")(new Date(d));
+                  });
                   chart.yAxis
                     .axisLabel('Displays')
                     .tickFormat(d3.format(',.i'));

@@ -29,10 +29,14 @@ angular.module('dashboard')
           {
             projectId : 'rise-core-log',
             /* jshint ignore:start */            
-            query : "select date, count(distinct displayId, 1000000) from (select DATE(startTime) as date, displayId from [coreLog.displayRequests] where appId='s~rvaserver2') group by date order by date desc"
+            query : "select date, count(distinct displayId, 1000000) from (select DATE(startTime) as date, displayId from [coreLog.displayRequests] where appId='s~rvaserver2') group by date order by date"
             /* jshint ignore:end */
           })         
           .execute(function (result) {
+            if(result.error){
+              deferred.reject(result.error);
+              return;
+            }
             try{
                 var displays = [],
                     normalizedDisplays = [];
@@ -48,15 +52,17 @@ angular.module('dashboard')
                 var displaysLength = displays.length;
                 for(var i=0; i < displaysLength; i++ ) {
                   var past30 = 0;
-                  for(var j=i; (j < i + 30) && (j < displaysLength); j++) {
+                  var j=i;
+                  for(; (j >= 0) && (j > i - 30); j--) {
                     past30 += displays[j].y;
                   }//for j
+
                   normalizedDisplays.push({ x : displays[i].x,
-                                            y : Math.floor(past30/Math.min(30,displaysLength-i))});
+                                            y : Math.round(past30/Math.min(30,i+1))});
                 }//for i
 
-                deferred.resolve([{ key : "Displays", values : displays },
-                                  { key : "Normalized Displays", values : normalizedDisplays }]);
+                deferred.resolve([{ key : "Actual", values : displays },
+                                  { key : "Average", values : normalizedDisplays }]);
             }catch(e){
               deferred.reject(e);
             }
