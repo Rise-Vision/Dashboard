@@ -10,6 +10,8 @@
   <link href="//code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
   <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
 
+  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+ 
   <!-- build:css css/all.min.css -->
   <link href="css/dashboard.css" rel="stylesheet" type="text/css">
   <!-- endbuild -->
@@ -72,9 +74,10 @@
 
   <!-- build:js script/main.min.js -->
 
-  <script type="text/javascript" src="components/lodash/dist/lodash.js"></script>
+  <script type="text/javascript" src="components/lodash/dist/lodash.underscore.js"></script>
   <script type="text/javascript" src="components/d3/d3.js"></script>
   <script type="text/javascript" src="components/nvd3/nv.d3.js"></script>
+  <script type="text/javascript" src="lib/markerclusterer_compiled.js"></script>
 
   <script type="text/javascript" src="script/app.js"></script>
   <script type="text/javascript" src="script/ctr-index.js"></script>
@@ -83,6 +86,8 @@
   <script type="text/javascript" src="script/services/svc-authentication.js"></script>
   <script type="text/javascript" src="script/services/svc-gapi.js"></script>
   <script type="text/javascript" src="script/services/svc-local-storage.js"></script>
+  <script type="text/javascript" src="script/services/svc-marker-cluster.js"></script>
+
 
   <script type="text/javascript" src="script/directives/dtv-active-displays-heat-map.js"></script>
   <script type="text/javascript" src="script/directives/dtv-active-displays-line-graph.js"></script>
