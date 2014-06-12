@@ -29,10 +29,14 @@ angular.module('dashboard')
           {
             projectId : 'rise-core-log',
             /* jshint ignore:start */            
-            query : "select date, count(distinct displayId, 1000000) from (select DATE(startTime) as date, displayId from [coreLog.displayRequests] where appId='s~rvaserver2') group by date order by date desc"
+            query : "select date, count(distinct displayId, 1000000) from (select DATE(startTime) as date, displayId from [coreLog.displayRequests] where appId='s~rvaserver2') group by date order by date"
             /* jshint ignore:end */
           })         
           .execute(function (result) {
+            if(result.error){
+              deferred.reject(result.error);
+              return;
+            }
             try{
                 var displays = [],
                     normalizedDisplays = [];
@@ -55,8 +59,8 @@ angular.module('dashboard')
                                             y : Math.floor(past30/Math.min(30,displaysLength-i))});
                 }//for i
 
-                deferred.resolve([{ key : "Displays", values : displays },
-                                  { key : "Normalized Displays", values : normalizedDisplays }]);
+                deferred.resolve([{ key : "Actual", values : displays },
+                                  { key : "Average", values : normalizedDisplays }]);
             }catch(e){
               deferred.reject(e);
             }
