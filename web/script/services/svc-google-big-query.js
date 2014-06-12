@@ -52,11 +52,13 @@ angular.module('dashboard')
                 var displaysLength = displays.length;
                 for(var i=0; i < displaysLength; i++ ) {
                   var past30 = 0;
-                  for(var j=i; (j < i + 30) && (j < displaysLength); j++) {
+                  var j=i;
+                  for(; (j >= 0) && (j > i - 30); j--) {
                     past30 += displays[j].y;
                   }//for j
+
                   normalizedDisplays.push({ x : displays[i].x,
-                                            y : Math.floor(past30/Math.min(30,displaysLength-i))});
+                                            y : Math.round(past30/Math.min(30,i+1))});
                 }//for i
 
                 deferred.resolve([{ key : "Actual", values : displays },
