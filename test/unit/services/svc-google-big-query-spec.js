@@ -1,5 +1,6 @@
 /*jshint expr:true */
 "use strict";
+/*global _:false */
 
 describe("Services: google big query", function() {
   var googleBigQueryService = {};
@@ -26,6 +27,30 @@ describe("Services: google big query", function() {
                                 f : [
                                       {v:"2014-01-01"},
                                       {v:8999}
+                                    ]
+                              },
+                              { 
+                                f : [
+                                      {v:"2014-01-01"},
+                                      {v:8991}
+                                    ]
+                              },
+                              { 
+                                f : [
+                                      {v:"2014-01-01"},
+                                      {v:899}
+                                    ]
+                              },
+                              { 
+                                f : [
+                                      {v:"2014-01-01"},
+                                      {v:89}
+                                    ]
+                              },
+                              { 
+                                f : [
+                                      {v:"2014-01-01"},
+                                      {v:8}
                                     ]
                               }
                             ]
@@ -66,6 +91,14 @@ describe("Services: google big query", function() {
                 expect(result[0].values[0].y).to.a('number');
                 expect(result[0].values[0].y).to.equal(result[1].values[0].y);
                 expect(result[0].values[0].x).to.a('Date');
+                expect(result[0].values.length).to.be.below(30);
+                var sum = 0;
+                for (var i=0; i < result[0].values.length; i++){
+                  sum += result[0].values[i].y;
+                }
+                
+                expect(_.last(result[1].values).y).to.equal(Math.round(sum/result[0].values.length));
+
                 done();
               })
               .then(null,done);
