@@ -12,7 +12,8 @@ angular.module('dashboard')
       authenticated = $q.defer(),
       isUserAuthenticated = false,//holds the user's internal authentication state
       token = localStorageService.get('token'),//if the user already has a token in localstorage, use it
-      CLIENT_ID = '810443916453-vjmrchhc179t6na1rgq1v8qdvqtab0h0.apps.googleusercontent.com',
+      //CLIENT_ID = '193588728592-9h8im0urqe13qd0mev55sdcroq9j16e9.apps.googleusercontent.com',
+      CLIENT_ID = '193588728592-9h8im0urqe13qd0mev55sdcroq9j16e9.apps.googleusercontent.com',
       SCOPES = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform',
       LOCAL_STORAGE_KEY = 'token';
 

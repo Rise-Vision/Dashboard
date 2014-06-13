@@ -1,1 +1,14 @@
-ACTIVE DISPLAYS HEAT MAP
+
+<div style="text-align: center">
+  <h3>Active Display 30 Days Map</h3>
+  <br>
+    <div id="map-canvas" style="height: 435px;" ng-hide="errorMessage"/>
+
+  <div ng-if="showSpinner">
+    <h5>Loading (This May Take up to 45 Seconds)....</h5>
+    <i class="icon ion-loading-b" ></i>
+  </div>
+  <div class="bg-danger" ng-show="errorMessage" >
+    <h5>{{errorMessage}}</h5>
+  </div>
+</div>
