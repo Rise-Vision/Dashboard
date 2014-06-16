@@ -26,15 +26,17 @@ angular.module('dashboard')
         .then(function(result){
           var markers = [];
           angular.forEach(result,function(item){
-            var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(item.lat,item.lng),
-                title:item.id
-            });
+            var marker = new google.maps.Marker(
+                              {
+                                position: new google.maps.LatLng(item.lat,item.lng),
+                                title:item.id                                
+                              });
             markers.push(marker);
           });
           var markerCluster = new MarkerClusterer(map, markers);
           
           markerCluster.setCalculator(markerClusterService.getClusterCalculator());
+          markerCluster.setMinimumClusterSize(1);
         })
         .then(null,function(error){
           console.error(error);
