@@ -5,18 +5,12 @@
 */
 
 angular.module('dashboard')
-.factory('authenticationService', ['$q','gapiLoader', 'oauthAPILoader','$interval','localStorageService',
-  function($q, gapiLoader,oauthAPILoader,$interval,localStorageService) {
+.factory('authenticationService', ['$q','$http','$window','API_ROOT',
+  function($q,$http,$window,API_ROOT) {
   var service = {},
-      autoAuthRefreshInterval,
       authenticated = $q.defer(),
-      isUserAuthenticated = false,//holds the user's internal authentication state
-      token = localStorageService.get('token'),//if the user already has a token in localstorage, use it
-      //CLIENT_ID = '193588728592-9h8im0urqe13qd0mev55sdcroq9j16e9.apps.googleusercontent.com',
-      CLIENT_ID = '193588728592-9h8im0urqe13qd0mev55sdcroq9j16e9.apps.googleusercontent.com',
-      SCOPES = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform',
-      LOCAL_STORAGE_KEY = 'token';
-
+      isUserAuthenticated = false;//holds the user's internal authentication state
+    
   //is the user authenticated?
   //true -> yes
   service.isUserAuthenticated = function(){
@@ -30,76 +24,41 @@ angular.module('dashboard')
   };
 
   //login in the user. if successful, put the token in localStorage, and set the user to authenticated
-  service.login = function(silentCheck) {
+  service.login = function() {
+    $window.location.replace(API_ROOT+'/auth/login');
     var deferred = $q.defer();
-    gapiLoader.get().then(function (gApi) {
-      gApi.auth.authorize({ client_id: CLIENT_ID, scope: SCOPES, immediate: silentCheck,approval_prompt:'auto'}, function (authResult) {
-        if(authResult && !authResult.error){
-          token = {
-                    access_token: authResult.access_token,
-                    expires_in:authResult.expires_in,
-                    state:authResult.state
-                  };
-          
-          localStorageService.set(LOCAL_STORAGE_KEY,token);
-          isUserAuthenticated = true;
-          authenticated.resolve();
-          deferred.resolve(authResult);
-        }else{
-          localStorageService.remove(LOCAL_STORAGE_KEY);
-          deferred.reject(authResult);
-        }
-      });
-    });
+     $http.get(API_ROOT + '/auth/user')
+                .then(function(result){
+
+                  authenticated.resolve(result.data);
+                  isUserAuthenticated = true;
+                  deferred.resolve(result.data);
+                });
     return deferred.promise;
   };
 
   //logout the user and cancel the auto refresh
   service.logout = function(){
-    var deferred = $q.defer();
-
-    $interval.cancel(autoAuthRefreshInterval);
-    localStorageService.remove(LOCAL_STORAGE_KEY);
-
-    token = null;
-    isUserAuthenticated = false;
-    deferred.resolve();
-    return deferred.promise;
+    return $http.post(API_ROOT+'/auth/logout')
+                .then(function(){
+                    isUserAuthenticated = false;
+                  });
   };     
 
   //get the current authorized user's google profile
   service.getProfile = function () {
-    var deferred = $q.defer();
-    oauthAPILoader.get().then(function (oauth2) {
-      oauth2.userinfo.get({})
-      .execute(function (resp) {
-        deferred.resolve(resp);
-      });
-    });
-    return deferred.promise;
+    return authenticated.promise;
+
   };
 
-  //set up the service to auto refresh token once the user signs in
-  service.whenAuthenticated()
-  .then(function(){
-    autoAuthRefreshInterval = $interval(function(){ service.checkAuth(true); }, 55 * 60 * 1000);//every 55 mins
-  });
 
-  //see if there was a token in localstorage, use it
-  //if invalid, user will have to login (which overwrites it)
-  gapiLoader.get()
-  .then(function (gApi) {
-    if(typeof token !== 'undefined' && token){
-      gApi.auth.setToken(token);
-      
-      //see if auth token is still valid
-      service.getProfile()
-      .then(function(result){
-        if(result &&!result.error){
-          authenticated.resolve(result);
-          isUserAuthenticated = true;
-        }
-      });
+  $http.get('/api/auth/user')
+  .then(function(result){
+    authenticated.resolve(result.data);
+    isUserAuthenticated = true;
+  },function(error){
+    if(error.status !== 401){
+      console.error(error);
     }
   });
 
