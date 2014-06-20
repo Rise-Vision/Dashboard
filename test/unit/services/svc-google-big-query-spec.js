@@ -7,13 +7,14 @@ describe("Services: google big query", function() {
 
   beforeEach(module('dashboard'));
   beforeEach(module(function ($provide) {
+    $provide.constant('API_ROOT','');
     $provide.service("$q", function() {return Q;});
     $provide.service('$http',function(){
       return{
         get:function(url){
           var deferred = Q.defer();
           switch(url){
-            case '/api/query/googleBigQuery/getActiveDisplaysForLineChart':
+            case '/query/googleBigQuery/getActiveDisplaysForLineChart':
               deferred.resolve({data:{
                                 jobComplete : true,                          
                                 rows:[
@@ -50,7 +51,7 @@ describe("Services: google big query", function() {
                                     ]
                               }});
               break;
-            case  '/api/query/googleBigQuery/getActiveDisplaysForMap':           
+            case  '/query/googleBigQuery/getActiveDisplaysForMap':           
               deferred.resolve({data:{
                                 jobComplete : true,
                                 rows:[

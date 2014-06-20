@@ -4,12 +4,14 @@ describe("Services: Gooddata Query", function() {
   beforeEach(module('dashboard'));
   beforeEach(module(function ($provide) {
     $provide.service("$q", function() {return Q;});
+    $provide.constant('API_ROOT','');
+
     $provide.service('$http',function(){
       return{
         get:function(url){
           var deferred = Q.defer();
           switch(url){
-            case '/api/query/gooddata/getZenDeskResponseTime':
+            case '/query/gooddata/getZenDeskResponseTime':
             /* jshint ignore:start */            
              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Mar 2014","9.5500000000000000"\n"Apr 2014","73.0054347826086957"\n"May 2014","9.9652777777777778"\n"Jun 2014","14.6138613861386139"\n'});
             /* jshint ignore:end */            
