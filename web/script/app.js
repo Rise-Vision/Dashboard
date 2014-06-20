@@ -5,7 +5,7 @@ angular.module('dashboard', ['ngRoute'])
 .run(function () { 
    // console.log('started');
 })
-.constant('API_ROOT','/api')
+.constant('API_ROOT','http://devtools1.risevision.com:5000/api')
 .config(function($routeProvider) {
   $routeProvider
    .when('/', {
