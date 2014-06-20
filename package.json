@@ -40,7 +40,7 @@
   "scripts": {
     "dev-install": "npm install && bower install && gulp config && gulp sass",
     "dev": "gulp server",
-    "ci-build": "npm install && bower install && gulp test-ci && gulp build"
+    "ci-build": "npm install --production && bower install && gulp test-ci && gulp build"
   },
   "author": "Rise",
   "devDependencies": {
