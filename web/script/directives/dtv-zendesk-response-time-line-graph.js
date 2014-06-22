@@ -30,7 +30,7 @@ angular.module('dashboard')
                   chart.xAxis
                   .axisLabel('Month')
                   .tickFormat(function (d) {
-                    return d3.time.format("%m-%y")(new Date(d));
+                    return d3.time.format("%d-%m-%y")(new Date(d));
                   });
                   chart.yAxis
                     .axisLabel('mins')
