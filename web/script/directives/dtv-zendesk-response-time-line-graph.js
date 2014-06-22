@@ -3,18 +3,17 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('activeDisplaysLineGraph', ['googleBigQueryService',
-    function(googleBigQueryService){
+  .directive('zendeskResponseTimeLineGraph', ['gooddataQueryService',
+    function(gooddataQueryService){
      return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'view/active-displays-line-graph.html',
+      templateUrl: 'view/zendesk-response-time-line-graph.html',
       link: function (scope) {   
-            scope.showSpinner = true;   
-             googleBigQueryService.getActiveDisplaysForLineChart()
+            scope.showSpinner = true;  
+             gooddataQueryService.getZendeskResponseTimeForLineGraph()
               .then(function(result){
                 result[0].color = "#45B864";
-                result[1].color = "#2D60AD";
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
@@ -25,19 +24,19 @@ angular.module('dashboard')
                                   margin: {left: 70, bottom: 50,right:50},
                                   showXAxis: true,
                                   showYAxis: true,
-                                  transitionDuration: 250
+                                  transitionDuration: 250                                  
                                 });
 
                   chart.xAxis
-                  .axisLabel('Date')
+                  .axisLabel('Month')
                   .tickFormat(function (d) {
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
                   chart.yAxis
-                    .axisLabel('Displays')
+                    .axisLabel('mins')
                     .tickFormat(d3.format(',.i'));
 
-                  d3.select('#chart')
+                  d3.select('#zendeskResponseTimeChart')
                     .datum(result)
                     .call(chart);
 

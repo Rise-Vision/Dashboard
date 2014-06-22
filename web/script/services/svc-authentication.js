@@ -52,7 +52,7 @@ angular.module('dashboard')
   };
 
 
-  $http.get('/api/auth/user')
+  $http.get(API_ROOT+'/auth/user')
   .then(function(result){
     authenticated.resolve(result.data);
     isUserAuthenticated = true;

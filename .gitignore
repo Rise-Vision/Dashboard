@@ -5,4 +5,5 @@ README.html
 dist-e2e
 dist
 test_reports
+web/components
 web/css/dashboard.css

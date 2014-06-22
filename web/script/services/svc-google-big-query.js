@@ -14,7 +14,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForMap = function() {
     var deferred = $q.defer();
 
-    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap')
+    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap',{timeout:45000})
       .then(function(response){
         var result = response.data;
         if(result.error || !result.jobComplete){
@@ -46,7 +46,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForLineChart = function(){
     var deferred = $q.defer();
     
-   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart')
+   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:20000})
        .then(function(response){
           var result = response.data;
           if(result.error|| !result.jobComplete){
@@ -60,7 +60,7 @@ angular.module('dashboard')
                                 function(item){
                                   return { 
                                     x : new Date(item.f[0].v),
-                                    y : parseInt(item.f[1].v)
+                                    y : Math.round(parseInt(item.f[1].v))
                                   };
                                 });
               
@@ -68,8 +68,7 @@ angular.module('dashboard')
               var displaysLength = displays.length;
               for(var i=0; i < displaysLength; i++ ) {
                 var past30 = 0;
-                var j=i;
-                for(; (j >= 0) && (j > i - 30); j--) {
+                for(var j = i; (j >= 0) && (j > i - 30); j--) {
                   past30 += displays[j].y;
                 }//for j
 
