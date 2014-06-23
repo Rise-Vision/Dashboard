@@ -3,13 +3,15 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('activeDisplaysLineGraph', ['googleBigQueryService',
-    function(googleBigQueryService){
+  .directive('activeDisplaysLineGraph', ['googleBigQueryService','commonMetricService',
+    function(googleBigQueryService,commonMetricService){
      return {
       restrict: 'E',
       scope: {},
-      templateUrl: 'view/active-displays-line-graph.html',
-      link: function (scope) {   
+      templateUrl: 'view/common-line-chart.html',
+      link: function (scope) {
+            scope.title = 'Active Displays';
+            scope.id = commonMetricService.generateChartId('activeDisplaysLineChart');
             scope.showSpinner = true;   
              googleBigQueryService.getActiveDisplaysForLineChart()
               .then(function(result){
@@ -37,7 +39,7 @@ angular.module('dashboard')
                     .axisLabel('Displays')
                     .tickFormat(d3.format(',.i'));
 
-                  d3.select('#chart')
+                  d3.select('#'+scope.id)
                     .datum(result)
                     .call(chart);
 
@@ -48,7 +50,7 @@ angular.module('dashboard')
               })//THEN
               .then(null,function(error){
                 console.error(error);
-                scope.errorMessage = 'Failed to Load. See Console For More Details';
+                scope.errorMessage = commonMetricService.generateErrorMessage(error);
               })
               .finally(function(){
                 scope.showSpinner = false;
