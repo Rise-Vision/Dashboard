@@ -30,7 +30,7 @@ angular.module('dashboard')
                                 });
 
                   chart.xAxis
-                  .axisLabel('Month')
+                  .axisLabel('Date')
                   .tickFormat(function (d) {
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
@@ -49,7 +49,7 @@ angular.module('dashboard')
               })//THEN
               .then(null,function(error){
                 console.error(error);
-                scope.errorMessage = 'Failed to Load. See Console For More Details';
+                scope.errorMessage = commonMetricService.generateErrorMessage(error);
               })
               .finally(function(){
                 scope.showSpinner = false;

@@ -13,7 +13,7 @@ angular.module('dashboard')
             scope.title = 'Topic Response Time';
             scope.id = commonMetricService.generateChartId('topicResponseTimeChart');
             scope.showSpinner = true;  
-             gooddataQueryService.getAverageTopicResponseTimesPerMonth()
+             gooddataQueryService.getAverageTopicResponseTimesPerDay()
               .then(function(result){
                 result[0].color = "#2D60AD";
 

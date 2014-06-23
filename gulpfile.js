@@ -210,7 +210,7 @@ gulp.task("watch-dist", function() {
 gulp.task("server", ["sass","lint", "watch", "watch-dev"], function() {
   httpServer = connect.server({
     root: "web",
-    port: 8000,
+    port: 8001,
     livereload: true,
     glob: ['./web/**/*.html', './web/**/*.js']
 
