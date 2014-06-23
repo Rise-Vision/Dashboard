@@ -3,15 +3,16 @@
 /*global MarkerClusterer:false */
 
 angular.module('dashboard')
-  .directive('activeDisplaysHeatMap', ['googleBigQueryService','markerClusterService',
-    function(googleBigQueryService,markerClusterService){
+  .directive('activeDisplaysHeatMap', ['googleBigQueryService','markerClusterService','commonMetricService','$timeout',
+    function(googleBigQueryService,markerClusterService,commonMetricService, $timeout){
       return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/active-displays-heat-map.html',
       link: function (scope) {
         scope.showSpinner = true;   
-        var mapOptions = {
+        scope.id = commonMetricService.generateChartId('activeDisplaysMap');
+        var map, mapOptions = {
           center: new google.maps.LatLng(30.775646, -25.820313),
           zoom: 2,
           mapTypeControl : false,
@@ -19,9 +20,11 @@ angular.module('dashboard')
           mapTypeControlOptions : false
         };
         
-        var tmp = document.getElementById("map-canvas");
+        //let the html render first, and then go and get our element for the map
+        $timeout(function(){
+          map = new google.maps.Map(document.getElementById(scope.id), mapOptions);
+        },0);
         
-        var map = new google.maps.Map(tmp, mapOptions);
         googleBigQueryService.getActiveDisplaysForMap()
         .then(function(result){
           var markers = [];
@@ -40,7 +43,7 @@ angular.module('dashboard')
         })
         .then(null,function(error){
           console.error(error);
-          scope.errorMessage = 'Failed to Load. See Console For More Details';
+          scope.errorMessage = commonMetricService.generateErrorMessage(error);
         })
         .finally(function(){
           scope.showSpinner = false;

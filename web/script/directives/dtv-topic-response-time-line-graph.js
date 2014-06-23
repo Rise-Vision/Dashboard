@@ -3,17 +3,17 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('zendeskResponseTimeLineGraph', ['gooddataQueryService','commonMetricService',
+  .directive('topicResponseTimeLineGraph', ['gooddataQueryService','commonMetricService',
     function(gooddataQueryService,commonMetricService){
      return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
       link: function (scope) {   
-            scope.title = 'Zendesk Response Time';
-            scope.id = commonMetricService.generateChartId('zendeskResponseTimeChart');
+            scope.title = 'Topic Response Time';
+            scope.id = commonMetricService.generateChartId('topicResponseTimeChart');
             scope.showSpinner = true;  
-             gooddataQueryService.getZendeskResponseTimeForLineGraph()
+             gooddataQueryService.getAverageTopicResponseTimesPerMonth()
               .then(function(result){
                 result[0].color = "#2D60AD";
 
@@ -30,7 +30,7 @@ angular.module('dashboard')
                                 });
 
                   chart.xAxis
-                  .axisLabel('Month')
+                  .axisLabel('Topic Created Date')
                   .tickFormat(function (d) {
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
@@ -49,7 +49,7 @@ angular.module('dashboard')
               })//THEN
               .then(null,function(error){
                 console.error(error);
-                scope.errorMessage = 'Failed to Load. See Console For More Details';
+                scope.errorMessage = commonMetricService.generateErrorMessage(error);
               })
               .finally(function(){
                 scope.showSpinner = false;

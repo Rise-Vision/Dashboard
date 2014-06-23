@@ -14,7 +14,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForMap = function() {
     var deferred = $q.defer();
 
-    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap',{timeout:45000})
+    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap',{timeout:60000})
       .then(function(response){
         var result = response.data;
         if(result.error || !result.jobComplete){
@@ -46,7 +46,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForLineChart = function(){
     var deferred = $q.defer();
     
-   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:20000})
+   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:60000})
        .then(function(response){
           var result = response.data;
           if(result.error|| !result.jobComplete){
