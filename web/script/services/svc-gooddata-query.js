@@ -37,10 +37,10 @@ angular.module('dashboard')
       return deferred.promise;
     };
 
-    service.getAverageTopicResponseTimesPerMonth = function() {
+    service.getAverageTopicResponseTimesPerDay = function() {
       var deferred = $q.defer();
 
-      $http.get(API_ROOT + '/query/gooddata/getAverageTopicResponseTimesPerMonth')
+      $http.get(API_ROOT + '/query/gooddata/getAverageTopicResponseTimesPerDay')
       .then(function(result){
         var csvArray = result.data.split('\n');
         var jsonResult = [];
