@@ -3,17 +3,17 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('topicResponseTimeLineGraph', ['gooddataQueryService','commonMetricService',
+  .directive('zendeskResolutionTimeLineGraph', ['gooddataQueryService','commonMetricService',
     function(gooddataQueryService,commonMetricService){
      return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
       link: function (scope) {   
-            scope.title = 'Community Response Time';
-            scope.id = commonMetricService.generateChartId('topicResponseTimeChart');
+            scope.title = 'Zendesk Resolution Time';
+            scope.id = commonMetricService.generateChartId('zendeskResolutionTimeChart');
             scope.showSpinner = true;  
-             gooddataQueryService.getAverageTopicResponseTimesPerDay()
+             gooddataQueryService.getFullResolutionTimesPerMonth()
               .then(function(result){
                 result[0].color = "#2D60AD";
 
@@ -30,12 +30,12 @@ angular.module('dashboard')
                                 });
 
                   chart.xAxis
-                  .axisLabel('Topic Created Date')
+                  .axisLabel('Date')
                   .tickFormat(function (d) {
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
                   chart.yAxis
-                    .axisLabel('mins')
+                    .axisLabel('Hours')
                     .tickFormat(d3.format(',.i'));
 
                   d3.select('#'+scope.id)
