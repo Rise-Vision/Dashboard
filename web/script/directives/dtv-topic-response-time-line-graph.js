@@ -10,7 +10,7 @@ angular.module('dashboard')
       scope: {},
       templateUrl: 'view/common-line-chart.html',
       link: function (scope) {   
-            scope.title = 'Topic Response Time';
+            scope.title = 'Community Response Time';
             scope.id = commonMetricService.generateChartId('topicResponseTimeChart');
             scope.showSpinner = true;  
              gooddataQueryService.getAverageTopicResponseTimesPerDay()

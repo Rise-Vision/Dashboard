@@ -35,7 +35,7 @@ angular.module('dashboard')
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
                   chart.yAxis
-                    .axisLabel('mins')
+                    .axisLabel('Hours')
                     .tickFormat(d3.format(',.i'));
 
                   d3.select('#'+scope.id)

@@ -66,7 +66,7 @@ angular.module('dashboard')
             y: Math.round(parseFloat(row[1].substr(1,row[1].length-2)) )
           });
         }
-        deferred.resolve([{key:'Avg Resolution (mins)',values:jsonResult}]);
+        deferred.resolve([{key:'Avg Resolution (hrs)',values:jsonResult}]);
       })
       .then(null,function(error){
         deferred.reject(error);
