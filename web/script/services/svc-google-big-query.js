@@ -6,7 +6,8 @@
 */
 
 angular.module('dashboard')
-.factory('googleBigQueryService', ['$q','$http','API_ROOT', function($q,$http,API_ROOT) {
+.factory('googleBigQueryService', ['$q','$http','API_ROOT','queryHelpersService',
+ function($q,$http,API_ROOT,queryHelpersService) {
   var service = {};
 
   //Query for the data points for the 'Active Display 30 Days Map' metric
@@ -53,10 +54,8 @@ angular.module('dashboard')
             deferred.reject(result.error || 'big query job failed to complete');
             return;
           }
-          try{
-              var displays = [],
-                  normalizedDisplays = [];
-              displays = _.map(result.rows,
+          try {
+              var displays = _.map(result.rows,
                                 function(item){
                                   return { 
                                     x : new Date(item.f[0].v),
@@ -64,20 +63,8 @@ angular.module('dashboard')
                                   };
                                 });
               
-              //calculate the normalized daily active displays over 30 days
-              var displaysLength = displays.length;
-              for(var i=0; i < displaysLength; i++ ) {
-                var past30 = 0;
-                for(var j = i; (j >= 0) && (j > i - 30); j--) {
-                  past30 += displays[j].y;
-                }//for j
-
-                normalizedDisplays.push({ x : displays[i].x,
-                                          y : Math.round(past30/Math.min(30,i+1))});
-              }//for i
-
               deferred.resolve([{ key : "Actual", values : displays },
-                                { key : "Average", values : normalizedDisplays }]);
+                                { key : "Average", values : queryHelpersService.calculateNormalizedValues(displays,30) }]);
           }catch(e){
             deferred.reject(e);
           }

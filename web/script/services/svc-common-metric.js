@@ -1,7 +1,7 @@
 'use strict';
 
 /*
- * commonMetricService: handles shared functionality between the line charts
+ * commonMetricService: handles shared functionality between the line charts directives
  */
 
 angular.module('dashboard')

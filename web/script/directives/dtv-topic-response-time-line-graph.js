@@ -23,7 +23,7 @@ angular.module('dashboard')
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options({
-                                  margin: {left: 70, bottom: 50,right:50},
+                                  margin: {left: 74, bottom: 50,right:50},
                                   showXAxis: true,
                                   showYAxis: true,
                                   transitionDuration: 250                                  

@@ -14,13 +14,52 @@ describe("Services: Gooddata Query", function() {
             
           switch(url){
             case '/query/gooddata/getZenDeskResponseTime':
-              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Mar 2014","9.5500000000000000"\n"Apr 2014","73.0054347826086957"\n"May 2014","9.9652777777777778"\n"Jun 2014","14.6138613861386139"\n'});
-              break;
+             
             case '/query/gooddata/getAverageTopicResponseTimesPerDay':
-              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Mar 2014","9.5500000000000000"\n"Apr 2014","73.0054347826086957"\n"May 2014","9.9652777777777778"\n"Jun 2014","14.6138613861386139"\n'});
-              break;
+              
             case '/query/gooddata/getFullResolutionTimesPerMonth':
-              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Mar 2014","9.5500000000000000"\n"Apr 2014","73.0054347826086957"\n"May 2014","9.9652777777777778"\n"Jun 2014","14.6138613861386139"\n'});
+              
+            case '/query/gooddata/getGetSatisfactionTouchesByDay':
+             
+            case '/query/gooddata/getZenDeskTouchesByDay':
+              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Jan 1 2014","9.5500000000000000"\n"Feb 1 2014","73.0054347826086957"\n"Mar 1 2014","9.9652777777777778"\n"Apr 1 2014","14.6138613861386139"\n'});
+              break;
+            case '/query/googleBigQuery/getActiveDisplaysForLineChart':
+              deferred.resolve({data:{
+                                jobComplete : true,                          
+                                rows:[
+                                      { 
+                                        f : [
+                                              {v:"2014-01-01"},
+                                              {v:8999}
+                                            ]
+                                      },
+                                      { 
+                                        f : [
+                                              {v:"2014-02-01"},
+                                              {v:8991}
+                                            ]
+                                      },
+                                      { 
+                                        f : [
+                                              {v:"2014-03-01"},
+                                              {v:899}
+                                            ]
+                                      },
+                                      { 
+                                        f : [
+                                              {v:"2014-04-01"},
+                                              {v:89}
+                                            ]
+                                      },
+                                      { 
+                                        f : [
+                                              {v:"2014-05-01"},
+                                              {v:8}
+                                            ]
+                                      }
+                                    ]
+                              }});
               break;
             default:
               deferred.reject('unexpected url:'+url);
@@ -45,7 +84,7 @@ describe("Services: Gooddata Query", function() {
     expect(gooddataQueryService.getZendeskResponseTimeForLineGraph).to.be.defined;    
     expect(gooddataQueryService.getAverageTopicResponseTimesPerDay).to.be.defined;    
     expect(gooddataQueryService.getFullResolutionTimesPerMonth).to.be.defined;    
-    expect(gooddataQueryService.AwesomeMonthDateParser).to.be.defined;        
+    expect(gooddataQueryService.getTouchesByDay).to.be.defined;        
     /* jshint ignore:end */            
 
   });
@@ -100,27 +139,29 @@ describe("Services: Gooddata Query", function() {
     });
   });
 
-  describe('AwesomeMonthDateParser',function(){
-    var testDate = new Date('June 1 2014');
 
-    it('should parse a month that has already occured in the current year',function(){ 
-      var result = gooddataQueryService.AwesomeMonthDateParser('Mar',testDate);
-      expect(result).to.be.a('Date');
-      expect(result.toString()).to.equal(new Date('March 1 2014').toString());
-    });
+describe('getTouchesByDay',function(){
+    it('should parse the returned csv into a JS object',function(done){
+      return gooddataQueryService.getTouchesByDay()
+      .then(function(result){
+        
+        expect(result).to.be.an('Array');
+        expect(result).to.have.length(3);
+        for (var i = 0; i < 3; i++) {
+          expect(result[i].values[0].x).to.be.a('Date');
+          /* jshint ignore:start */            
+          expect(result[i].values[0].x).to.be.truely;
+          /* jshint ignore:end */
+          expect(result[i].values[0].y).to.be.a('Number');
+          expect(result[i].values[0].y).to.be.least(0);
 
-    it('should parse a month that is the current month',function(){ 
-      var result = gooddataQueryService.AwesomeMonthDateParser('Jun',testDate);
-      expect(result).to.be.a('Date');
-      expect(result.toString()).to.equal(testDate.toString());
-    });
-
-    it('should parse a month that has  occured in the previous year',function(){ 
-      var result = gooddataQueryService.AwesomeMonthDateParser('Dec',testDate);
-      expect(result).to.be.a('Date');
-      expect(result.toString()).to.equal(new Date('December 1 2013').toString());
+        }
+        done();
+      })
+      .then(null,done);
     });
   });
+  
 
 
 });

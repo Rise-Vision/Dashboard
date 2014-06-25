@@ -3,20 +3,21 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('activeDisplaysLineGraph', ['googleBigQueryService','commonMetricService',
-    function(googleBigQueryService,commonMetricService){
+  .directive('dailyTouchesLineGraph', ['gooddataQueryService','commonMetricService',
+    function(gooddataQueryService,commonMetricService){
      return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
-      link: function (scope) {
-            scope.title = 'Active Displays';
-            scope.id = commonMetricService.generateChartId('activeDisplaysLineChart');
-            scope.showSpinner = true;   
-             googleBigQueryService.getActiveDisplaysForLineChart()
+      link: function (scope) {   
+            scope.title = 'Touch Index';
+            scope.id = commonMetricService.generateChartId('dailyTouchesLineGraph');
+            scope.showSpinner = true;  
+             gooddataQueryService.getTouchesByDay()
               .then(function(result){
-                result[0].color = "#45B864";
-                result[1].color = "#2D60AD";
+                result[0].color = "#2D60AD";
+                result[1].color = "#62FF0D";
+                result[2].color = "#E5AFE8";
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
@@ -27,7 +28,7 @@ angular.module('dashboard')
                                   margin: {left: 74, bottom: 50,right:50},
                                   showXAxis: true,
                                   showYAxis: true,
-                                  transitionDuration: 250
+                                  transitionDuration: 250                                  
                                 });
 
                   chart.xAxis
@@ -36,8 +37,8 @@ angular.module('dashboard')
                     return d3.time.format("%d-%m-%y")(new Date(d));
                   });
                   chart.yAxis
-                    .axisLabel('Displays')
-                    .tickFormat(d3.format(',.i'));
+                    .axisLabel('Touches')
+                    .tickFormat(d3.format(',.f.2'));
 
                   d3.select('#'+scope.id)
                     .datum(result)
