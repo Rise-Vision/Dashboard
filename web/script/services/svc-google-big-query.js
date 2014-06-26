@@ -55,16 +55,17 @@ angular.module('dashboard')
             return;
           }
           try {
-              var displays = _.map(result.rows,
-                                function(item){
-                                  return { 
-                                    x : new Date(item.f[0].v),
+              
+            var displays = _.map(result.rows,
+                              function(item){
+                                 return { 
+                                    x : queryHelpersService.parseSlashDate(item.f[0].v),
                                     y : Math.round(parseInt(item.f[1].v))
                                   };
-                                });
-              
-              deferred.resolve([{ key : "Actual", values : displays },
-                                { key : "Average", values : queryHelpersService.calculateNormalizedValues(displays,30) }]);
+                              });
+
+            deferred.resolve([{ key : "Actual", values : displays },
+                              { key : "Average", values : queryHelpersService.calculateNormalizedValues(displays,30) }]);
           }catch(e){
             deferred.reject(e);
           }

@@ -40,6 +40,13 @@ angular.module('dashboard')
       return new Date(shortMonth +' 1 ' + year);
     },
 
+    //Since JS is WAT, we need a special date parser for dates in the form "2013-12-31"
+    //
+    parseSlashDate : function(dateStr) {
+      var parts = dateStr.split('-');
+      return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+    },
+
     //transforms an array in the form [{x:__,y:___}] into an object in the form
     // { x1 : y1, x2 : y2, ....} 
     // UNLESS useShortDateString === true, { x1.toDateString() : y1, x2.toDateString() : y2, ....} 
