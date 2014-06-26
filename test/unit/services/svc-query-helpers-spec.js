@@ -12,6 +12,9 @@ describe('Services: Query Helpers', function(){
   it('should load', function(){
     expect(queryHelpersService).to.respondTo('calculateNormalizedValues');
     expect(queryHelpersService).to.respondTo('awesomeMonthDateParser');    
+    expect(queryHelpersService).to.respondTo('parseSlashDate');   
+    expect(queryHelpersService).to.respondTo('mapDateToValue');   
+    expect(queryHelpersService).to.respondTo('combineIntoArray');
   });
 
 
@@ -34,6 +37,16 @@ describe('Services: Query Helpers', function(){
       var result = queryHelpersService.awesomeMonthDateParser('Dec',testDate);
       expect(result).to.be.a('Date');
       expect(result.toString()).to.equal(new Date('December 1 2013').toString());
+    });
+  });
+
+  describe('parseSlashDate',function(){
+    it('should parse a date in the form "2014-06-25"',function(){
+      var result = queryHelpersService.parseSlashDate("2014-06-25");
+      expect(result).to.be.a('Date');
+      expect(result.getFullYear()).to.equal(2014);
+      expect(result.getMonth() + 1).to.equal(6);
+      expect(result.getDate()).to.equal(25);
     });
   });
 
