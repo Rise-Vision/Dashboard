@@ -72,7 +72,7 @@ angular.module('dashboard')
                
           var divideByActiveDiplays = function(val) {            
             var displays = avgActiveDisplaysByDay[val.x.toDateString()];
-            return { x : val.x, y : (typeof displays === 'undefined'|| !displays|| displays <= 0)? 0 : val.y / displays * 1000};
+            return { x : val.x, y : (typeof displays === 'undefined'|| !displays|| displays <= 0)? 0 : Math.round((val.y / displays * 1000) * 100) / 100};
           };
           //calculate the average touches for the pass 60 days (normalize over 60days)
           //and then divide by the number of active displays for 
