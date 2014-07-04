@@ -2,8 +2,8 @@
 #navbar{
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: rgb(252, 252, 252);
-  border-color: rgb(243, 243, 243);
+  background-color: #FCFCFC;
+  border-color: #F3F3F3;
 }
 
 #loginModal{
@@ -28,4 +28,40 @@
     } 
 
   }
+}
+
+.githubStats {
+  text-align: center;
+  
+  .table-responsive{
+    overflow: scroll;
+    
+    .columHeaders{
+      background-color: lightgrey;
+    }
+
+    
+
+    thead > tr > th {
+      text-align: center;
+
+    }
+     tr :first-child{
+      text-align: right;
+    }
+   
+
+    a {
+      color : #2D60AD;
+    }
+
+    th > a{
+      text-decoration: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  }
+
+  
 }

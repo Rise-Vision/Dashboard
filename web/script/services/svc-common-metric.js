@@ -17,12 +17,26 @@ angular.module('dashboard')
       if(error.status === 0){
         message +=' ( Request Timed Out )';
       } else if (error.data){
-        message +=' ( '+error.data.toString()+' )';
+        message +=' ( ' + error.status+' '+error.data.toString()+' )';
       } else if (typeof error === 'string'){
-        message +=' ( '+error+' )';
+        message +=' ( '+error.status+' '+error+' )';
       }
 
       return message;
+    },
+    //returns an array of hex colours to use for the line charts
+    getChartColours : function() {
+      return ["#2D60AD","#62FF0D","E5AFE8"];
+    },
+    //takes a number of {{monthsAgo}} from {{now}} and returns the short month name
+    intToShortAgoMonth : function(monthsAgo, now) {
+      if(typeof now === 'undefined'){
+        now = new Date();
+      }
+      var shortMonthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+      now.setMonth(now.getMonth() - monthsAgo);
+      return shortMonthNames[now.getMonth()];
     }
+
   };
 }]);
