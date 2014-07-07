@@ -2,7 +2,9 @@
 <div style="text-align: center">
   <h3>Active Display 30 Days Map</h3>
   <br>
+  <div class="mapOverlay" ng-click="allowScroll()">
     <div id="{{id}}" style="height: 435px;" ng-hide="errorMessage"/>
+  </div>
 
   <div ng-if="showSpinner">
     <h5>Loading (This May Take up to 45 Seconds)....</h5>

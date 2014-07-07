@@ -2,6 +2,7 @@
   "name": "Dashboard",
   "version": "1.0.0",
   "description": "Rise Vision Dashboard",
+  "repository": "https://github.com/Rise-Vision/Dashboard.git",
   "main": "gulpfile.js",
   "dependencies": {
     "gulp-autoprefixer": "~0.0.6",
@@ -40,6 +41,8 @@
   "scripts": {
     "dev-install": "npm install && bower install && gulp config && gulp sass",
     "dev": "gulp server",
+    "test": "gulp test-ci",
+    "start" : "gulp server",
     "ci-build": "npm install --production && bower install && gulp test-ci && gulp build"
   },
   "author": "Rise",

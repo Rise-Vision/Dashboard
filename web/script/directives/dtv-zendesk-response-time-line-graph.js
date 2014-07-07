@@ -15,25 +15,18 @@ angular.module('dashboard')
             scope.showSpinner = true;  
              gooddataQueryService.getZendeskResponseTimeForLineGraph()
               .then(function(result){
-                result[0].color = "#2D60AD";
+                result[0].color = commonMetricService.getChartColours()[0];
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
-                                .options({
-                                  margin: {left: 74, bottom: 50,right:50},
-                                  showXAxis: true,
-                                  showYAxis: true,
-                                  transitionDuration: 250                                  
-                                });
+                                .options(commonMetricService.getCommonChartOptions());
 
                   chart.xAxis
-                  .axisLabel('Date')
-                  .tickFormat(function (d) {
-                    return d3.time.format("%d-%m-%y")(new Date(d));
-                  });
+                  .tickFormat(commonMetricService.dateD3Format);
+                  
                   chart.yAxis
                     .axisLabel('mins')
                     .tickFormat(d3.format(',.i'));
@@ -45,7 +38,7 @@ angular.module('dashboard')
                   nv.utils.windowResize(chart.update);
 
                     return chart;
-                  });//addGraph
+                });//addGraph
               })//THEN
               .then(null,function(error){
                 console.error(error);
