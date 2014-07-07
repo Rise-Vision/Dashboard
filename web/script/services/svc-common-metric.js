@@ -1,4 +1,5 @@
 'use strict';
+/*global d3:false */
 
 /*
  * commonMetricService: handles shared functionality between the line charts directives
@@ -36,7 +37,20 @@ angular.module('dashboard')
       var shortMonthNames = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
       now.setMonth(now.getMonth() - monthsAgo);
       return shortMonthNames[now.getMonth()];
-    }
+    },
+    //shared nvd3 line chart options
+    getCommonChartOptions : function() {
+      return {
+                margin: {left: 74, bottom: 25,right:25},
+                showXAxis: true,
+                showYAxis: true,
+                transitionDuration: 250             
+              };
+    },
+    //common date format for nvd3 charts
+    dateD3Format : function (d) {
+      return d3.time.format("%d-%b-%y")(new Date(d));
+    },
 
   };
 }]);

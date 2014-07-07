@@ -15,30 +15,24 @@ angular.module('dashboard')
             scope.showSpinner = true;   
              googleBigQueryService.getActiveDisplaysForLineChart()
               .then(function(result){
-                result[0].color = "#45B864";
-                result[1].color = "#2D60AD";
+                var colours = commonMetricService.getChartColours();
+                result[0].color = colours[0];
+                result[1].color = colours[1];
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
-                                .options({
-                                  margin: {left: 74, bottom: 50,right:50},
-                                  showXAxis: true,
-                                  showYAxis: true,
-                                  transitionDuration: 250
-                                });
-
+                                .options(commonMetricService.getCommonChartOptions());
+                                
+    
                   chart.xAxis
-                  .axisLabel('Date')
-                  .tickFormat(function (d) {
-                    return d3.time.format("%d-%m-%y")(new Date(d));
-                  });
+                   .tickFormat(commonMetricService.dateD3Format);
+
                   chart.yAxis
                     .axisLabel('Displays')
                     .tickFormat(d3.format(',.i'));
-
                   d3.select('#'+scope.id)
                     .datum(result)
                     .call(chart);

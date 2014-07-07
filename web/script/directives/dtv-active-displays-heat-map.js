@@ -17,7 +17,8 @@ angular.module('dashboard')
           zoom: 2,
           mapTypeControl : false,
           streetViewControl : false,
-          mapTypeControlOptions : false
+          mapTypeControlOptions : false,
+          scrollwheel : false
         };
         
         //let the html render first, and then go and get our element for the map
@@ -48,6 +49,14 @@ angular.module('dashboard')
         .finally(function(){
           scope.showSpinner = false;
         });//getActiveDisplaysForLineChart    
+
+        scope.allowScroll = function(){
+          if(!mapOptions.scrollwheel){
+            mapOptions.scrollwheel = true;
+            map.setOptions(mapOptions);
+          }
+        };
+
       }
     };
   }]);

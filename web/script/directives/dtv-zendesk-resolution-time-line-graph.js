@@ -22,18 +22,11 @@ angular.module('dashboard')
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
-                                .options({
-                                  margin: {left: 74, bottom: 50,right:50},
-                                  showXAxis: true,
-                                  showYAxis: true,
-                                  transitionDuration: 250                                  
-                                });
+                                .options(commonMetricService.getCommonChartOptions());                                
 
                   chart.xAxis
-                  .axisLabel('Date')
-                  .tickFormat(function (d) {
-                    return d3.time.format("%d-%m-%y")(new Date(d));
-                  });
+                   .tickFormat(commonMetricService.dateD3Format);
+                   
                   chart.yAxis
                     .axisLabel('Hours')
                     .tickFormat(d3.format(',.i'));

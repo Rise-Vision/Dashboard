@@ -13,8 +13,12 @@ describe("Services: common metric", function() {
 
   it("should exist", function() {
     expect(commonMetricService).be.defined;
-    expect(commonMetricService.generateChartId).be.defined;
-    expect(commonMetricService.generateErrorMessage).be.defined;
+    expect(commonMetricService).to.respondTo('generateChartId');
+    expect(commonMetricService).to.respondTo('generateErrorMessage');
+    expect(commonMetricService).to.respondTo('getChartColours');
+    expect(commonMetricService).to.respondTo('intToShortAgoMonth');
+    expect(commonMetricService).to.respondTo('getCommonChartOptions');
+    expect(commonMetricService).to.respondTo('dateD3Format');
   });
 
   describe("generateChartId",function(){
