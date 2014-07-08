@@ -20,6 +20,10 @@ angular.module('dashboard')
       $http.get(API_ROOT + '/query/gooddata/' + urlPath)
       .then(function(result) {
         //since gooddata gives the values as a string in csv, we need to strip out the extra "" at the begining and end using split
+        if(typeof result.data !== 'string'){
+          throw new Error('Gooddata API failed to return data in csv');
+        }
+
         var csvArray = result.data.split('"\n"');
         var jsonResult = [];
         for(var i = 1; i < csvArray.length; i++){
@@ -27,9 +31,6 @@ angular.module('dashboard')
           if(row.length < 2){
             continue;
           }
-          
-         
-
           jsonResult.push({
             x: expectShortMonth ? queryHelpersService.awesomeMonthDateParser(row[0]) : new Date(row[0]),            
             y: Math.round(parseFloat(row[1])) 

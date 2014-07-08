@@ -13,14 +13,10 @@ describe("Services: Gooddata Query", function() {
           var deferred = Q.defer();
             
           switch(url){
-            case '/query/gooddata/getZenDeskResponseTime':
-             
-            case '/query/gooddata/getAverageTopicResponseTimesPerDay':
-              
-            case '/query/gooddata/getFullResolutionTimesPerMonth':
-              
-            case '/query/gooddata/getGetSatisfactionTouchesByDay':
-             
+            case '/query/gooddata/getZenDeskResponseTime':         
+            case '/query/gooddata/getAverageTopicResponseTimesPerDay':              
+            case '/query/gooddata/getFullResolutionTimesPerMonth':              
+            case '/query/gooddata/getGetSatisfactionTouchesByDay':             
             case '/query/gooddata/getZenDeskTouchesByDay':
               deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Jan 1 2014","9.5500000000000000"\n"Feb 1 2014","73.0054347826086957"\n"Mar 1 2014","9.9652777777777778"\n"Apr 1 2014","14.6138613861386139"\n'});
               break;
