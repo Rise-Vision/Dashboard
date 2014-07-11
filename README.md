@@ -1,4 +1,4 @@
-Rise Vision Dashboard [![Build Status](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/badge/icon)](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/)
+Rise Vision Dashboard [![Build Status](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/badge/icon)](http://devtools1.risevision.com:8080/job/Dashboard-Client-Master-Prod/)[![Code Climate](https://codeclimate.com/github/Rise-Vision/Dashboard.png)](https://codeclimate.com/github/Rise-Vision/Dashboard)
 =====
 
 First Timer?

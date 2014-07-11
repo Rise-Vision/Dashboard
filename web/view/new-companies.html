@@ -1,0 +1,30 @@
+
+<div class="newCompanies" style="text-align: center">
+  <h3>{{title}}</h3>
+  <br>
+  <div ng-hide="showSpinner || errorMessage">
+    <svg id='{{id}}' style="height: 500px; width: 100%;" ></svg>
+    <br/>
+    <table class="statsTable table">
+      <thead>
+        <tr><td>Period</td><td>Sign Ups</td></tr>        
+      </thead>
+      <tbody>    
+        <tr><td>Today</td><td>{{growthStats.today}}</td></tr>
+        <tr><td>Yesterday</td><td>{{growthStats.yesterday}}</td></tr>
+        <tr><td>Grow MTD</td><td>{{growthStats.thisMonth}}%</td></tr>
+        <tr><td>Growth Last Month</td><td>{{growthStats.lastMonth}}%</td></tr>
+        <tr><td>Growth Last 3 Month</td><td>{{growthStats.last3Months}}%</td></tr>
+        <tr><td>Growth Last 12 Month</td><td>{{growthStats.last12Months}}%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div ng-if="showSpinner">
+    <h5>Loading....</h5>
+    <i class="icon ion-loading-b" ></i>
+  </div>
+  <div class="bg-danger" ng-show="errorMessage" >
+    <h5>{{errorMessage}}</h5>
+    <!-- TODO: put a reload button here that clears the cache for this metric -->
+  </div>
+</div>

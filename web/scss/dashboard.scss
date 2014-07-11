@@ -61,7 +61,30 @@
       -webkit-user-select: none;
       user-select: none;
     }
-  }
+  }  
+}
 
-  
+.newCompanies {
+  .statsTable {
+    width: 84%;
+    margin-left: 71px;
+    thead > tr {
+      font-weight: bold;
+      background-color: #D3D3D3;
+    }
+
+    tr :first-child{
+      text-align: right;
+      padding-right: 10px;
+      width: 50%;
+
+    }
+    tr {
+      text-align: justify;
+    }
+    td :first-child {
+      padding-right: 10px;
+
+    }
+  }
 }

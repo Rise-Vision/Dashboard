@@ -44,7 +44,12 @@ angular.module('dashboard')
     //
     parseSlashDate : function(dateStr) {
       var parts = dateStr.split('-');
-      return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+      if(parts.length >= 3){
+        return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+      }
+      else {
+        return new Date(parts[0], parts[1]-1, 1);
+      }
     },
 
     //transforms an array in the form [{x:__,y:___}] into an object in the form
@@ -77,6 +82,18 @@ angular.module('dashboard')
       result = _.map(result, function(num,index) {return { x : new Date(index), y : num };});
 
       return _.sortBy(result,'x');
+    },
+
+    //takes a {{numberOfMonths}} ago, and returns a Date object set to the first of that month
+    getMonthsAgo : function (numberOfMonths) {
+      var result = new Date();
+      result.setMonth(result.getMonth() - numberOfMonths);
+      result.setDate(1);
+      result.setHours(0);
+      result.setMinutes(0);
+      result.setSeconds(0);
+      result.setMilliseconds(0);
+      return result;
     }
   };//return
 }]);
