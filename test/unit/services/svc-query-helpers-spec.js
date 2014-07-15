@@ -48,6 +48,14 @@ describe('Services: Query Helpers', function(){
       expect(result.getMonth() + 1).to.equal(6);
       expect(result.getDate()).to.equal(25);
     });
+
+    it('should parse a date in the form "2014-06"',function(){
+      var result = queryHelpersService.parseSlashDate("2014-06");
+      expect(result).to.be.a('Date');
+      expect(result.getFullYear()).to.equal(2014);
+      expect(result.getMonth() + 1).to.equal(6);
+      expect(result.getDate()).to.equal(1);
+    });
   });
 
   describe('calculateNormalizedValues',function(){
@@ -120,11 +128,28 @@ describe('Services: Query Helpers', function(){
       expect(result[1].y).to.equal(4);
 
       expect(result[2].x.toString()).to.equal(key3.toString());
-      expect(result[2].y).to.equal(3);
-
-
-      
+      expect(result[2].y).to.equal(3);      
     });
+  });//combineIntoArray
 
-  });
+  describe('getMonthsAgo', function(){
+    it('should set it to the first of the month if numberOfMonths === 0',function(){
+      var now = new Date();
+      var result = queryHelpersService.getMonthsAgo(0);
+      expect(result).to.be.a('Date');
+      expect(result.getMonth()).to.equal(now.getMonth());
+      expect(result.getFullYear()).to.equal(now.getFullYear());
+      expect(result.getDate()).to.equal(1);
+      expect(result.getHours()).to.equal(0);
+      expect(result.getMinutes()).to.equal(0);
+      expect(result.getSeconds()).to.equal(0);
+      expect(result.getMilliseconds()).to.equal(0);
+    });
+    it('should set in the proper number of months in the past',function(){
+      var now = new Date();
+
+      var result = queryHelpersService.getMonthsAgo(1);
+      expect(result.getMonth()).to.equal((now.getMonth() - 1 ) % 12 );
+    });
+  });//getMonthsAgo
 });
