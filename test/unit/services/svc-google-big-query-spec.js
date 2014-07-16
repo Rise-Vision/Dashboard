@@ -211,7 +211,11 @@ var getDateString = function(date){
                 
                 expect(result.today).to.equal(1);
                 expect(result.yesterday).to.equal(2);
-
+                var expectedTotalNewCompanies = 0;
+                for (var x = 0; x < result.byDay[0].values.length; x++) {
+                  expectedTotalNewCompanies += (x+1);
+                }
+                expect(result.total).to.equal(expectedTotalNewCompanies);
                 var thisMonthCount = 0
                   , lastMonthCount = 0;
                 if(new Date().getDate() === 1){
