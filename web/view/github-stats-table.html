@@ -45,24 +45,6 @@
               </span>
             </a>
           </th>
-          <th ng-click="orderByField='commits'; reverseSort = !reverseSort">
-            <a >
-              Commits
-              <span ng-show="orderByField == 'commits'">
-                <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
-                <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
-              </span>
-            </a>
-          </th>
-          <th ng-click="orderByField='authors.'+selectedTimeline.key; reverseSort = !reverseSort">
-            <a >
-              Authors
-               <span ng-show="orderByField == 'authors.'+selectedTimeline.key">
-                <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
-                <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
-              </span>
-            </a>
-          </th>  
           <th ng-click="orderByField='forked'; reverseSort = !reverseSort">
             <a >
               Forked
@@ -95,15 +77,24 @@
       <tbody>
         <tr ng-repeat="repo in data|filter:exposure.filter|orderBy:orderByField:reverseSort">
           <td ><a ng-href="https://github.com/{{repo.fullName}}" target="_blank">{{repo.name}}</a></td>
-          <td>{{repo.releases[selectedTimeline.key]}}</td>       
+          <td>{{repo.releases[selectedTimeline.key]}}</td>
           <td> {{repo.pullRequests[selectedTimeline.key]}}</td>
-          <td >{{repo.commits}}</td>
-          <td>{{repo.authors[selectedTimeline.key]}}</td>       
           <td >{{repo.forked}}</td>
           <td >{{repo.watched}}</td>
-          <td >{{repo.starred}}</td> 
+          <td >{{repo.starred}}</td>
         </tr>
       </tbody>
+      <tfoot>
+        <tr>
+          <td>Totals</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'releases.'+selectedTimeline.key}}</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'pullRequests.'+selectedTimeline.key}}</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'forked'}}</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'watched'}}</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'starred'}}</td>
+        </tr>
+      </tfoot>
+
     </table>
   </div>
   <div ng-if="showSpinner">
