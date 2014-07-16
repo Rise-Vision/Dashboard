@@ -19,6 +19,7 @@ angular.module('dashboard')
                 scope.growthStats = {
                   today : result.today,
                   yesterday : result.yesterday,
+                  total : result.total,
                   thisMonth : Math.round(result.thisMonth),
                   lastMonth : Math.round(result.lastMonth),
                   last3Months : Math.round(result.last3Months),

@@ -112,6 +112,7 @@ angular.module('dashboard')
           , lastMonthCount = 0
           , last3MonthsCount = 0
           , last12MonthsCount = 0
+          , totalCount = 0
           , previousMonthTotalCompanies = 0
           , twoMonthsAgoTotalCompanies = 0
           , fourMonthsAgoTotalCompanies = 0
@@ -173,6 +174,8 @@ angular.module('dashboard')
                                 (result.x.getFullYear() < thisMonth.getFullYear() ))) {
                               last12MonthsCount += result.y;
                             }
+
+                            totalCount += result.y;
                             return result;
                           });
         _.forEach(res2.data.rows,function(item){
@@ -195,6 +198,7 @@ angular.module('dashboard')
                    { key : "Average", values : queryHelpersService.calculateNormalizedValues(byDay,30) }],
           today : todayCount,
           yesterday : yesterdayCount,
+          total : totalCount,
           thisMonth : thisMonthCount / previousMonthTotalCompanies  * 100, 
           lastMonth : lastMonthCount / twoMonthsAgoTotalCompanies  * 100 ,
           last3Months : last3MonthsCount / fourMonthsAgoTotalCompanies * 100,
