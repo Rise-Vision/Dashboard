@@ -82,7 +82,7 @@ gulp.task("clean", function() {
 
 //throw any errors -> intended for ci builds
 gulp.task("lint-throw", function() {
-  return gulp.src(appJSFiles)
+  return gulp.src("web/script/**/*.js")
     .pipe(jshint())
     .pipe(jshint.reporter("jshint-stylish"))
     .pipe(jshint.reporter("fail"))
@@ -92,7 +92,7 @@ gulp.task("lint-throw", function() {
 });
 
 gulp.task("lint", function() {
-  return gulp.src(appJSFiles)
+  return gulp.src("web/script/**/*.js")
     .pipe(jshint())
     .pipe(jshint.reporter("jshint-stylish")); 
 });

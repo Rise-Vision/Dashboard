@@ -152,4 +152,18 @@ describe('Services: Query Helpers', function(){
       expect(result.getMonth()).to.equal((now.getMonth() - 1 ) % 12 );
     });
   });//getMonthsAgo
+
+  describe('equalDate', function(){
+    it('should return true if the date parts are equal',function(){
+      var d1 = new Date();d1.setHours(10);
+      var d2 = new Date();d2.setHours(9);
+      expect(queryHelpersService.equalDate(d1,d2)).to.be.true;
+    });
+
+    it('should return false if the date parts are not equal',function(){
+      var d1 = new Date();d1.setHours(10);
+      var d2 = new Date(d1);d2.setYear(2000);
+      expect(queryHelpersService.equalDate(d1,d2)).to.be.false;
+    });
+  })
 });

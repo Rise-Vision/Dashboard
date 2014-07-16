@@ -44,6 +44,13 @@ angular.module('dashboard')
 
   //Query for the data points for 'Active Displays per Day' metric
   //returns a promise that resolves to the query result for display
+  // Today (how many new Active Displays have been added to the Average Active Displays today)
+  // Yesterday (how many new Active Displays were added to the Average Active Displays yesterday)
+  // Growth MTD (# of new Active Displays added to the Average Active Displays  this month to date / total of the Average Active Displays as of last month * 100)
+  // Growth Last Month (# of new Active Displays added to the Average Active Displays last month (does not include current month) / total of the Average Active Displays as of previous month * 100)
+  // Growth Last 3 Months (# of new Active Displays added for last 3 months (does not include current month) / total of the Average Active Displays as of previous month (4 months ago)  * 100)
+  // Growth Last 12 Months (# of new Active Displays added  to the Average Active Displays for last 12 months (does not include current month)
+  //      / total of  the Average Active Displays as of previous month (13 months ago)  * 100)
   service.getActiveDisplaysForLineChart = function(){
     var deferred = $q.defer();
     
@@ -54,8 +61,8 @@ angular.module('dashboard')
             deferred.reject(result.error || 'big query job failed to complete');
             return;
           }
-          try {
-              
+            
+            
             var displays = _.map(result.rows,
                               function(item){
                                  return { 
@@ -63,12 +70,60 @@ angular.module('dashboard')
                                     y : Math.round(parseInt(item.f[1].v))
                                   };
                               });
+            var averageDisplays = queryHelpersService.calculateNormalizedValues(displays,30);
+            var todayCount = 0
+            , yesterdayCount = 0
+            , twoDaysAgoCount = 0
+            , lastMonthCount = 0
+            , last2MonthsAgoCount = 0
+            , last4MonthsAgoCount = 0
+            , last13MonthsAgoCount = 0;
+            
 
-            deferred.resolve([{ key : "Actual", values : displays },
-                              { key : "Average", values : queryHelpersService.calculateNormalizedValues(displays,30) }]);
-          }catch(e){
-            deferred.reject(e);
-          }
+            var today = new Date();
+            var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
+            var twoDaysAgo = new Date();twoDaysAgo.setDate(twoDaysAgo.getDate() -2);
+            var lastDayOfLastMonth = new Date(); lastDayOfLastMonth.setDate(0);
+            var lastDayOf2MonthsAgo = queryHelpersService.getMonthsAgo(1); lastDayOf2MonthsAgo.setDate(0);
+            var lastDayOf3MonthsAgo = queryHelpersService.getMonthsAgo(2); lastDayOf3MonthsAgo.setDate(0);
+            var lastDayOf4MonthsAgo = queryHelpersService.getMonthsAgo(3); lastDayOf4MonthsAgo.setDate(0);
+            var lastDayOf13MonthsAgo = queryHelpersService.getMonthsAgo(12); lastDayOf13MonthsAgo.setDate(0);
+
+            
+            _.forEach(averageDisplays,function(result){
+                if(queryHelpersService.equalDate(result.x, today)) {
+                  todayCount = result.y;
+                } 
+                else if(queryHelpersService.equalDate(result.x, yesterday)) {
+                  yesterdayCount = result.y;
+                }
+                else if(queryHelpersService.equalDate(result.x, twoDaysAgo)) {
+                  twoDaysAgoCount = result.y;
+                }else if(queryHelpersService.equalDate(result.x, lastDayOfLastMonth)) {
+                  lastMonthCount = result.y;
+                }else if (queryHelpersService.equalDate(result.x, lastDayOf2MonthsAgo)){
+                  last2MonthsAgoCount = result.y;
+                }else if (queryHelpersService.equalDate(result.x, lastDayOf4MonthsAgo)) {
+                  last4MonthsAgoCount = result.y;
+                }else if (queryHelpersService.equalDate(result.x, lastDayOf13MonthsAgo)) {
+                  last13MonthsAgoCount = result.y;
+                }
+            });           
+
+            deferred.resolve({
+                                byDay : [
+                                          { key : "Actual", values : displays },
+                                          { key : "Average", values : averageDisplays }
+                                        ],
+                                today : todayCount - yesterdayCount,
+                                yesterday : yesterdayCount - twoDaysAgoCount,
+                                total : todayCount,
+                                thisMonth : (todayCount - lastMonthCount) / lastMonthCount * 100,
+                                lastMonth : (lastMonthCount - last2MonthsAgoCount) / last2MonthsAgoCount * 100,
+                                last3Months : (lastMonthCount - last4MonthsAgoCount) / last4MonthsAgoCount * 100,
+                                last12Months : (lastMonthCount - last13MonthsAgoCount) / last13MonthsAgoCount * 100,
+                              });
+          
        })
       .then(null,function(error){
         deferred.reject(error);
@@ -78,6 +133,7 @@ angular.module('dashboard')
 //gets the data for a Line chart of total new Companies to Date, by Day. Below the line chart, and as part of the same widget, show 6 fields below the line chart with summary (1 number) stats:
 // Today (how many new Companies have been added today)
 // Yesterday (how many new Companies were added yesterday)
+// total (total number of new companies)
 // Growth MTD (# of new Companies this month to date / total as of last month * 100)
 // Growth Last Month (# of new Companies added last month (does not include current month) / total as of previous month * 100)
 // Growth Last 3 Months (# of new Companies added for last 3 months (does not include current month) / total as of previous month (4 months ago)  * 100)
@@ -194,8 +250,8 @@ angular.module('dashboard')
           }
         });
         deferred.resolve({
-          byDay : [{key : "Companies", values : byDay},
-                   { key : "Average", values : queryHelpersService.calculateNormalizedValues(byDay,30) }],
+          byDay : [ {key : "Actual", values : byDay},
+                    { key : "Average", values : queryHelpersService.calculateNormalizedValues(byDay,30) }],
           today : todayCount,
           yesterday : yesterdayCount,
           total : totalCount,

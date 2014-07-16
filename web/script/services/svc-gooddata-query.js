@@ -66,7 +66,7 @@ angular.module('dashboard')
         .then(function(results){
           var zdResult = results[0][0].values
             , gsResult = results[1][0].values
-            , avgActiveDisplaysByDay = queryHelpersService.mapDateToValue(results[2][1].values,true);
+            , avgActiveDisplaysByDay = queryHelpersService.mapDateToValue(results[2].byDay[1].values,true);
 
           //calculate the combined ZD and GS touches
           var combinedTouches = queryHelpersService.combineIntoArray(queryHelpersService.mapDateToValue(zdResult),queryHelpersService.mapDateToValue(gsResult));
