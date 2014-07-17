@@ -36,7 +36,7 @@ angular.module('dashboard')
             y: Math.round(parseFloat(row[1])) 
           });
         }
-        deferred.resolve([{key:key,values:jsonResult}]);
+        deferred.resolve([{ key : key, values : _.sortBy(jsonResult,'x') }]);
       })
       .then(null,function(error){
         deferred.reject(error);
