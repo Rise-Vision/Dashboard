@@ -46,11 +46,11 @@ angular.module('dashboard')
     };
 
     service.getZendeskResponseTimeForLineGraph = function() {
-      return queryAPI('getZenDeskResponseTime','Avg Response Time (mins)');
+      return queryAPI('getZenDeskResponseTime','Zendesk');
     };
 
     service.getAverageTopicResponseTimesPerDay = function() {
-     return queryAPI('getAverageTopicResponseTimesPerDay','Avg First Reply (mins)');
+     return queryAPI('getAverageTopicResponseTimesPerDay','Community');
     };
     
     service.getFullResolutionTimesPerMonth = function() {

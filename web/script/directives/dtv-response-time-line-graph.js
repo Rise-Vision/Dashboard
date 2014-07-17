@@ -3,19 +3,26 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('topicResponseTimeLineGraph', ['gooddataQueryService','commonMetricService',
-    function(gooddataQueryService,commonMetricService){
+  .directive('responseTimeLineGraph', ['gooddataQueryService','commonMetricService', '$q',
+    function(gooddataQueryService,commonMetricService,$q){
      return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
       link: function (scope) {   
-            scope.title = 'Community Response Time';
-            scope.id = commonMetricService.generateChartId('topicResponseTimeChart');
-            scope.showSpinner = true;  
-             gooddataQueryService.getAverageTopicResponseTimesPerDay()
-              .then(function(result){
-                result[0].color = "#2D60AD";
+            scope.title = 'Average Response Time';
+            scope.id = commonMetricService.generateChartId('ResponseTimeChart');
+            scope.showSpinner = true; 
+            $q.all([
+                     gooddataQueryService.getAverageTopicResponseTimesPerDay(),
+                     gooddataQueryService.getZendeskResponseTimeForLineGraph()
+              ]) 
+              .then(function(results){
+                var dataSet = _.flatten(results,true);
+                var colours = commonMetricService.getChartColours();
+                for(var i = 0; i < dataSet.length; i++){
+                  dataSet[i].color = colours[i];                  
+                }
 
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
@@ -23,23 +30,22 @@ angular.module('dashboard')
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options(commonMetricService.getCommonChartOptions());
-                                
 
                   chart.xAxis
-                   .tickFormat(commonMetricService.dateD3Format);
-                   
+                  .tickFormat(commonMetricService.dateD3Format);
+                  
                   chart.yAxis
-                    .axisLabel('mins')
+                    .axisLabel('Minutes')
                     .tickFormat(d3.format(',.i'));
 
                   d3.select('#'+scope.id)
-                    .datum(result)
+                    .datum(dataSet)
                     .call(chart);
 
                   nv.utils.windowResize(chart.update);
 
                     return chart;
-                  });//addGraph
+                });//addGraph
               })//THEN
               .then(null,function(error){
                 console.error(error);
