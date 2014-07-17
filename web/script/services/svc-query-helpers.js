@@ -94,6 +94,12 @@ angular.module('dashboard')
       result.setSeconds(0);
       result.setMilliseconds(0);
       return result;
+    },
+    //returns true if the date parts of the Dates {{d1}} and {{d2}} are equal
+    equalDate : function(d1, d2){
+      return (d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate());
     }
   };//return
 }]);

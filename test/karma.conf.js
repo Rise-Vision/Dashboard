@@ -12,8 +12,7 @@ module.exports = function(config){
     reporters: ["progress"],
 
     plugins : [
-            "karma-chrome-launcher",
-            "karma-firefox-launcher",
+            
             "karma-jasmine",
             "karma-mocha",
             "karma-chai",

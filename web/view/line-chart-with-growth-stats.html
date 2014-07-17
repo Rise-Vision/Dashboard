@@ -7,7 +7,7 @@
     <br/>
     <table class="statsTable table">
       <thead>
-        <tr><td>Period</td><td>Sign Ups</td></tr>        
+        <tr><td>Period</td><td>{{growthStats.title}}</td></tr>        
       </thead>
       <tbody>    
         <tr><td>Today</td><td>{{growthStats.today}}</td></tr>
@@ -16,7 +16,7 @@
         <tr><td>Grow MTD</td><td>{{growthStats.thisMonth}}%</td></tr>
         <tr><td>Growth Last Month</td><td>{{growthStats.lastMonth}}%</td></tr>
         <tr><td>Growth Last 3 Month</td><td>{{growthStats.last3Months}}%</td></tr>
-        <tr><td>Growth Last 12 Month</td><td>{{growthStats.last12Months}}%</td></tr>
+        <tr><td>Growth Last 12 Month</td><td>{{ growthStats.last12Months !== null ? growthStats.last12Months:'N/A'}}%</td></tr>
       </tbody>
     </table>
   </div>

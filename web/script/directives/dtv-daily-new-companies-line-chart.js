@@ -8,8 +8,7 @@ angular.module('dashboard')
      return {
       restrict: 'E',
       scope: {},
-      /*TODO need new template to include the additional stats*/
-      templateUrl: 'view/new-companies.html',
+      templateUrl: 'view/line-chart-with-growth-stats.html',
       link: function (scope) {
             scope.title = 'New Companies';
             scope.id = commonMetricService.generateChartId('dailyNewCompaniesLineChart');
@@ -17,13 +16,14 @@ angular.module('dashboard')
              googleBigQueryService.getNewCompaniesByDay()
               .then(function(result){
                 scope.growthStats = {
+                  title:'Sign Ups',
                   today : result.today,
                   yesterday : result.yesterday,
                   total : result.total,
-                  thisMonth : Math.round(result.thisMonth),
-                  lastMonth : Math.round(result.lastMonth),
-                  last3Months : Math.round(result.last3Months),
-                  last12Months : Math.round(result.last12Months)
+                  thisMonth :isFinite(result.thisMonth) ?  Math.round(result.thisMonth) : 'N/A',
+                  lastMonth : isFinite(result.lastMonth) ? Math.round(result.lastMonth) : 'N/A',
+                  last3Months :isFinite(result.last3Months) ?  Math.round(result.last3Months) : 'N/A',
+                  last12Months : isFinite(result.last12Months) ? Math.round(result.last12Months) : 'N/A'
                 };
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < result.byDay.length; i++){

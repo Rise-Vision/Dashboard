@@ -169,11 +169,6 @@
     "version": false,
     "publishExternalAPI": false,
 
-    /* minerr.js */
-    "minErr": false,
-
-    /* loader.js */
-    "setupModuleLoader": false,
 
     /* jqLite.js */
     "BOOLEAN_ATTR": false,
@@ -199,32 +194,6 @@
     "addEventListenerFn": false,
     "removeEventListenerFn": false,
 
-    /* apis.js */
-    "hashKey": false,
-    "HashMap": false,
-
-    /* urlUtils.js */
-    "urlResolve": false,
-    "urlIsSameOrigin": false,
-
-    /* ng/compile.js */
-    "directiveNormalize": false,
-
-    /* ng/parse.js */
-    "setter": false,
-
-    /* ng/directive/directives.js */
-    "ngDirective": false,
-
-    /* ng/directive/input.js */
-    "VALID_CLASS": false,
-    "INVALID_CLASS": false,
-    "PRISTINE_CLASS": false,
-    "DIRTY_CLASS": false,
-
-    /* ng/diretctive/form.js */
-    "nullFormCtrl": false,
-
     /* Q */
     "Q": false,
 
@@ -239,12 +208,9 @@
     "module": false,
     "expect": false,
 
-    /* fixtures */
-    "rvFixtures": false,
+    /*lodash*/
+    "_":false
 
-    /* RV Globals */
-    "shoppingCart": false,
-    "showSpin": false,
-    "hideSpin": false
+
   }
 }
