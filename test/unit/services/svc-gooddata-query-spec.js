@@ -18,7 +18,7 @@ describe("Services: Gooddata Query", function() {
             case '/query/gooddata/getFullResolutionTimesPerMonth':              
             case '/query/gooddata/getGetSatisfactionTouchesByDay':             
             case '/query/gooddata/getZenDeskTouchesByDay':
-              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Jan 1 2014","9.5500000000000000"\n"Feb 1 2014","73.0054347826086957"\n"Mar 1 2014","9.9652777777777778"\n"Apr 1 2014","14.6138613861386139"\n'});
+              deferred.resolve({data:'"Month/Year (Created)","[Biz Hrs] First Reply Time (min) [Avg]"\n"Feb 1 2014","73.0054347826086957"\n"Mar 1 2014","9.9652777777777778"\n"Apr 1 2014","14.6138613861386139"\n"Jan 1 2014","9.5500000000000000"\n'});
               break;
             case '/query/googleBigQuery/getActiveDisplaysForLineChart':
               deferred.resolve({data:{
@@ -109,6 +109,12 @@ describe("Services: Gooddata Query", function() {
         expect(result).to.be.an('Array');
         expect(result.length).to.be.above(0);
         expect(result[0].values[0].x).to.be.a('Date');
+        //it should sort the final result
+        expect(result[0].values[0].x.getMonth()).to.equal(0);
+        expect(result[0].values[0].x.getDate()).to.equal(1);
+        expect(result[0].values[0].x.getFullYear()).to.equal(2014);
+
+
         /* jshint ignore:start */      
         expect(result[0].values[0].x).to.be.truely;
         /* jshint ignore:end */
