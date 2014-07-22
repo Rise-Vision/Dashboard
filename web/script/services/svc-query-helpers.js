@@ -45,10 +45,10 @@ angular.module('dashboard')
     parseSlashDate : function(dateStr) {
       var parts = dateStr.split('-');
       if(parts.length >= 3){
-        return new Date(parts[0], parts[1]-1, parts[2]); // Note: months are 0-based
+        return new Date(parts[0], parts[1]-1, parts[2],0,0,0,0); // Note: months are 0-based
       }
       else {
-        return new Date(parts[0], parts[1]-1, 1);
+        return new Date(parts[0], parts[1]-1, 1,0,0,0,0);
       }
     },
 
@@ -100,6 +100,30 @@ angular.module('dashboard')
       return (d1.getFullYear() === d2.getFullYear() &&
         d1.getMonth() === d2.getMonth() &&
         d1.getDate() === d2.getDate());
+    },
+    //returns true if the Date {{d}} is within range {{monthsAgoStart}}  {{monthsAgoEnd}}
+    isDateWithinMonths : function(d,monthsAgoStart,monthsAgoEnd) {
+      if(monthsAgoStart > monthsAgoEnd){
+        console.error('queryHelpersService: monthsAgoStart > monthsAgoEnd! inverted range');
+      }
+
+      var start = this.getMonthsAgo(monthsAgoStart)
+      ,   end = this.getMonthsAgo(monthsAgoEnd);
+
+
+      return (((d.getFullYear() === end.getFullYear() &&
+              d.getMonth() >= end.getMonth()) ||
+              (d.getFullYear() > end.getFullYear() )) &&                                                          
+              ((d.getFullYear() === start.getFullYear() &&
+              d.getMonth() <= start.getMonth()) ||
+              (d.getFullYear() < start.getFullYear() )));
+
+
+    },
+    //returns true if {{d}} is in the same month + year as {{monthsAgo}} from now
+    isDateWithinMonth : function(d,monthsAgo) {
+      var d2 = this.getMonthsAgo(monthsAgo);
+      return (d.getFullYear() === d2.getFullYear() && d.getMonth() === d2.getMonth());
     }
   };//return
 }]);

@@ -19,6 +19,7 @@ describe("Services: common metric", function() {
     expect(commonMetricService).to.respondTo('intToShortAgoMonth');
     expect(commonMetricService).to.respondTo('getCommonChartOptions');
     expect(commonMetricService).to.respondTo('dateD3Format');
+    expect(commonMetricService).to.respondTo('generateGrowthStats');
   });
 
   describe("generateChartId",function(){
@@ -45,4 +46,37 @@ describe("Services: common metric", function() {
       expect(commonMetricService.generateErrorMessage('error message').toLowerCase().indexOf('error message')).to.be.above(-1);
     });
   });//generateErrorMessage
+
+  describe('generateGrowthStats',function(){
+    it('should map the values',function(){
+      var test = {
+                today : 1,
+                yesterday : 2,
+                total : 3,
+                thisMonth :4,
+                lastMonth : 5,
+                last3Months :6,
+                last12Months : 7
+              };
+      var result = commonMetricService.generateGrowthStats('TEST',test);
+      expect(result.title).to.equal('TEST');
+      for(var key in test){
+        expect(result[key]).to.equal(test[key]);
+      }
+    });
+
+    it('should display N/A when no value is provided', function(){
+      var test = {
+                today : 1,
+                yesterday : 2,
+                total : 3,
+                lastMonth : 5,
+                last3Months :6,
+                last12Months : 1/0
+              };
+      var result = commonMetricService.generateGrowthStats('TEST',test);
+      expect(result.thisMonth).to.equal('N/A');      
+      expect(result.last12Months).to.equal('N/A');
+    });
+  });//generateGrowthStats
 });//service
