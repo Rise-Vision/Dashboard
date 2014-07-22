@@ -72,6 +72,15 @@
               </span>
             </a>
           </th>
+          <th ng-click="orderByField='openIssues'; reverseSort = !reverseSort">
+            <a >
+              Open Issues
+              <span ng-show="orderByField == 'openIssues'">
+                <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
+                <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
+              </span>
+            </a>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -82,6 +91,7 @@
           <td >{{repo.forked}}</td>
           <td >{{repo.watched}}</td>
           <td >{{repo.starred}}</td>
+          <td >{{(repo.openIssues !== null ? repo.openIssues : '-')}}</td>
         </tr>
       </tbody>
       <tfoot>
@@ -92,6 +102,7 @@
           <td>{{data|filter:exposure.filter|sumByKey:'forked'}}</td>
           <td>{{data|filter:exposure.filter|sumByKey:'watched'}}</td>
           <td>{{data|filter:exposure.filter|sumByKey:'starred'}}</td>
+          <td>{{data|filter:exposure.filter|sumByKey:'openIssues'}}</td>
         </tr>
       </tfoot>
 

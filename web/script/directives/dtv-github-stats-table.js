@@ -49,7 +49,10 @@ angular.module('dashboard')
           for (var x = 0; x < splitKey.length; x ++){
             value = value[splitKey[x]];
           }
-          sum += parseInt(value);
+          var intVal = parseInt(value);
+          if(!isNaN(intVal)){
+            sum += intVal;
+          }
         }
 
         return sum;
