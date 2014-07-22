@@ -15,6 +15,9 @@ describe('Services: Query Helpers', function(){
     expect(queryHelpersService).to.respondTo('parseSlashDate');   
     expect(queryHelpersService).to.respondTo('mapDateToValue');   
     expect(queryHelpersService).to.respondTo('combineIntoArray');
+    expect(queryHelpersService).to.respondTo('getMonthsAgo');
+    expect(queryHelpersService).to.respondTo('isDateWithinMonths');
+    expect(queryHelpersService).to.respondTo('isDateWithinMonth');    
   });
 
 
@@ -165,5 +168,37 @@ describe('Services: Query Helpers', function(){
       var d2 = new Date(d1);d2.setYear(2000);
       expect(queryHelpersService.equalDate(d1,d2)).to.be.false;
     });
-  })
+  });//equalDate
+
+  describe('isDateWithinMonths',function(){
+    it('should return true if the date is within the range',function(){
+      var d = new Date();
+      expect(queryHelpersService.isDateWithinMonths(d,0,1)).to.be.true;
+    });
+    it('should return false if the date is after the range',function(){
+      var d = new Date();
+      expect(queryHelpersService.isDateWithinMonths(d,10,20)).to.be.false;
+    });
+    it('should return true if the date is before the range',function(){
+      var d = new Date();d.setFullYear(2000);
+      expect(queryHelpersService.isDateWithinMonths(d,1,2)).to.be.false;
+    });
+  });
+  describe('isDateWithinMonth',function(){
+    it('should return true if the date is within the desired month+year',function(){
+      var d = new Date();
+      expect(queryHelpersService.isDateWithinMonth(d,0)).to.be.true;
+    });
+    it('should return false if the date is after the desired month+year',function(){
+      var d = new Date();
+      expect(queryHelpersService.isDateWithinMonth(d,10)).to.be.false;
+    });
+    it('should return true if the date is before the desired month+year',function(){
+      var d = new Date();d.setFullYear(2000);
+      expect(queryHelpersService.isDateWithinMonths(d,1)).to.be.false;
+    });
+  });
+
+
+
 });

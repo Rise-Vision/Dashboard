@@ -10,7 +10,7 @@ angular.module('dashboard')
   return {
     //Generates a relatively unique id for the chart's canvas for d3 to find
     generateChartId : function(chartName){
-      return chartName + '_' + Math.floor((Math.random() * 10000000) + 1);
+      return chartName + '_' + Math.floor((Math.random() * 10000000000000) + 1);
     },
     //generic error message generator for charts
     generateErrorMessage : function(error){
@@ -51,6 +51,19 @@ angular.module('dashboard')
     dateD3Format : function (d) {
       return d3.time.format("%d-%b-%y")(new Date(d));
     },
+    //maps the growth stats and title into the common scope object for display in line-chart-with-growth-stats.html
+    generateGrowthStats : function(title,result) {
+      return {
+                title:title,
+                today : result.today,
+                yesterday : result.yesterday,
+                total : result.total,
+                thisMonth :isFinite(result.thisMonth) ?  Math.round(result.thisMonth) : 'N/A',
+                lastMonth : isFinite(result.lastMonth) ? Math.round(result.lastMonth) : 'N/A',
+                last3Months :isFinite(result.last3Months) ?  Math.round(result.last3Months) : 'N/A',
+                last12Months : isFinite(result.last12Months) ? Math.round(result.last12Months) : 'N/A'
+              };
+    }
 
   };
 }]);

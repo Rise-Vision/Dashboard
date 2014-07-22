@@ -3,25 +3,23 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('activeDisplaysLineGraph', ['googleBigQueryService','commonMetricService',
-    function(googleBigQueryService,commonMetricService){
+  .directive('dailyReleasesLineChart', ['githubQueryService','commonMetricService',
+    function(githubQueryService,commonMetricService){
      return {
       restrict: 'E',
       scope: {},
       templateUrl: 'view/line-chart-with-growth-stats.html',
       link: function (scope) {
-            scope.title = 'Active Displays';
-            scope.id = commonMetricService.generateChartId('activeDisplaysLineChart');
+            scope.title = 'Releases';
+            scope.id = commonMetricService.generateChartId('dailyNewCompaniesLineChart');
             scope.showSpinner = true;   
-             googleBigQueryService.getActiveDisplaysForLineChart()
+             githubQueryService.getDailyReleases()
               .then(function(result){
-                scope.growthStats = commonMetricService.generateGrowthStats('Displays Growth',result);
-                                
+                scope.growthStats = commonMetricService.generateGrowthStats('Releases',result);
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < result.byDay.length; i++){
                   result.byDay[i].color = colours[i];                  
                 }
-                
                 nv.addGraph(function() {  
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
@@ -34,7 +32,7 @@ angular.module('dashboard')
                    .tickFormat(commonMetricService.dateD3Format);
 
                   chart.yAxis
-                    .axisLabel('Displays')
+                    .axisLabel('Releases')
                     .tickFormat(d3.format(',.i'));
                   d3.select('#'+scope.id)
                     .datum(result.byDay)
@@ -42,8 +40,9 @@ angular.module('dashboard')
 
                   nv.utils.windowResize(chart.update);
 
-                  return chart;
-                });//addGraph
+                    return chart;
+                  });//addGraph
+
               })//THEN
               .then(null,function(error){
                 console.error(error);

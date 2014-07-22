@@ -15,16 +15,8 @@ angular.module('dashboard')
             scope.showSpinner = true;   
              googleBigQueryService.getNewCompaniesByDay()
               .then(function(result){
-                scope.growthStats = {
-                  title:'Sign Ups',
-                  today : result.today,
-                  yesterday : result.yesterday,
-                  total : result.total,
-                  thisMonth :isFinite(result.thisMonth) ?  Math.round(result.thisMonth) : 'N/A',
-                  lastMonth : isFinite(result.lastMonth) ? Math.round(result.lastMonth) : 'N/A',
-                  last3Months :isFinite(result.last3Months) ?  Math.round(result.last3Months) : 'N/A',
-                  last12Months : isFinite(result.last12Months) ? Math.round(result.last12Months) : 'N/A'
-                };
+                scope.growthStats = commonMetricService.generateGrowthStats('Sign Ups',result);
+                
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < result.byDay.length; i++){
                   result.byDay[i].color = colours[i];                  
