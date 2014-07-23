@@ -140,7 +140,7 @@ describe("Service: BigQuery", function() {
                 .getActiveDisplaysForLineChart()
                 .then(function(result){
                   expect(result).to.be.truely;
-                  expect(result).to.contain.keys('byDay','today','yesterday','total','thisMonth','lastMonth','last3Months','last12Months');
+                  expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
                   expect(result.byDay).to.have.length(2);
                   done();
                 })                  
@@ -184,6 +184,17 @@ describe("Service: BigQuery", function() {
                   done();
                 })                  
                 .then(null,done);  
+      });
+
+      it('should calculate the last 7 days count',function(done){
+        return googleBigQueryService
+                .getActiveDisplaysForLineChart()
+                .then(function(result){
+                  var last7Days = _.last(result.byDay[1].values,7);
+                  expect(result.last7Days).to.equal(last7Days[6].y - last7Days[0].y);
+                  done();
+                })
+                .then(null,done);
       });
 
       it('should calculate the total count',function(done){
@@ -267,7 +278,7 @@ describe("Service: BigQuery", function() {
                 .getNewCompaniesByDay()
                 .then(function(result){
                   expect(result).to.be.truely;
-                  expect(result).to.contain.keys('byDay','today','yesterday','total','thisMonth','lastMonth','last3Months','last12Months');
+                  expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
                   expect(result.byDay).to.have.length(2);
                   done();
                 })                  
@@ -309,6 +320,20 @@ describe("Service: BigQuery", function() {
                   done();
                 })                  
                 .then(null,done);  
+      });
+
+       it('should calculate the last 7 days count',function(done){
+        return googleBigQueryService
+                .getNewCompaniesByDay()
+                .then(function(result){
+                  if(new Date().getDate() <= 7){
+                  expect(result.last7Days).to.equal(result.today+result.yesterday+3);
+                }else{
+                  expect(result.last7Days).to.equal(result.today+result.yesterday);
+                }
+                  done();
+                })                  
+                .then(null,done);
       });
 
       it('should calculate the total count',function(done){

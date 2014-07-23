@@ -74,6 +74,7 @@ angular.module('dashboard')
             var todayCount = 0
             , yesterdayCount = 0
             , twoDaysAgoCount = 0
+            , sevenDaysAgoCount = 0
             , lastMonthCount = 0
             , last2MonthsAgoCount = 0
             , last4MonthsAgoCount = 0
@@ -83,6 +84,7 @@ angular.module('dashboard')
             var today = new Date();
             var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
             var twoDaysAgo = new Date();twoDaysAgo.setDate(twoDaysAgo.getDate() -2);
+            var sevenDaysAgo = new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate() -6);
             var lastDayOfLastMonth = new Date(); lastDayOfLastMonth.setDate(0);
             var lastDayOf2MonthsAgo = queryHelpersService.getMonthsAgo(1); lastDayOf2MonthsAgo.setDate(0);
             var lastDayOf3MonthsAgo = queryHelpersService.getMonthsAgo(2); lastDayOf3MonthsAgo.setDate(0);
@@ -93,11 +95,11 @@ angular.module('dashboard')
             _.forEach(averageDisplays,function(result){
                 if(queryHelpersService.equalDate(result.x, today)) {
                   todayCount = result.y;
-                } 
-                else if(queryHelpersService.equalDate(result.x, yesterday)) {
+                }else if(queryHelpersService.equalDate(result.x, yesterday)) {
                   yesterdayCount = result.y;
-                }
-                else if(queryHelpersService.equalDate(result.x, twoDaysAgo)) {
+                }else if (queryHelpersService.equalDate(result.x, sevenDaysAgo)){
+                  sevenDaysAgoCount = result.y;
+                }else if(queryHelpersService.equalDate(result.x, twoDaysAgo)) {
                   twoDaysAgoCount = result.y;
                 }else if(queryHelpersService.equalDate(result.x, lastDayOfLastMonth)) {
                   lastMonthCount = result.y;
@@ -117,6 +119,7 @@ angular.module('dashboard')
                                         ],
                                 today : todayCount - yesterdayCount,
                                 yesterday : yesterdayCount - twoDaysAgoCount,
+                                last7Days : todayCount - sevenDaysAgoCount ,
                                 total : todayCount,
                                 thisMonth : (todayCount - lastMonthCount) / lastMonthCount * 100,
                                 lastMonth : (lastMonthCount - last2MonthsAgoCount) / last2MonthsAgoCount * 100,
@@ -164,6 +167,7 @@ angular.module('dashboard')
 
         var todayCount = 0
           , yesterdayCount = 0
+          , last7DaysCount = 0
           , thisMonthCount = 0
           , lastMonthCount = 0
           , last3MonthsCount = 0
@@ -176,13 +180,8 @@ angular.module('dashboard')
           
         var today = new Date();
         var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
-        var thisMonth = queryHelpersService.getMonthsAgo(0)
-         ,  lastMonth = queryHelpersService.getMonthsAgo(1)
-         ,  twoMonths = queryHelpersService.getMonthsAgo(2)
-         , fourMonths = queryHelpersService.getMonthsAgo(4) 
-         , fiveMonths = queryHelpersService.getMonthsAgo(5) 
-         , thirteenMonths = queryHelpersService.getMonthsAgo(13)
-         , fourteenMonths = queryHelpersService.getMonthsAgo(14);
+        var sevenDaysAgo = new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);sevenDaysAgo.setHours(0); sevenDaysAgo.setMinutes(0);sevenDaysAgo.setSeconds(0);sevenDaysAgo.setMilliseconds(0);
+        
         var byDay = _.map(res.data.rows,
                            function(item){
                             var result = {
@@ -191,43 +190,28 @@ angular.module('dashboard')
                             };
 
                             //SR note: while bigquery will only return only return 1 record per day, for unit testing simplisty purposes, there may be more than 1 entry
-                            if( result.x.getFullYear() === today.getFullYear() &&
-                                result.x.getMonth() === today.getMonth() &&
-                                result.x.getDate() === today.getDate()) {
+                            if(queryHelpersService.equalDate( result.x,today)) {
                               todayCount += result.y;
-                            } 
-                            if(result.x.getFullYear() === yesterday.getFullYear() &&
-                                result.x.getMonth() === yesterday.getMonth() &&
-                                result.x.getDate() === yesterday.getDate()){
+                            } else if(queryHelpersService.equalDate(result.x, yesterday)){
                               yesterdayCount += result.y;
                             }
-                            if(result.x.getFullYear() === thisMonth.getFullYear() &&
-                                result.x.getMonth() === thisMonth.getMonth()){
-                              thisMonthCount += result.y;
+                            if(result.x >= sevenDaysAgo){
+                              last7DaysCount += result.y;
                             }
-                            if(result.x.getFullYear() === lastMonth.getFullYear() &&
-                                result.x.getMonth() === lastMonth.getMonth()){
+
+                            if(queryHelpersService.isDateWithinMonth(result.x,0)){
+                              thisMonthCount += result.y;
+                            }else if(queryHelpersService.isDateWithinMonth(result.x,1)){
                               lastMonthCount += result.y;
                             }
                             
                             //do not include current month 
-                            if(((result.x.getFullYear() === fourMonths.getFullYear() &&
-                                result.x.getMonth() >= fourMonths.getMonth()) ||
-                                (result.x.getFullYear() > fourMonths.getFullYear() )) &&                                                          
-                                ((result.x.getFullYear() === thisMonth.getFullYear() &&
-                                result.x.getMonth() < thisMonth.getMonth()) ||
-                                (result.x.getFullYear() < thisMonth.getFullYear() ))) {
-                              
+                            if(queryHelpersService.isDateWithinMonths(result.x,1,4)) {                              
                               last3MonthsCount += result.y;
                             }
 
                             //do not include current month 
-                            if(((result.x.getFullYear() === thirteenMonths.getFullYear() &&
-                                result.x.getMonth() >= thirteenMonths.getMonth()) ||
-                                (result.x.getFullYear() > thirteenMonths.getFullYear() ))&&
-                                ((result.x.getFullYear() === thisMonth.getFullYear() &&
-                                result.x.getMonth() < thisMonth.getMonth()) ||
-                                (result.x.getFullYear() < thisMonth.getFullYear() ))) {
+                            if( queryHelpersService.isDateWithinMonths(result.x,1,13)) {
                               last12MonthsCount += result.y;
                             }
 
@@ -239,13 +223,13 @@ angular.module('dashboard')
                           date : queryHelpersService.parseSlashDate(item.f[0].v),
                           count : parseInt(item.f[1].v)
                         };
-          if (result.date.getMonth() === lastMonth.getMonth() && result.date.getFullYear() === lastMonth.getFullYear()){
+          if (queryHelpersService.isDateWithinMonth(result.date,1)){
             previousMonthTotalCompanies = result.count;
-          } else if (result.date.getMonth() === twoMonths.getMonth() && result.date.getFullYear() === twoMonths.getFullYear()){
+          } else if (queryHelpersService.isDateWithinMonth(result.date,2)){
             twoMonthsAgoTotalCompanies = result.count;
-          } else if (result.date.getMonth() === fiveMonths.getMonth() && result.date.getFullYear() === fiveMonths.getFullYear()){
+          } else if (queryHelpersService.isDateWithinMonth(result.date,5)){
             fourMonthsAgoTotalCompanies = result.count;
-          } else if (result.date.getMonth() === fourteenMonths.getMonth() && result.date.getFullYear() === fourteenMonths.getFullYear()){
+          } else if (queryHelpersService.isDateWithinMonth(result.date,14)){
             thirteenMonthsAgoTotalCompanies = result.count;
           }
         });
@@ -254,6 +238,7 @@ angular.module('dashboard')
                     { key : "Average", values : queryHelpersService.calculateNormalizedValues(byDay,30) }],
           today : todayCount,
           yesterday : yesterdayCount,
+          last7Days : last7DaysCount,
           total : totalCount,
           thisMonth : thisMonthCount / previousMonthTotalCompanies  * 100, 
           lastMonth : lastMonthCount / twoMonthsAgoTotalCompanies  * 100 ,

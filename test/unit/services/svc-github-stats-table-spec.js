@@ -171,6 +171,20 @@ describe("Services: githubQueryService", function() {
               .then(null,done);
     });
 
+    it('should calculate last 7 days count',function(done){
+      return githubQueryService.getDailyReleases()
+              .then(function(result){
+                expect(result.last7Days).to.be.a('number');
+                var expectedSum = 0;
+                for(var i=0; i < 7; i++){
+                  expectedSum+=(result.byDay[0].values.length - i - 1);
+                }                
+                expect(result.last7Days).to.equal(expectedSum);
+                done();
+              })
+              .then(null,done);
+    });
+
     it('should calculate the total count',function(done){
       return githubQueryService.getDailyReleases()
               .then(function(result){
