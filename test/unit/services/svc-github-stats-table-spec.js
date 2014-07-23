@@ -65,7 +65,8 @@ describe("Services: githubQueryService", function() {
                   "forked" : 0,
                   "watched" : 0,
                   "starred" : 0,
-                  'openIssues' : 0
+                  'openIssues' : 0,
+                  'tests':0
                 }
               ]});
             break;//getStats
@@ -114,7 +115,7 @@ describe("Services: githubQueryService", function() {
               .then(function(result){
                 expect(result).to.be.an('Array');
                 expect(result).to.have.length.above(0);
-                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues'];
+                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues','tests'];
                 for(var i = 0; i < expectedProperties.length; i++) {
                   expect(result[0]).to.have.property(expectedProperties[i]);
                 }
@@ -165,6 +166,20 @@ describe("Services: githubQueryService", function() {
               .then(function(result){
                 expect(result.yesterday).to.be.a('number');
                 expect(result.yesterday).to.equal(result.byDay[0].values.length -2 )
+                done();
+              })
+              .then(null,done);
+    });
+
+    it('should calculate last 7 days count',function(done){
+      return githubQueryService.getDailyReleases()
+              .then(function(result){
+                expect(result.last7Days).to.be.a('number');
+                var expectedSum = 0;
+                for(var i=0; i < 7; i++){
+                  expectedSum+=(result.byDay[0].values.length - i - 1);
+                }                
+                expect(result.last7Days).to.equal(expectedSum);
                 done();
               })
               .then(null,done);
