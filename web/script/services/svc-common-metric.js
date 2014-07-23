@@ -57,6 +57,7 @@ angular.module('dashboard')
                 title:title,
                 today : result.today,
                 yesterday : result.yesterday,
+                last7Days : result.last7Days,
                 total : result.total,
                 thisMonth :isFinite(result.thisMonth) ?  Math.round(result.thisMonth) : 'N/A',
                 lastMonth : isFinite(result.lastMonth) ? Math.round(result.lastMonth) : 'N/A',

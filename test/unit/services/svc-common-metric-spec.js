@@ -52,6 +52,7 @@ describe("Services: common metric", function() {
       var test = {
                 today : 1,
                 yesterday : 2,
+                last7Days : 100,
                 total : 3,
                 thisMonth :4,
                 lastMonth : 5,

@@ -29,6 +29,7 @@ angular.module('dashboard')
     .then(function(result){
       var todayCount = 0
       , yesterdayCount = 0
+      , last7DaysCount = 0
 
       , thisMonthCount = 0
       , lastMonthCount = 0
@@ -44,7 +45,7 @@ angular.module('dashboard')
 
       var today = new Date();
       var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);      
-
+      var sevenDaysAgo = new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);sevenDaysAgo.setHours(0);sevenDaysAgo.setMinutes(0);sevenDaysAgo.setSeconds(0);sevenDaysAgo.setMilliseconds(0);
       var releases = _.map(result.data,
                               function(item){
                                  var result =  { 
@@ -62,6 +63,11 @@ angular.module('dashboard')
                                               result.x.getDate() === yesterday.getDate()){
                                     yesterdayCount += result.y;
                                   }
+
+                                  if(result.x >= sevenDaysAgo){
+                                    last7DaysCount += result.y;
+                                  }
+
                                   if(queryHelpersService.isDateWithinMonth(result.x,0)){
                                     thisMonthCount += result.y;
                                   }
@@ -98,6 +104,7 @@ angular.module('dashboard')
         ],
         today : todayCount,
         yesterday : yesterdayCount,
+        last7Days : last7DaysCount,
         total : totalCount,
         thisMonth : (thisMonthCount - lastMonthCount) / lastMonthCount  * 100, 
         lastMonth : (lastMonthCount - previousMonthCount) / previousMonthCount  * 100 ,
