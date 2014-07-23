@@ -51,16 +51,23 @@ angular.module('dashboard')
 
   };
 
+  //ask the server if the user is authenticated
+  service.makeAuthCheck = function() {
+    var deferred = $q.defer();
 
-  $http.get(API_ROOT+'/auth/user')
-  .then(function(result){
-    authenticated.resolve(result.data);
-    isUserAuthenticated = true;
-  },function(error){
-    if(error.status !== 401){
-      console.error(error);
-    }
-  });
+    $http.get(API_ROOT+'/auth/user')
+    .then(function(result){
+      authenticated.resolve(result.data);
+      isUserAuthenticated = true;
+    },function(error){
+      if(error.status === 404){
+        console.error('Dashboard Proxy Server is Currently Unavailable.');
+      }      
+      deferred.reject(error);
+    });
+    return deferred.promise;
+
+  };
 
   return service;
 }]);

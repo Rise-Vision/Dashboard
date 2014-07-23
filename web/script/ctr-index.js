@@ -43,10 +43,23 @@ angular.module('dashboard')
 
       authenticationService.login()
       .then(null, function(error){
-        console.error(error);
         $scope.logingIn = false;
-        $scope.loginErrorMessage = 'Failed to login: ' + error.toString();
+        if(error.status === 404){
+          $scope.loginErrorMessage = 'Proxy Server Is Unavailable At The Moment.';
+        }else{
+          $scope.loginErrorMessage = 'Failed to login: ' + error.toString();
+        }
       });             
     }; 
+
+    authenticationService.makeAuthCheck()
+    .then(null,function(e){
+      $scope.logingIn = false;
+      if(e.status === 404){
+        $scope.loginErrorMessage = 'Proxy Server Is Unavailable At The Moment. Dashboard Can Not Load.';
+      }else{
+        $scope.loginErrorMessage = 'Failed to login: ' + e.toString();
+      }
+    });
   }
 ]); //mainController

@@ -44,6 +44,7 @@ describe("Services: Authentication", function() {
   it("should exist", function() {
     expect(authenticationService).be.defined;
     expect(authenticationService.isUserAuthenticated()).be.false;
+    expect(authenticationService).to.respondTo('makeAuthCheck');
   });
 
   it("should set the user to authenticated", function(done) {
