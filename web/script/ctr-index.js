@@ -57,7 +57,7 @@ angular.module('dashboard')
       $scope.logingIn = false;
       if(e.status === 404){
         $scope.loginErrorMessage = 'Proxy Server Is Unavailable At The Moment. Dashboard Can Not Load.';
-      }else{
+      }else if(e.status !== 401){
         $scope.loginErrorMessage = 'Failed to login: ' + e.toString();
       }
     });
