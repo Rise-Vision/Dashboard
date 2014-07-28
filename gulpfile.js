@@ -29,6 +29,7 @@ var env = process.env.NODE_ENV || "dev",
     connect = require("gulp-connect"),
     protractor = require("gulp-protractor").protractor,
     webdriver_update = require("gulp-protractor").webdriver_update,
+    factory = require("widget-tester").gulpTaskFactory,
     httpServer,
 
     //Test files
@@ -172,7 +173,7 @@ gulp.task("test", function() {
   return gulp.src(testFiles).pipe(
     watch(function(files) {
       return files.pipe(karma({
-        configFile: "test/karma.conf.js",
+        configFile: "node_modules/widget-tester/karma.conf.js",
         action: "start"
       }))
       .on("error", function(err) {
@@ -186,7 +187,7 @@ gulp.task("test-ci", function() {
   // Be sure to return the stream
   return gulp.src(testFiles)
     .pipe(karma({
-      configFile: "test/karma-jenkins.conf.js",
+      configFile: "node_modules/widget-tester/karma.conf.js",
       action: "run"
     }))
     .on("error", function(err) {
@@ -243,7 +244,7 @@ gulp.task("e2e-server", ["build-e2e"], function() {
 gulp.task("protractor", ["webdriver_update", "e2e-server"], function () {
   return gulp.src(["./test/e2e/*.js"])
     .pipe(protractor({
-        configFile: "./test/protractor.conf.js",
+        configFile: "./node_modules/widget-tester/protractor.conf.js",
         args: ["--baseUrl", "http://127.0.0.1:" + e2ePort + "/index.html"]
     }))
     .on("error", function (e) { console.log(e); throw e; })
@@ -251,6 +252,9 @@ gulp.task("protractor", ["webdriver_update", "e2e-server"], function () {
       connect.serverClose();
     });
 });
+
+
+gulp.task("metrics", factory.metrics());
 
 gulp.task("test-e2e", ["protractor"], function() {
 });
