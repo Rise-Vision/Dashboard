@@ -7,3 +7,4 @@ dist
 test_reports
 web/components
 web/css/dashboard.css
+reports/

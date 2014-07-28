@@ -36,14 +36,15 @@
     "gulp-connect": "~2.0.5",
     "gulp-protractor": "~0.0.7",
     "gulp-html-replace": "git://github.com/settinghead/gulp-html-replace.git",
-    "protractor": "~0.23.1"
+    "protractor": "~0.23.1",
+    "widget-tester": "git://github.com/Rise-Vision/widget-tester.git"
   },
   "scripts": {
-    "dev-install": "npm install && bower install && gulp config && gulp sass",
+    "dev-install": "npm install; bower install; gulp config; gulp sass",
     "dev": "gulp server",
-    "test": "gulp test-ci",
+    "test": "gulp test-ci; gulp metrics",
     "start" : "gulp server",
-    "ci-build": "npm install --production && bower install && gulp test-ci && gulp build"
+    "ci-build": "npm install --production; bower install; gulp test-ci; gulp metrics; gulp build"
   },
   "author": "Rise",
   "devDependencies": {
