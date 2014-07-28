@@ -136,6 +136,7 @@ angular.module('dashboard')
 //gets the data for a Line chart of total new Companies to Date, by Day. Below the line chart, and as part of the same widget, show 6 fields below the line chart with summary (1 number) stats:
 // Today (how many new Companies have been added today)
 // Yesterday (how many new Companies were added yesterday)
+// last7Days (how many new Companies were added the last 7 days)
 // total (total number of new companies)
 // Growth MTD (# of new Companies this month to date / total as of last month * 100)
 // Growth Last Month (# of new Companies added last month (does not include current month) / total as of previous month * 100)
@@ -252,6 +253,97 @@ angular.module('dashboard')
 
     return deferred.promise;
   };//getNewCompaniesByDay
+
+  //gets the number of active companies per day and includes the following growth stats
+  // Today (how many active Companies have been added today)
+  // Yesterday (how many active Companies were added yesterday)
+  // Growth MTD (# of active Companies this month to date / total as of last month * 100)
+  // Growth Last Month (# of active Companies added last month (does not include current month) / total as of previous month * 100)
+  // Growth Last 3 Months (# of active Companies added for last 3 months (does not include current month) / total as of previous month (4 months ago)  * 100)
+  // Growth Last 12 Months (# of active Companies added for last 12 months (does not include current month) / total as of previous month (13 months ago)  * 100)
+  
+  service.getActiveCompaniesByDay = function(){
+  var deferred = $q.defer();
+   
+   $q.all([
+      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000}),
+      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByMonth',{timeout:60000})
+    ]) 
+       .then(function(response){
+          var result = response[0].data;
+          if(result.error|| !result.jobComplete){
+            deferred.reject(result.error || 'big query job failed to complete');
+            return;
+          }
+            var todayCount = 0
+            , yesterdayCount = 0
+            , twoDaysAgoCount = 0;
+
+            var today = new Date();
+            var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
+            var twoDaysAgo = new Date();twoDaysAgo.setDate(twoDaysAgo.getDate() -2);
+
+            var companies = _.map(result.rows,
+                              function(item){
+                                 var result = { 
+                                    x : queryHelpersService.parseSlashDate(item.f[0].v),
+                                    y : Math.round(parseInt(item.f[1].v))
+                                  };
+
+                                  if(queryHelpersService.equalDate(result.x, today)) {
+                                    todayCount = result.y;
+                                  }else if(queryHelpersService.equalDate(result.x, yesterday)) {
+                                    yesterdayCount = result.y;
+                                  }else if (queryHelpersService.equalDate(result.x, twoDaysAgo)) {
+                                    twoDaysAgoCount += result.y;
+                                  }   
+                                  return result;
+                              });
+            var averageCompanies = queryHelpersService.calculateNormalizedValues(companies,30);           
+            var thisMonthCount = 0
+            , previousMonthCount = 0
+            , twoMonthsAgoCount = 0
+            , fourMonthsAgoCount = 0
+            , thirteenMonthsAgoCount = 0;
+            _.forEach(response[1].data.rows,function(item){
+              var result = {
+                              date : queryHelpersService.parseSlashDate(item.f[0].v),
+                              count : parseInt(item.f[1].v)
+                            };
+              if(queryHelpersService.isDateWithinMonth(result.date,0)){
+                thisMonthCount = result.count;
+              } else if (queryHelpersService.isDateWithinMonth(result.date,1)){
+                previousMonthCount = result.count;
+              } else if (queryHelpersService.isDateWithinMonth(result.date,2)){
+                twoMonthsAgoCount = result.count;
+              } else if (queryHelpersService.isDateWithinMonth(result.date,4)){
+                fourMonthsAgoCount = result.count;
+              } else if (queryHelpersService.isDateWithinMonth(result.date,13)){
+                thirteenMonthsAgoCount = result.count;
+              }
+            });
+
+            deferred.resolve({
+                                byDay : [
+                                          { key : "Actual", values : companies },
+                                          { key : "Average", values : averageCompanies }
+                                        ],
+                                today : todayCount - yesterdayCount,
+                                yesterday : yesterdayCount - twoDaysAgoCount,
+                                
+                                total : todayCount,
+                                thisMonth : (thisMonthCount-previousMonthCount) / previousMonthCount  * 100, 
+                                lastMonth : (previousMonthCount-twoMonthsAgoCount) / twoMonthsAgoCount  * 100 ,
+                                last3Months : (previousMonthCount-fourMonthsAgoCount) / fourMonthsAgoCount * 100,
+                                last12Months : (previousMonthCount-thirteenMonthsAgoCount) / thirteenMonthsAgoCount * 100
+                              });
+          
+       })
+      .then(null,function(error){
+        deferred.reject(error);
+      });
+    return deferred.promise;   
+  };//getActiveCompaniesByDay
 
   return service;
 }]);
