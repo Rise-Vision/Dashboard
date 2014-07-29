@@ -32,8 +32,8 @@ angular.module('dashboard')
             continue;
           }
           jsonResult.push({
-            x: expectShortMonth ? queryHelpersService.awesomeMonthDateParser(row[0]) : new Date(row[0]),            
-            y: Math.round(parseFloat(row[1])) 
+            x: expectShortMonth ? queryHelpersService.awesomeMonthDateParser(row[0]) : new Date(row[0]),
+            y: Math.round(parseFloat(row[1]))
           });
         }
         deferred.resolve([{ key : key, values : _.sortBy(jsonResult,'x') }]);
@@ -52,7 +52,7 @@ angular.module('dashboard')
     service.getAverageTopicResponseTimesPerDay = function() {
      return queryAPI('getAverageTopicResponseTimesPerDay','Community');
     };
-    
+
     service.getFullResolutionTimesPerMonth = function() {
       return queryAPI('getFullResolutionTimesPerMonth','Avg Resolution (hrs)');
     };
@@ -70,13 +70,13 @@ angular.module('dashboard')
 
           //calculate the combined ZD and GS touches
           var combinedTouches = queryHelpersService.combineIntoArray(queryHelpersService.mapDateToValue(zdResult),queryHelpersService.mapDateToValue(gsResult));
-               
-          var divideByActiveDiplays = function(val) {            
+
+          var divideByActiveDiplays = function(val) {
             var displays = avgActiveDisplaysByDay[val.x.toDateString()];
             return { x : val.x, y : (typeof displays === 'undefined'|| !displays|| displays <= 0)? 0 : Math.round((val.y / displays * 1000) * 100) / 100};
           };
           //calculate the average touches for the pass 60 days (normalize over 60days)
-          //and then divide by the number of active displays for 
+          //and then divide by the number of active displays for
            var normCount = 60 //days
             , normZDTouchesOverDisplays = _.map(queryHelpersService.calculateNormalizedValues(zdResult, normCount), divideByActiveDiplays)
             , normGSTouchesOverDisplays = _.map(queryHelpersService.calculateNormalizedValues(gsResult, normCount), divideByActiveDiplays)
@@ -90,12 +90,12 @@ angular.module('dashboard')
         .then(null,function(error){
           deferred.reject(error);
         });
-      
+
       return deferred.promise;
     };
 
-    
-    
+
+
 
 
 

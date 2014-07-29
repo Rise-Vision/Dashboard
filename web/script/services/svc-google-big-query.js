@@ -27,7 +27,7 @@ angular.module('dashboard')
               return {
                 id : row.f[0].v,
                 lat : row.f[1].v,
-                lng : row.f[2].v 
+                lng : row.f[2].v
               };
             }
           ));
@@ -53,7 +53,7 @@ angular.module('dashboard')
   //      / total of  the Average Active Displays as of previous month (13 months ago)  * 100)
   service.getActiveDisplaysForLineChart = function(){
     var deferred = $q.defer();
-    
+
    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:60000})
        .then(function(response){
           var result = response.data;
@@ -61,11 +61,11 @@ angular.module('dashboard')
             deferred.reject(result.error || 'big query job failed to complete');
             return;
           }
-            
-            
+
+
             var displays = _.map(result.rows,
                               function(item){
-                                 return { 
+                                 return {
                                     x : queryHelpersService.parseSlashDate(item.f[0].v),
                                     y : Math.round(parseInt(item.f[1].v))
                                   };
@@ -79,7 +79,7 @@ angular.module('dashboard')
             , last2MonthsAgoCount = 0
             , last4MonthsAgoCount = 0
             , last13MonthsAgoCount = 0;
-            
+
 
             var today = new Date();
             var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
@@ -91,7 +91,7 @@ angular.module('dashboard')
             var lastDayOf4MonthsAgo = queryHelpersService.getMonthsAgo(3); lastDayOf4MonthsAgo.setDate(0);
             var lastDayOf13MonthsAgo = queryHelpersService.getMonthsAgo(12); lastDayOf13MonthsAgo.setDate(0);
 
-            
+
             _.forEach(averageDisplays,function(result){
                 if(queryHelpersService.equalDate(result.x, today)) {
                   todayCount = result.y;
@@ -110,7 +110,7 @@ angular.module('dashboard')
                 }else if (queryHelpersService.equalDate(result.x, lastDayOf13MonthsAgo)) {
                   last13MonthsAgoCount = result.y;
                 }
-            });           
+            });
 
             deferred.resolve({
                                 byDay : [
@@ -126,12 +126,12 @@ angular.module('dashboard')
                                 last3Months : (lastMonthCount - last4MonthsAgoCount) / last4MonthsAgoCount * 100,
                                 last12Months : (lastMonthCount - last13MonthsAgoCount) / last13MonthsAgoCount * 100,
                               });
-          
+
        })
       .then(null,function(error){
         deferred.reject(error);
       });
-    return deferred.promise;    
+    return deferred.promise;
   };
 //gets the data for a Line chart of total new Companies to Date, by Day. Below the line chart, and as part of the same widget, show 6 fields below the line chart with summary (1 number) stats:
 // Today (how many new Companies have been added today)
@@ -153,7 +153,7 @@ angular.module('dashboard')
         var errorMsg = '';
         _.forEach(results,
           function(item){
-            if(item.data.error) { 
+            if(item.data.error) {
               errorMsg += item.data.error + '. ';
             }
             else if(!item.data.jobComplete){
@@ -177,11 +177,11 @@ angular.module('dashboard')
           , twoMonthsAgoTotalCompanies = 0
           , fourMonthsAgoTotalCompanies = 0
           , thirteenMonthsAgoTotalCompanies = 0;
-          
+
         var today = new Date();
         var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
         var sevenDaysAgo = new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);sevenDaysAgo.setHours(0); sevenDaysAgo.setMinutes(0);sevenDaysAgo.setSeconds(0);sevenDaysAgo.setMilliseconds(0);
-        
+
         var byDay = _.map(res.data.rows,
                            function(item){
                             var result = {
@@ -204,13 +204,13 @@ angular.module('dashboard')
                             }else if(queryHelpersService.isDateWithinMonth(result.x,1)){
                               lastMonthCount += result.y;
                             }
-                            
-                            //do not include current month 
-                            if(queryHelpersService.isDateWithinMonths(result.x,1,4)) {                              
+
+                            //do not include current month
+                            if(queryHelpersService.isDateWithinMonths(result.x,1,4)) {
                               last3MonthsCount += result.y;
                             }
 
-                            //do not include current month 
+                            //do not include current month
                             if( queryHelpersService.isDateWithinMonths(result.x,1,13)) {
                               last12MonthsCount += result.y;
                             }
@@ -240,7 +240,7 @@ angular.module('dashboard')
           yesterday : yesterdayCount,
           last7Days : last7DaysCount,
           total : totalCount,
-          thisMonth : thisMonthCount / previousMonthTotalCompanies  * 100, 
+          thisMonth : thisMonthCount / previousMonthTotalCompanies  * 100,
           lastMonth : lastMonthCount / twoMonthsAgoTotalCompanies  * 100 ,
           last3Months : last3MonthsCount / fourMonthsAgoTotalCompanies * 100,
           last12Months : last12MonthsCount / thirteenMonthsAgoTotalCompanies * 100

@@ -44,7 +44,7 @@ angular.module('dashboard')
                 margin: {left: 74, bottom: 25,right:25},
                 showXAxis: true,
                 showYAxis: true,
-                transitionDuration: 250             
+                transitionDuration: 250
               };
     },
     //common date format for nvd3 charts

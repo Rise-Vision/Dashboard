@@ -7,9 +7,9 @@ describe("Services: Authentication", function() {
 
   beforeEach(module(function ($provide) {
     //stub services
-    $provide.service("$q", function() {return Q;});  
+    $provide.service("$q", function() {return Q;});
     $provide.service("$window",function(){
-      return { 
+      return {
         location:{
           replace:function(){}
         }
@@ -17,12 +17,12 @@ describe("Services: Authentication", function() {
     });
 
     $provide.service("$http",function(){
-      
-      return { 
+
+      return {
         get : function(){
           var deferred = Q.defer();
           deferred.resolve({data:123});
-          return deferred.promise;          
+          return deferred.promise;
         },
         post:function(){
           var deferred = Q.defer();
@@ -52,7 +52,7 @@ describe("Services: Authentication", function() {
             .then(function(result){
               expect(result).to.be.defined;
               expect(authenticationService.isUserAuthenticated()).to.be.true;
-              return authenticationService.whenAuthenticated();                     
+              return authenticationService.whenAuthenticated();
             })
             .then(function(){done();})
             .then(null,done);
@@ -63,8 +63,8 @@ describe("Services: Authentication", function() {
   it('should set the user to not authenticated after logout', function(done){
 
      return authenticationService.login()
-            .then(function(){              
-              return authenticationService.logout();                     
+            .then(function(){
+              return authenticationService.logout();
             })
             .then(function(){
               expect(authenticationService.isUserAuthenticated()).to.be.false;

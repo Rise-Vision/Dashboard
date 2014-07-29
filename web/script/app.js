@@ -2,7 +2,7 @@
 
 // Create a module for our core Store services
 angular.module('dashboard', ['ngRoute'])
-.run(function () { 
+.run(function () {
    // console.log('started');
 })
 .constant('API_ROOT','/api')

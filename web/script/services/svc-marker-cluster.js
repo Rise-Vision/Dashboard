@@ -10,14 +10,14 @@ angular.module('dashboard')
                 if(count < 50){
                   index = 0;
                 }else if(count <= 100){
-                  index = 1;                  
+                  index = 1;
                 }else if (count <= 200){
                   index = 2;
                 }else if(count <= 500){
                   index = 3;
                 }else{
                   index = 4;
-                }                
+                }
 
                 return {
                     text: count,

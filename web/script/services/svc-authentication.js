@@ -10,13 +10,13 @@ angular.module('dashboard')
   var service = {},
       authenticated = $q.defer(),
       isUserAuthenticated = false;//holds the user's internal authentication state
-    
+
   //is the user authenticated?
   //true -> yes
   service.isUserAuthenticated = function(){
     return isUserAuthenticated;
   };
-  
+
 
   //returns a promise that resolves  to the user's google profile when the user becomes authenticated
   service.whenAuthenticated = function(){
@@ -43,7 +43,7 @@ angular.module('dashboard')
                 .then(function(){
                     isUserAuthenticated = false;
                   });
-  };     
+  };
 
   //get the current authorized user's google profile
   service.getProfile = function () {
@@ -62,7 +62,7 @@ angular.module('dashboard')
     },function(error){
       if(error.status === 404){
         console.error('Dashboard Proxy Server is Currently Unavailable.');
-      }      
+      }
       deferred.reject(error);
     });
     return deferred.promise;

@@ -12,7 +12,7 @@ module.exports = function(config){
     reporters: ["progress"],
 
     plugins : [
-            
+
             "karma-jasmine",
             "karma-mocha",
             "karma-chai",
@@ -23,7 +23,7 @@ module.exports = function(config){
     // web server port
     port: 9876,
     logLevel: config.LOG_INFO,
-    
+
     // enable / disable colors in the output (reporters and logs)
     colors: true
 

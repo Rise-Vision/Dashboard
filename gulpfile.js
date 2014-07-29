@@ -49,7 +49,7 @@ var env = process.env.NODE_ENV || "dev",
       "test/unit/fixtures/*.js",
       "test/**/*spec.js"
     ],
-    // uglify also take care of removing unnecessary "use strict" statements 
+    // uglify also take care of removing unnecessary "use strict" statements
 
     appJSFiles = [
       "web/script/**/*.js",
@@ -89,13 +89,13 @@ gulp.task("lint-throw", function() {
     .pipe(jshint.reporter("fail"))
     .on("error", function(err) {
       throw err;
-    });  
+    });
 });
 
 gulp.task("lint", function() {
   return gulp.src("web/script/**/*.js")
     .pipe(jshint())
-    .pipe(jshint.reporter("jshint-stylish")); 
+    .pipe(jshint.reporter("jshint-stylish"));
 });
 
 gulp.task("watch", function() {
@@ -113,7 +113,7 @@ gulp.task("html", ["lint"], function () {
 gulp.task("build-e2e", function () {
   gulp.src("test/gapi-mock.js")
   .pipe(gulp.dest("dist-e2e/"));
-  
+
   gulp.src(viewFiles).pipe(gulp.dest("dist-e2e/view"));
   gulp.src(imgFiles).pipe(gulp.dest("dist-e2e/img"));
 
@@ -179,7 +179,7 @@ gulp.task("test", function() {
       .on("error", function(err) {
         // Make sure failed tests cause gulp to exit non-zero
         throw err;
-      });  
+      });
     }));
 });
 
@@ -207,7 +207,7 @@ gulp.task("watch-dist", function() {
   gulp.watch(imgFiles, ["img"]);
   gulp.watch(sassFiles, ["css"]);
 });
- 
+
 gulp.task("server", ["sass","lint", "watch", "watch-dev"], function() {
   httpServer = connect.server({
     root: "web",

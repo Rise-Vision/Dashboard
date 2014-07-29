@@ -12,13 +12,13 @@ exports.config = {
   // -----------------------------------------------------------------
   // Browser and Capabilities: Chrome
   // -----------------------------------------------------------------
- 
+
   capabilities: {
     browserName: "phantomjs",
     version: "",
     platform: "ANY"
   },
- 
+
   framework: "mocha",
 
   mochaOpts: {

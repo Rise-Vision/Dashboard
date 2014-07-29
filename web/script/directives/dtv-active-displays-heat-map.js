@@ -10,7 +10,7 @@ angular.module('dashboard')
       scope: {},
       templateUrl: 'view/active-displays-heat-map.html',
       link: function (scope) {
-        scope.showSpinner = true;   
+        scope.showSpinner = true;
         scope.id = commonMetricService.generateChartId('activeDisplaysMap');
         var map, mapOptions = {
           center: new google.maps.LatLng(30.775646, -25.820313),
@@ -20,12 +20,12 @@ angular.module('dashboard')
           mapTypeControlOptions : false,
           scrollwheel : false
         };
-        
+
         //let the html render first, and then go and get our element for the map
         $timeout(function(){
           map = new google.maps.Map(document.getElementById(scope.id), mapOptions);
         },0);
-        
+
         googleBigQueryService.getActiveDisplaysForMap()
         .then(function(result){
           var markers = [];
@@ -33,12 +33,12 @@ angular.module('dashboard')
             var marker = new google.maps.Marker(
                               {
                                 position: new google.maps.LatLng(item.lat,item.lng),
-                                title:item.id                                
+                                title:item.id
                               });
             markers.push(marker);
           });
           var markerCluster = new MarkerClusterer(map, markers);
-          
+
           markerCluster.setCalculator(markerClusterService.getClusterCalculator());
           markerCluster.setMinimumClusterSize(1);
         })
@@ -48,7 +48,7 @@ angular.module('dashboard')
         })
         .finally(function(){
           scope.showSpinner = false;
-        });//getActiveDisplaysForLineChart    
+        });//getActiveDisplaysForLineChart
 
         scope.allowScroll = function(){
           if(!mapOptions.scrollwheel){
