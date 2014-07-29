@@ -9,10 +9,10 @@ angular.module('dashboard')
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
-      link: function (scope) {   
+      link: function (scope) {
             scope.title = 'Touch Index';
             scope.id = commonMetricService.generateChartId('dailyTouchesLineGraph');
-            scope.showSpinner = true;  
+            scope.showSpinner = true;
              gooddataQueryService.getTouchesByDay()
               .then(function(result){
                 var colours = commonMetricService.getChartColours();
@@ -21,13 +21,13 @@ angular.module('dashboard')
                   result[i].data = result[i].values;
                 }
 
-                nv.addGraph(function() {  
+                nv.addGraph(function() {
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options(commonMetricService.getCommonChartOptions());
-                                
+
 
                   chart.xAxis
                   .tickFormat(commonMetricService.dateD3Format);
@@ -51,7 +51,7 @@ angular.module('dashboard')
               })
               .finally(function(){
                 scope.showSpinner = false;
-              });//getActiveDisplaysForLineChart      
+              });//getActiveDisplaysForLineChart
             }//LINK
     };//return
   }]);//directive

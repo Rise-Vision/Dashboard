@@ -24,13 +24,13 @@ describe("Services: common metric", function() {
 
   describe("generateChartId",function(){
     it("should include the given prefix at the start of the id", function() {
-      expect(commonMetricService.generateChartId('someTitle')).to.match(/^someTitle/);      
-    });  
+      expect(commonMetricService.generateChartId('someTitle')).to.match(/^someTitle/);
+    });
     it("should generate unique* ids", function() {
       for(var i = 0; i < 100000; i ++){
         expect(commonMetricService.generateChartId('someTitle')).to.not.equal(commonMetricService.generateChartId('someTitle'));
-      }      
-    });  
+      }
+    });
   });//generateChartId
 
   describe('generateErrorMessage', function(){
@@ -76,7 +76,7 @@ describe("Services: common metric", function() {
                 last12Months : 1/0
               };
       var result = commonMetricService.generateGrowthStats('TEST',test);
-      expect(result.thisMonth).to.equal('N/A');      
+      expect(result.thisMonth).to.equal('N/A');
       expect(result.last12Months).to.equal('N/A');
     });
   });//generateGrowthStats

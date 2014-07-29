@@ -10,7 +10,7 @@ angular.module('dashboard')
       scope: {},
       templateUrl: 'view/github-stats-table.html',
       link: function (scope) {
-        scope.showSpinner = true; 
+        scope.showSpinner = true;
         scope.exposures = [
           {displayName : 'All', filter:{}},
           {displayName : 'Open Source', filter:{isPrivate:false}},
@@ -18,7 +18,7 @@ angular.module('dashboard')
         ];
         scope.exposure = _.first(scope.exposures);
         scope.orderByField = 'name';
-        scope.reverseSort = false; 
+        scope.reverseSort = false;
         //scope.intToShortAgoMonth = commonMetricService.intToShortAgoMonth;
 
         githubQueryService.getStats()
@@ -33,7 +33,7 @@ angular.module('dashboard')
         })
         .finally(function(){
           scope.showSpinner = false;
-        });//getStatsTable    
+        });//getStatsTable
       }
     };
   }])//githubStatsTable

@@ -16,11 +16,11 @@ describe("Service: BigQuery", function() {
           get:function(url){
             var deferred = Q.defer();
             switch(url){
-              case  '/query/googleBigQuery/getActiveDisplaysForMap':           
+              case  '/query/googleBigQuery/getActiveDisplaysForMap':
                 deferred.resolve({data:{
                                   jobComplete : true,
                                   rows:[
-                                        { 
+                                        {
                                           f : [
                                                 {v:"id"},
                                                 {v:8999},
@@ -35,7 +35,7 @@ describe("Service: BigQuery", function() {
                 var getDateString = function(date){
                  return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
                 };
-                
+
                 var rows = [];
                 for(var i = 500; i >= 0; i--){
                   var date = new Date();date.setDate(date.getDate() - i);
@@ -115,7 +115,7 @@ describe("Service: BigQuery", function() {
                 jobComplete:true,
                 rows:rows
               }});
-            /* jshint ignore:end */            
+            /* jshint ignore:end */
             break;
             default:
               deferred.reject('unexpected url: '+url);
@@ -143,7 +143,7 @@ describe("Service: BigQuery", function() {
                   expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
                   expect(result.byDay).to.have.length(2);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -160,7 +160,7 @@ describe("Service: BigQuery", function() {
                     }
                   }
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -171,7 +171,7 @@ describe("Service: BigQuery", function() {
                   var last2Days = _.last(result.byDay[1].values,2);
                   expect(result.today).to.equal(last2Days[1].y - last2Days[0].y);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -182,8 +182,8 @@ describe("Service: BigQuery", function() {
                   var last3AvgDisplays = _.last(result.byDay[1].values,3)
                   expect(result.yesterday).to.equal(last3AvgDisplays[2].y - last3AvgDisplays[1].y);
                   done();
-                })                  
-                .then(null,done);  
+                })
+                .then(null,done);
       });
 
       it('should calculate the last 7 days count',function(done){
@@ -200,10 +200,10 @@ describe("Service: BigQuery", function() {
       it('should calculate the total count',function(done){
         return googleBigQueryService
                 .getActiveDisplaysForLineChart()
-                .then(function(result){                  
+                .then(function(result){
                   expect(result.total).to.equal(_.last(result.byDay[1].values).y);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -221,7 +221,7 @@ describe("Service: BigQuery", function() {
                                                                 i.x.getDate() === lastDayOfLastMonth.getDate());;
                                                     })).y;
                   expect(result.thisMonth).to.equal((thisMonthCount-endOfLastMonthCount)/endOfLastMonthCount * 100);
-                  
+
                   var lastDayOf2MonthsAgo = new Date();lastDayOf2MonthsAgo.setMonth(lastDayOf2MonthsAgo.getMonth()-1);lastDayOf2MonthsAgo.setDate(0);
                   var endOf2MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
                                                        return (i.x.getFullYear() === lastDayOf2MonthsAgo.getFullYear() &&
@@ -229,7 +229,7 @@ describe("Service: BigQuery", function() {
                                                                 i.x.getDate() === lastDayOf2MonthsAgo.getDate());;
                                                     })).y;
                   expect(result.lastMonth).to.equal((endOfLastMonthCount-endOf2MonthsAgoCount)/endOf2MonthsAgoCount * 100);
-                  
+
                   var lastDayOf4MonthsAgo = new Date();lastDayOf4MonthsAgo.setMonth(lastDayOf4MonthsAgo.getMonth()-3);lastDayOf4MonthsAgo.setDate(0);
                   var endOf4MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
                                                        return (i.x.getFullYear() === lastDayOf4MonthsAgo.getFullYear() &&
@@ -237,7 +237,7 @@ describe("Service: BigQuery", function() {
                                                                 i.x.getDate() === lastDayOf4MonthsAgo.getDate());;
                                                     })).y;
                   expect(result.last3Months).to.equal((endOfLastMonthCount-endOf4MonthsAgoCount)/endOf4MonthsAgoCount * 100);
-                  
+
 
 
                   var lastDayOf13MonthsAgo = new Date();lastDayOf13MonthsAgo.setMonth(lastDayOf13MonthsAgo.getMonth()-12);lastDayOf13MonthsAgo.setDate(0);
@@ -247,10 +247,10 @@ describe("Service: BigQuery", function() {
                                                                 i.x.getDate() === lastDayOf13MonthsAgo.getDate());;
                                                     })).y;
                   expect(result.last12Months).to.equal((endOfLastMonthCount-endOf13MonthsAgoCount)/endOf13MonthsAgoCount * 100);
-                  
+
 
                   done();
-                })                  
+                })
                 .then(null,done);
       });
     });//getActiveDisplaysForLineChart
@@ -281,7 +281,7 @@ describe("Service: BigQuery", function() {
                   expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
                   expect(result.byDay).to.have.length(2);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -298,7 +298,7 @@ describe("Service: BigQuery", function() {
                     }
                   }
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -308,7 +308,7 @@ describe("Service: BigQuery", function() {
                 .then(function(result){
                   expect(result.today).to.equal(1);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -318,8 +318,8 @@ describe("Service: BigQuery", function() {
                 .then(function(result){
                   expect(result.yesterday).to.equal(2);
                   done();
-                })                  
-                .then(null,done);  
+                })
+                .then(null,done);
       });
 
        it('should calculate the last 7 days count',function(done){
@@ -332,7 +332,7 @@ describe("Service: BigQuery", function() {
                   expect(result.last7Days).to.equal(result.today+result.yesterday);
                 }
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -346,7 +346,7 @@ describe("Service: BigQuery", function() {
                   }
                   expect(result.total).to.equal(expectedTotalNewCompanies);
                   done();
-                })                  
+                })
                 .then(null,done);
       });
 
@@ -357,7 +357,7 @@ describe("Service: BigQuery", function() {
                   var thisMonthCount = 0
                     , lastMonthCount = 0;
                   if(new Date().getDate() === 1){
-                    //dont include yesterday count 
+                    //dont include yesterday count
                     thisMonthCount = 1 + 3;
                     lastMonthCount = 2 + 4;
                   }
@@ -371,7 +371,7 @@ describe("Service: BigQuery", function() {
                   expect(result.last12Months).to.equal((lastMonthCount + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12+13+14+15+16) / 14 * 100 );
 
                   done();
-                })                  
+                })
                 .then(null,done);
       });
     });//getActiveDisplaysForMap
@@ -395,7 +395,7 @@ describe("Service: BigQuery", function() {
         googleBigQueryService = $injector.get('googleBigQueryService');
       });
     });
-    
+
     it('getActiveDisplaysForLineChart should handle failures',function(done){
       return googleBigQueryService
               .getActiveDisplaysForLineChart()
@@ -427,5 +427,5 @@ describe("Service: BigQuery", function() {
     });
 
   });//failed
-  
+
 });//service

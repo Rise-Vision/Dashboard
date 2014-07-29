@@ -12,22 +12,22 @@ angular.module('dashboard')
       link: function (scope) {
             scope.title = 'Releases';
             scope.id = commonMetricService.generateChartId('dailyNewCompaniesLineChart');
-            scope.showSpinner = true;   
+            scope.showSpinner = true;
              githubQueryService.getDailyReleases()
               .then(function(result){
                 scope.growthStats = commonMetricService.generateGrowthStats('Releases',result);
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < result.byDay.length; i++){
-                  result.byDay[i].color = colours[i];                  
+                  result.byDay[i].color = colours[i];
                 }
-                nv.addGraph(function() {  
+                nv.addGraph(function() {
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options(commonMetricService.getCommonChartOptions());
-                                
-    
+
+
                   chart.xAxis
                    .tickFormat(commonMetricService.dateD3Format);
 
@@ -50,7 +50,7 @@ angular.module('dashboard')
               })
               .finally(function(){
                 scope.showSpinner = false;
-              });//getActiveDisplaysForLineChart      
+              });//getActiveDisplaysForLineChart
             }//LINK
     };//return
   }]);//directive

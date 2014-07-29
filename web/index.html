@@ -11,12 +11,12 @@
   <link href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.15-beta/nv.d3.min.css" rel="stylesheet" type="text/css">
 
   <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
- 
+
   <!-- build:css css/all.min.css -->
   <link href="css/dashboard.css" rel="stylesheet" type="text/css">
   <!-- endbuild -->
-  
-  
+
+
 </head>
 <body ng-app="dashboard" ng-controller="indexController" ng-cloak>
   <nav id="navbar" class="navbar navbar-default navbar-static-top" role="navigation" >
@@ -31,23 +31,23 @@
           </div>
         </button>
         <img src="//s3.amazonaws.com/rise-common/images/logo-small.png" class="img-responsive logo-small" width="113" height="42" alt="Rise Vision">
-      </div>      
+      </div>
       <div class="collapse navbar-collapse" >
-        <div class="nav navbar-nav navbar-right" ng-show="isAuthenticated">        
+        <div class="nav navbar-nav navbar-right" ng-show="isAuthenticated">
           Welcome, {{userName}}<br/>
           <a href="" ng-click="logout()">
             <span>Sign Out</span>
-            <i class="icon ion-log-out"></i>              
-          </a>            
-        </div>         
-      </div>      
+            <i class="icon ion-log-out"></i>
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
   <div ng-view ng-if="isAuthenticated"></div>
   <div tabindex="-1" class="modal" ng-class="{show:!isAuthenticated}" id="loginModal" role="dialog" aria-hidden="true" ng-hide="isAuthenticated" style="background-color: rgba(0, 0, 0, .5)">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">            
+        <div class="modal-header">
           <h4 class="modal-title">Rise Vision Dashboard</h4>
         </div>
         <div class="modal-body">
@@ -57,7 +57,7 @@
           <button class="btn btn-primary btn-lg btn-block" ng-click="login()" ng-class="{'disabled':loginErrorMessage}">
             Sign In With Google
             <i class="icon" ng-class="{'ion-log-in':!logingIn, 'ion-loading-b':logingIn}"></i>
-          </button> 
+          </button>
         </div>
         <div class="modal-footer">
          <div>Rise Vision ©{{currentYear}}</div>

@@ -11,32 +11,32 @@ describe('Services: Query Helpers', function(){
 
   it('should load', function(){
     expect(queryHelpersService).to.respondTo('calculateNormalizedValues');
-    expect(queryHelpersService).to.respondTo('awesomeMonthDateParser');    
-    expect(queryHelpersService).to.respondTo('parseSlashDate');   
-    expect(queryHelpersService).to.respondTo('mapDateToValue');   
+    expect(queryHelpersService).to.respondTo('awesomeMonthDateParser');
+    expect(queryHelpersService).to.respondTo('parseSlashDate');
+    expect(queryHelpersService).to.respondTo('mapDateToValue');
     expect(queryHelpersService).to.respondTo('combineIntoArray');
     expect(queryHelpersService).to.respondTo('getMonthsAgo');
     expect(queryHelpersService).to.respondTo('isDateWithinMonths');
-    expect(queryHelpersService).to.respondTo('isDateWithinMonth');    
+    expect(queryHelpersService).to.respondTo('isDateWithinMonth');
   });
 
 
   describe('awesomeMonthDateParser',function(){
     var testDate = new Date('June 1 2014');
 
-    it('should parse a month that has already occured in the current year',function(){ 
+    it('should parse a month that has already occured in the current year',function(){
       var result = queryHelpersService.awesomeMonthDateParser('Mar',testDate);
       expect(result).to.be.a('Date');
       expect(result.toString()).to.equal(new Date('March 1 2014').toString());
     });
 
-    it('should parse a month that is the current month',function(){ 
+    it('should parse a month that is the current month',function(){
       var result = queryHelpersService.awesomeMonthDateParser('Jun',testDate);
       expect(result).to.be.a('Date');
       expect(result.toString()).to.equal(testDate.toString());
     });
 
-    it('should parse a month that has  occured in the previous year',function(){ 
+    it('should parse a month that has  occured in the previous year',function(){
       var result = queryHelpersService.awesomeMonthDateParser('Dec',testDate);
       expect(result).to.be.a('Date');
       expect(result.toString()).to.equal(new Date('December 1 2013').toString());
@@ -62,9 +62,9 @@ describe('Services: Query Helpers', function(){
   });
 
   describe('calculateNormalizedValues',function(){
-    
+
     it('should calcute the normalized average',function(){
-      var testArray = [{x:1,y:1},{x:2,y:2},{x:3,y:3},{x:4,y:4}]; 
+      var testArray = [{x:1,y:1},{x:2,y:2},{x:3,y:3},{x:4,y:4}];
       var result = queryHelpersService.calculateNormalizedValues(testArray,3);
       expect(result).to.be.an('Array');
       expect(result.length).to.equal(testArray.length);
@@ -131,7 +131,7 @@ describe('Services: Query Helpers', function(){
       expect(result[1].y).to.equal(4);
 
       expect(result[2].x.toString()).to.equal(key3.toString());
-      expect(result[2].y).to.equal(3);      
+      expect(result[2].y).to.equal(3);
     });
   });//combineIntoArray
 

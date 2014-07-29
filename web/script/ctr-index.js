@@ -17,13 +17,13 @@ angular.module('dashboard')
     })
     .then(function(result){
         //TODO: once delievered, remove the rangle.io domain from below.
-       
+
           $scope.userName = result.displayName;
-        
+
           $scope.isAuthenticated = true;
     })
     .then(null,function(error){
-      console.error(error);      
+      console.error(error);
     })
     .finally(function(){
       $scope.logingIn = false;
@@ -49,8 +49,8 @@ angular.module('dashboard')
         }else{
           $scope.loginErrorMessage = 'Failed to login: ' + error.toString();
         }
-      });             
-    }; 
+      });
+    };
 
     authenticationService.makeAuthCheck()
     .then(null,function(e){

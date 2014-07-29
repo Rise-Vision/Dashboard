@@ -44,11 +44,11 @@ angular.module('dashboard')
       , totalCount = 0;
 
       var today = new Date();
-      var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);      
+      var yesterday = new Date();yesterday.setDate(yesterday.getDate() -1);
       var sevenDaysAgo = new Date();sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);sevenDaysAgo.setHours(0);sevenDaysAgo.setMinutes(0);sevenDaysAgo.setSeconds(0);sevenDaysAgo.setMilliseconds(0);
       var releases = _.map(result.data,
                               function(item){
-                                 var result =  { 
+                                 var result =  {
                                     x : queryHelpersService.parseSlashDate(item.x),
                                     y : parseInt(item.y)
                                   };
@@ -74,17 +74,17 @@ angular.module('dashboard')
                                   if(queryHelpersService.isDateWithinMonth(result.x,1)){
                                     lastMonthCount += result.y;
                                   }else if (queryHelpersService.isDateWithinMonth(result.x,2) ){
-                                    previousMonthCount += result.y;                                    
+                                    previousMonthCount += result.y;
                                   }
-                                  
-                                  //do not include current month 
+
+                                  //do not include current month
                                   if(queryHelpersService.isDateWithinMonths(result.x,1,4)) {
                                     last3MonthsCount += result.y;
                                   }else if (queryHelpersService.isDateWithinMonths(result.x,5,8)){
                                     previous3MonthsCount += result.y;
                                   }
 
-                                  //do not include current month 
+                                  //do not include current month
                                   if(queryHelpersService.isDateWithinMonths(result.x,1,13)) {
                                     last12MonthsCount += result.y;
                                   }else if(queryHelpersService.isDateWithinMonths(result.x,14,26)) {
@@ -95,7 +95,7 @@ angular.module('dashboard')
 
                                   return result;
                               });
-      var averageReleases = queryHelpersService.calculateNormalizedValues(releases,30);         
+      var averageReleases = queryHelpersService.calculateNormalizedValues(releases,30);
 
       deferred.resolve({
         byDay :[
@@ -106,7 +106,7 @@ angular.module('dashboard')
         yesterday : yesterdayCount,
         last7Days : last7DaysCount,
         total : totalCount,
-        thisMonth : (thisMonthCount - lastMonthCount) / lastMonthCount  * 100, 
+        thisMonth : (thisMonthCount - lastMonthCount) / lastMonthCount  * 100,
         lastMonth : (lastMonthCount - previousMonthCount) / previousMonthCount  * 100 ,
         last3Months : (last3MonthsCount - previous3MonthsCount)/ previous3MonthsCount * 100,
         last12Months : (last12MonthsCount - previous12MonthsCount) / previous12MonthsCount * 100

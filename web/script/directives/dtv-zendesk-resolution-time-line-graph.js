@@ -9,24 +9,24 @@ angular.module('dashboard')
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
-      link: function (scope) {   
+      link: function (scope) {
             scope.title = 'Zendesk Resolution Time';
             scope.id = commonMetricService.generateChartId('zendeskResolutionTimeChart');
-            scope.showSpinner = true;  
+            scope.showSpinner = true;
              gooddataQueryService.getFullResolutionTimesPerMonth()
               .then(function(result){
                 result[0].color = "#2D60AD";
 
-                nv.addGraph(function() {  
+                nv.addGraph(function() {
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
-                                .options(commonMetricService.getCommonChartOptions());                                
+                                .options(commonMetricService.getCommonChartOptions());
 
                   chart.xAxis
                    .tickFormat(commonMetricService.dateD3Format);
-                   
+
                   chart.yAxis
                     .axisLabel('Hours')
                     .tickFormat(d3.format(',.i'));
@@ -46,7 +46,7 @@ angular.module('dashboard')
               })
               .finally(function(){
                 scope.showSpinner = false;
-              });//getActiveDisplaysForLineChart      
+              });//getActiveDisplaysForLineChart
             }//LINK
     };//return
   }]);//directive

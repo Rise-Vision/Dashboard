@@ -9,22 +9,22 @@ angular.module('dashboard')
       restrict: 'E',
       scope: {},
       templateUrl: 'view/common-line-chart.html',
-      link: function (scope) {   
+      link: function (scope) {
             scope.title = 'Average Response Time';
             scope.id = commonMetricService.generateChartId('ResponseTimeChart');
-            scope.showSpinner = true; 
+            scope.showSpinner = true;
             $q.all([
                      gooddataQueryService.getAverageTopicResponseTimesPerDay(),
                      gooddataQueryService.getZendeskResponseTimeForLineGraph()
-              ]) 
+              ])
               .then(function(results){
                 var dataSet = _.flatten(results,true);
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < dataSet.length; i++){
-                  dataSet[i].color = colours[i];                  
+                  dataSet[i].color = colours[i];
                 }
 
-                nv.addGraph(function() {  
+                nv.addGraph(function() {
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
@@ -33,7 +33,7 @@ angular.module('dashboard')
 
                   chart.xAxis
                   .tickFormat(commonMetricService.dateD3Format);
-                  
+
                   chart.yAxis
                     .axisLabel('Minutes')
                     .tickFormat(d3.format(',.i'));
@@ -53,7 +53,7 @@ angular.module('dashboard')
               })
               .finally(function(){
                 scope.showSpinner = false;
-              });//getActiveDisplaysForLineChart      
+              });//getActiveDisplaysForLineChart
             }//LINK
     };//return
   }]);//directive

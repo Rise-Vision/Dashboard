@@ -7,11 +7,11 @@ describe("Services: githubQueryService", function() {
 
   beforeEach(module(function ($provide) {
     //stub services
-    $provide.service("$q", function() {return Q;});  
+    $provide.service("$q", function() {return Q;});
     $provide.constant('API_ROOT','');
     $provide.service("$http",function(){
-      
-      return { 
+
+      return {
         get : function(url){
           var deferred = Q.defer();
           switch(url){
@@ -74,7 +74,7 @@ describe("Services: githubQueryService", function() {
                 var getDateString = function(date){
                  return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
                 };
-                
+
                 var data = [];
                 var days = 357*2;
                 for(var i = days; i >= 0; i--){
@@ -89,7 +89,7 @@ describe("Services: githubQueryService", function() {
             default:
             deferred.reject('ERROR. Unexpected url: '+url);
           }
-          return deferred.promise;          
+          return deferred.promise;
         }
       };
     });
@@ -178,7 +178,7 @@ describe("Services: githubQueryService", function() {
                 var expectedSum = 0;
                 for(var i=0; i < 7; i++){
                   expectedSum+=(result.byDay[0].values.length - i - 1);
-                }                
+                }
                 expect(result.last7Days).to.equal(expectedSum);
                 done();
               })

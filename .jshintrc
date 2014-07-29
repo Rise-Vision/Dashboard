@@ -63,7 +63,7 @@
   "worker"       : false, // Web Workers
   "wsh"          : false, // Windows Scripting Host
   "yui"          : false, // Yahoo User Interface
-  
+
   // Legacy
   "nomen"        : false, // true: Prohibit dangling `_` in variables
   "onevar"       : false, // true: Allow only one `var` statement per function

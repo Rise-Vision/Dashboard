@@ -11,7 +11,7 @@ angular.module('dashboard')
   return {
 
     //takes an array in the form [{x:__,y:___}]
-    //and an array in the same form with y being set 
+    //and an array in the same form with y being set
     // to the average of the previous {maxPrevItemsInculded} items in array
     calculateNormalizedValues : function(array, maxPrevItemsInculded){
       var normalizedResult = [];
@@ -53,8 +53,8 @@ angular.module('dashboard')
     },
 
     //transforms an array in the form [{x:__,y:___}] into an object in the form
-    // { x1 : y1, x2 : y2, ....} 
-    // UNLESS useShortDateString === true, { x1.toDateString() : y1, x2.toDateString() : y2, ....} 
+    // { x1 : y1, x2 : y2, ....}
+    // UNLESS useShortDateString === true, { x1.toDateString() : y1, x2.toDateString() : y2, ....}
     mapDateToValue : function(xyArray, useShortDateString) {
       var result = {};
       for(var i = 0; i < xyArray.length; i++) {
@@ -67,7 +67,7 @@ angular.module('dashboard')
       return result;
     },
 
-    //transforms 2 objects in the form {x1:y1, x2:y2}] into an array 
+    //transforms 2 objects in the form {x1:y1, x2:y2}] into an array
     //in the form [{ xa1 : ya1 + yb1 },{ xa2 : ya2 + yb2 },...]
     combineIntoArray : function(a1,a2) {
 
@@ -113,7 +113,7 @@ angular.module('dashboard')
 
       return (((d.getFullYear() === end.getFullYear() &&
               d.getMonth() >= end.getMonth()) ||
-              (d.getFullYear() > end.getFullYear() )) &&                                                          
+              (d.getFullYear() > end.getFullYear() )) &&
               ((d.getFullYear() === start.getFullYear() &&
               d.getMonth() <= start.getMonth()) ||
               (d.getFullYear() < start.getFullYear() )));
