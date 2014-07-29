@@ -212,7 +212,7 @@ describe("Services: githubQueryService", function() {
                   expectedSum+= thisMonth[i].y;
                 }
 
-                var lastMonth = new Date();lastMonth.setMonth(lastMonth.getMonth() -1);
+                var lastMonth = new Date();lastMonth.setDate(2);lastMonth.setMonth(lastMonth.getMonth() -1);
                 var lastMonthItems = _.where(result.byDay[0].values,function(item){
                   return item.x.getMonth() === lastMonth.getMonth() &&
                           item.x.getFullYear() === lastMonth.getFullYear();
@@ -231,7 +231,7 @@ describe("Services: githubQueryService", function() {
       return githubQueryService.getDailyReleases()
               .then(function(result){
                 expect(result.lastMonth).to.be.a('number');
-                var lastMonth = new Date();lastMonth.setMonth(lastMonth.getMonth() -1);
+                var lastMonth = new Date();lastMonth.setDate(2);lastMonth.setMonth(lastMonth.getMonth() -1);
                 var lastMonthItems = _.where(result.byDay[0].values,function(item){
                   return item.x.getMonth() === lastMonth.getMonth() &&
                           item.x.getFullYear() === lastMonth.getFullYear();

@@ -262,8 +262,8 @@ angular.module('dashboard')
   // Growth Last 3 Months (# of active Companies added for last 3 months (does not include current month) / total as of previous month (4 months ago)  * 100)
   // Growth Last 12 Months (# of active Companies added for last 12 months (does not include current month) / total as of previous month (13 months ago)  * 100)
   
-  service.getActiveCompaniesByDay = function(){
-  var deferred = $q.defer();
+  service.getActiveCompaniesByDay = function() {
+    var deferred = $q.defer();
    
    $q.all([
       $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000}),

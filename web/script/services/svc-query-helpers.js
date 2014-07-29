@@ -87,8 +87,8 @@ angular.module('dashboard')
     //takes a {{numberOfMonths}} ago, and returns a Date object set to the first of that month
     getMonthsAgo : function (numberOfMonths) {
       var result = new Date();
+      result.setDate(1); //NOTE: need to set date to 1st of month so there are no weird date rounding issues regarding trying to set date to Feb 31 2014
       result.setMonth(result.getMonth() - numberOfMonths);
-      result.setDate(1);
       result.setHours(0);
       result.setMinutes(0);
       result.setSeconds(0);
