@@ -149,10 +149,12 @@ describe('Services: Query Helpers', function(){
       expect(result.getMilliseconds()).to.equal(0);
     });
     it('should set in the proper number of months in the past',function(){
-      var now = new Date();
-
-      var result = queryHelpersService.getMonthsAgo(1);
-      expect(result.getMonth()).to.equal((now.getMonth() - 1 ) % 12 );
+      var expected = new Date();expected.setDate(1);
+      for(var i = 1; i <= 12; i++){
+        var result = queryHelpersService.getMonthsAgo(i);
+        expected.setMonth(expected.getMonth()-1);
+        expect(result.getMonth()).to.equal(expected.getMonth());
+      }
     });
   });//getMonthsAgo
 
