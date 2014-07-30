@@ -44,6 +44,7 @@
     </div>
   </nav>
   <div ng-view ng-if="isAuthenticated"></div>
+  <div style="text-align: center">Note: All values are cached server side and refreshed every 30 minutes.</div>
   <div tabindex="-1" class="modal" ng-class="{show:!isAuthenticated}" id="loginModal" role="dialog" aria-hidden="true" ng-hide="isAuthenticated" style="background-color: rgba(0, 0, 0, .5)">
     <div class="modal-dialog">
       <div class="modal-content">
