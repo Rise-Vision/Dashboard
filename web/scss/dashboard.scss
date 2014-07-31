@@ -30,7 +30,7 @@
   }
 }
 
-.githubStats {
+.statsTable {
   text-align: center;
 
   .table-responsive{
@@ -56,6 +56,9 @@
       -webkit-user-select: none;
       user-select: none;
     }
+  }
+  tfoot {
+    font-weight: bolder;
   }
 }
 

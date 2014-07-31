@@ -13,6 +13,8 @@ describe('Services: Query Helpers', function(){
     expect(queryHelpersService).to.respondTo('calculateNormalizedValues');
     expect(queryHelpersService).to.respondTo('awesomeMonthDateParser');
     expect(queryHelpersService).to.respondTo('parseSlashDate');
+    expect(queryHelpersService.shortMonthNames).to.be.an('Array');
+    expect(queryHelpersService).to.respondTo('generateShortMonthDates');
     expect(queryHelpersService).to.respondTo('mapDateToValue');
     expect(queryHelpersService).to.respondTo('combineIntoArray');
     expect(queryHelpersService).to.respondTo('getMonthsAgo');
@@ -60,6 +62,19 @@ describe('Services: Query Helpers', function(){
       expect(result.getDate()).to.equal(1);
     });
   });
+
+  describe('generateShortMonthDates',function(){
+    it('should generate the date strings',function(){
+      var result = queryHelpersService.generateShortMonthDates(12);
+      expect(result).to.have.length(12);
+      for(var i = 0; i < result.length; i++){
+        expect(result[i]).to.be.a('string');
+        for(var j=1; j<result.length; j++){
+          expect(result[i]).to.not.equal(result[i+j]);
+        }
+      }
+    });
+  });//generateShortMonthDates
 
   describe('calculateNormalizedValues',function(){
 
