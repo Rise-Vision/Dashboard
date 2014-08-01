@@ -211,44 +211,50 @@ describe("Service: BigQuery", function() {
         return googleBigQueryService
                 .getActiveDisplaysForLineChart()
                 .then(function(result){
-                  var thisMonthCount = _.last(result.byDay[1].values).y;
-                  var lastDayOfLastMonth = new Date();lastDayOfLastMonth.setDate(0);
-                  expect(lastDayOfLastMonth.getDate()).to.be.at.least(28);
-                  expect(lastDayOfLastMonth.getDate()).to.be.at.most(31);
-                  var endOfLastMonthCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                       return (i.x.getFullYear() === lastDayOfLastMonth.getFullYear() &&
-                                                                i.x.getMonth() === lastDayOfLastMonth.getMonth() &&
-                                                                i.x.getDate() === lastDayOfLastMonth.getDate());;
-                                                    })).y;
-                  expect(result.thisMonth).to.equal((thisMonthCount-endOfLastMonthCount)/endOfLastMonthCount * 100);
+                  if((new Date()).getDate() <= 2){
+                    expect(result.thisMonth).to.equal(1/0);
+                    expect(result.lastMonth).to.equal(-100);
+                    expect(result.last3Months).to.equal(-100);
+                    expect(result.last12Months).to.equal(-100);
+                  }else{
+                    var thisMonthCount = _.last(result.byDay[1].values).y;
+                    var lastDayOfLastMonth = new Date();lastDayOfLastMonth.setDate(0);
+                    expect(lastDayOfLastMonth.getDate()).to.be.at.least(28);
+                    expect(lastDayOfLastMonth.getDate()).to.be.at.most(31);
 
-                  var lastDayOf2MonthsAgo = new Date();lastDayOf2MonthsAgo.setMonth(lastDayOf2MonthsAgo.getMonth()-1);lastDayOf2MonthsAgo.setDate(0);
-                  var endOf2MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                       return (i.x.getFullYear() === lastDayOf2MonthsAgo.getFullYear() &&
-                                                                i.x.getMonth() === lastDayOf2MonthsAgo.getMonth() &&
-                                                                i.x.getDate() === lastDayOf2MonthsAgo.getDate());;
-                                                    })).y;
-                  expect(result.lastMonth).to.equal((endOfLastMonthCount-endOf2MonthsAgoCount)/endOf2MonthsAgoCount * 100);
+                    var endOfLastMonthCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                         return (i.x.getFullYear() === lastDayOfLastMonth.getFullYear() &&
+                                                                  i.x.getMonth() === lastDayOfLastMonth.getMonth() &&
+                                                                  i.x.getDate() === lastDayOfLastMonth.getDate());;
+                                                      })).y;
+                    expect(result.thisMonth).to.equal((thisMonthCount-endOfLastMonthCount)/endOfLastMonthCount * 100);
 
-                  var lastDayOf4MonthsAgo = new Date();lastDayOf4MonthsAgo.setMonth(lastDayOf4MonthsAgo.getMonth()-3);lastDayOf4MonthsAgo.setDate(0);
-                  var endOf4MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                       return (i.x.getFullYear() === lastDayOf4MonthsAgo.getFullYear() &&
-                                                                i.x.getMonth() === lastDayOf4MonthsAgo.getMonth() &&
-                                                                i.x.getDate() === lastDayOf4MonthsAgo.getDate());;
-                                                    })).y;
-                  expect(result.last3Months).to.equal((endOfLastMonthCount-endOf4MonthsAgoCount)/endOf4MonthsAgoCount * 100);
+                    var lastDayOf2MonthsAgo = new Date();lastDayOf2MonthsAgo.setMonth(lastDayOf2MonthsAgo.getMonth()-1);lastDayOf2MonthsAgo.setDate(0);
+                    var endOf2MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                         return (i.x.getFullYear() === lastDayOf2MonthsAgo.getFullYear() &&
+                                                                  i.x.getMonth() === lastDayOf2MonthsAgo.getMonth() &&
+                                                                  i.x.getDate() === lastDayOf2MonthsAgo.getDate());;
+                                                      })).y;
+                    expect(result.lastMonth).to.equal((endOfLastMonthCount-endOf2MonthsAgoCount)/endOf2MonthsAgoCount * 100);
 
-
-
-                  var lastDayOf13MonthsAgo = new Date();lastDayOf13MonthsAgo.setMonth(lastDayOf13MonthsAgo.getMonth()-12);lastDayOf13MonthsAgo.setDate(0);
-                  var endOf13MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                       return (i.x.getFullYear() === lastDayOf13MonthsAgo.getFullYear() &&
-                                                                i.x.getMonth() === lastDayOf13MonthsAgo.getMonth() &&
-                                                                i.x.getDate() === lastDayOf13MonthsAgo.getDate());;
-                                                    })).y;
-                  expect(result.last12Months).to.equal((endOfLastMonthCount-endOf13MonthsAgoCount)/endOf13MonthsAgoCount * 100);
+                    var lastDayOf4MonthsAgo = new Date();lastDayOf4MonthsAgo.setMonth(lastDayOf4MonthsAgo.getMonth()-3);lastDayOf4MonthsAgo.setDate(0);
+                    var endOf4MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                         return (i.x.getFullYear() === lastDayOf4MonthsAgo.getFullYear() &&
+                                                                  i.x.getMonth() === lastDayOf4MonthsAgo.getMonth() &&
+                                                                  i.x.getDate() === lastDayOf4MonthsAgo.getDate());;
+                                                      })).y;
+                    expect(result.last3Months).to.equal((endOfLastMonthCount-endOf4MonthsAgoCount)/endOf4MonthsAgoCount * 100);
 
 
+
+                    var lastDayOf13MonthsAgo = new Date();lastDayOf13MonthsAgo.setMonth(lastDayOf13MonthsAgo.getMonth()-12);lastDayOf13MonthsAgo.setDate(0);
+                    var endOf13MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                         return (i.x.getFullYear() === lastDayOf13MonthsAgo.getFullYear() &&
+                                                                  i.x.getMonth() === lastDayOf13MonthsAgo.getMonth() &&
+                                                                  i.x.getDate() === lastDayOf13MonthsAgo.getDate());;
+                                                      })).y;
+                    expect(result.last12Months).to.equal((endOfLastMonthCount-endOf13MonthsAgoCount)/endOf13MonthsAgoCount * 100);
+                  }
                   done();
                 })
                 .then(null,done);
@@ -306,7 +312,10 @@ describe("Service: BigQuery", function() {
         return googleBigQueryService
                 .getNewCompaniesByDay()
                 .then(function(result){
-                  expect(result.today).to.equal(1);
+                  if((new Date()).getDate() === 1)
+                    expect(result.today).to.equal(4);
+                  else
+                    expect(result.today).to.equal(1);
                   done();
                 })
                 .then(null,done);
@@ -316,7 +325,10 @@ describe("Service: BigQuery", function() {
         return googleBigQueryService
                 .getNewCompaniesByDay()
                 .then(function(result){
-                  expect(result.yesterday).to.equal(2);
+                  if((new Date()).getDate() === 2)
+                    expect(result.today).to.equal(5);
+                  else
+                    expect(result.yesterday).to.equal(2);
                   done();
                 })
                 .then(null,done);
@@ -327,10 +339,10 @@ describe("Service: BigQuery", function() {
                 .getNewCompaniesByDay()
                 .then(function(result){
                   if(new Date().getDate() <= 7){
-                  expect(result.last7Days).to.equal(result.today+result.yesterday+3);
-                }else{
-                  expect(result.last7Days).to.equal(result.today+result.yesterday);
-                }
+                    expect(result.last7Days).to.equal(6);
+                  }else{
+                    expect(result.last7Days).to.equal(result.today+result.yesterday);
+                  }
                   done();
                 })
                 .then(null,done);

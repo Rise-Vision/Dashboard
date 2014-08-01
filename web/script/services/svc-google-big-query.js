@@ -261,14 +261,14 @@ angular.module('dashboard')
   // Growth Last Month (# of active Companies added last month (does not include current month) / total as of previous month * 100)
   // Growth Last 3 Months (# of active Companies added for last 3 months (does not include current month) / total as of previous month (4 months ago)  * 100)
   // Growth Last 12 Months (# of active Companies added for last 12 months (does not include current month) / total as of previous month (13 months ago)  * 100)
-  
+
   service.getActiveCompaniesByDay = function() {
     var deferred = $q.defer();
-   
+
    $q.all([
       $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000}),
       $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByMonth',{timeout:60000})
-    ]) 
+    ])
        .then(function(response){
           var result = response[0].data;
           if(result.error|| !result.jobComplete){
@@ -285,7 +285,7 @@ angular.module('dashboard')
 
             var companies = _.map(result.rows,
                               function(item){
-                                 var result = { 
+                                 var result = {
                                     x : queryHelpersService.parseSlashDate(item.f[0].v),
                                     y : Math.round(parseInt(item.f[1].v))
                                   };
@@ -296,10 +296,10 @@ angular.module('dashboard')
                                     yesterdayCount = result.y;
                                   }else if (queryHelpersService.equalDate(result.x, twoDaysAgo)) {
                                     twoDaysAgoCount += result.y;
-                                  }   
+                                  }
                                   return result;
                               });
-            var averageCompanies = queryHelpersService.calculateNormalizedValues(companies,30);           
+            var averageCompanies = queryHelpersService.calculateNormalizedValues(companies,30);
             var thisMonthCount = 0
             , previousMonthCount = 0
             , twoMonthsAgoCount = 0
@@ -330,19 +330,19 @@ angular.module('dashboard')
                                         ],
                                 today : todayCount - yesterdayCount,
                                 yesterday : yesterdayCount - twoDaysAgoCount,
-                                
+
                                 total : todayCount,
-                                thisMonth : (thisMonthCount-previousMonthCount) / previousMonthCount  * 100, 
+                                thisMonth : (thisMonthCount-previousMonthCount) / previousMonthCount  * 100,
                                 lastMonth : (previousMonthCount-twoMonthsAgoCount) / twoMonthsAgoCount  * 100 ,
                                 last3Months : (previousMonthCount-fourMonthsAgoCount) / fourMonthsAgoCount * 100,
                                 last12Months : (previousMonthCount-thirteenMonthsAgoCount) / thirteenMonthsAgoCount * 100
                               });
-          
+
        })
       .then(null,function(error){
         deferred.reject(error);
       });
-    return deferred.promise;   
+    return deferred.promise;
   };//getActiveCompaniesByDay
 
   return service;
