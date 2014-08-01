@@ -24,11 +24,6 @@ To run unit test for a single run, do
 gulp test-ci
 ```
 
-To run E2E testing, do
-```bash
-gulp test-e2e
-```
-
 Continuous Deployment
 ----
 ### Monitoring CI Builds
@@ -39,6 +34,3 @@ The Jenkins CI portal is located at
 Two projects are present:
 - RiseVisionDashboardPR, which builds commits to all branches, including forks specificed in the configuration.
 - RiseVisionDashboardProd, wich builds all commits to the master and generate a distrubiton(or artifact) specific to production environment
-
-
-Miscellaneous
