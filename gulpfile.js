@@ -173,7 +173,7 @@ gulp.task("test", function() {
   return gulp.src(testFiles).pipe(
     watch(function(files) {
       return files.pipe(karma({
-        configFile: "node_modules/widget-tester/karma.conf.js",
+        configFile: "test/karma.conf.js",
         action: "start"
       }))
       .on("error", function(err) {

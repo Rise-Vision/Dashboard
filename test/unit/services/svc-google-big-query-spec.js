@@ -1,6 +1,4 @@
-/*jshint expr:true */
 "use strict";
-/*global _:false */
 
 describe("Service: BigQuery", function() {
   var googleBigQueryService = {};
@@ -117,6 +115,34 @@ describe("Service: BigQuery", function() {
               }});
             /* jshint ignore:end */
             break;
+            case '/query/googleBigQuery/getDisplaysPerCompanyForLast12Months':
+              /* jshint ignore:start */
+              var rows = [];
+              for(var i = 1; i < 12; i++){
+                var date = new Date();date.setDate(1);date.setMonth(date.getMonth() - i);
+                rows.push({
+                  f:[
+                    {v:date.getFullYear()},
+                    {v:date.getMonth()+1},
+                    {v:'Company A'},
+                    {v:i}
+                  ]
+                });
+                rows.push({
+                  f:[
+                    {v:date.getFullYear()},
+                    {v:date.getMonth()+1},
+                    {v:'Company B'},
+                    {v:i}
+                  ]
+                });
+              }
+              deferred.resolve({data:{
+                jobComplete:true,
+                rows:rows
+              }});
+            /* jshint ignore:end */
+            break;
             default:
               deferred.reject('unexpected url: '+url);
               break;
@@ -135,129 +161,129 @@ describe("Service: BigQuery", function() {
 
     describe('getActiveDisplaysForLineChart', function() {
 
-       it('should get the expected fields',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  expect(result).to.be.truely;
-                  expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
-                  expect(result.byDay).to.have.length(2);
-                  done();
-                })
-                .then(null,done);
-      });
+     it('should get the expected fields',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                expect(result).to.be.truely;
+                expect(result).to.contain.keys('byDay','today','yesterday','last7Days','total','thisMonth','lastMonth','last3Months','last12Months');
+                expect(result.byDay).to.have.length(2);
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should get the the byDay values',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  for(var i = 0; i < result.byDay[0].values.length; i++) {
-                    for(var j = 0; j < result.byDay.length; j++) {
-                      var item = result.byDay[j].values[i];
-                      expect(item).to.contain.keys('x','y');
-                      expect(item.y).to.be.at.least(0);
-                      expect(item.x).to.be.a('Date');
-                    }
+    it('should get the the byDay values',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                for(var i = 0; i < result.byDay[0].values.length; i++) {
+                  for(var j = 0; j < result.byDay.length; j++) {
+                    var item = result.byDay[j].values[i];
+                    expect(item).to.contain.keys('x','y');
+                    expect(item.y).to.be.at.least(0);
+                    expect(item.x).to.be.a('Date');
                   }
-                  done();
-                })
-                .then(null,done);
-      });
+                }
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should calculate the today count',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  var last2Days = _.last(result.byDay[1].values,2);
-                  expect(result.today).to.equal(last2Days[1].y - last2Days[0].y);
-                  done();
-                })
-                .then(null,done);
-      });
+    it('should calculate the today count',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                var last2Days = _.last(result.byDay[1].values,2);
+                expect(result.today).to.equal(last2Days[1].y - last2Days[0].y);
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should calculate the yesterday count',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  var last3AvgDisplays = _.last(result.byDay[1].values,3)
-                  expect(result.yesterday).to.equal(last3AvgDisplays[2].y - last3AvgDisplays[1].y);
-                  done();
-                })
-                .then(null,done);
-      });
+    it('should calculate the yesterday count',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                var last3AvgDisplays = _.last(result.byDay[1].values,3)
+                expect(result.yesterday).to.equal(last3AvgDisplays[2].y - last3AvgDisplays[1].y);
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should calculate the last 7 days count',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  var last7Days = _.last(result.byDay[1].values,7);
-                  expect(result.last7Days).to.equal(last7Days[6].y - last7Days[0].y);
-                  done();
-                })
-                .then(null,done);
-      });
+    it('should calculate the last 7 days count',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                var last7Days = _.last(result.byDay[1].values,7);
+                expect(result.last7Days).to.equal(last7Days[6].y - last7Days[0].y);
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should calculate the total count',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  expect(result.total).to.equal(_.last(result.byDay[1].values).y);
-                  done();
-                })
-                .then(null,done);
-      });
+    it('should calculate the total count',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                expect(result.total).to.equal(_.last(result.byDay[1].values).y);
+                done();
+              })
+              .then(null,done);
+    });
 
-      it('should calculate the growth rates',function(done){
-        return googleBigQueryService
-                .getActiveDisplaysForLineChart()
-                .then(function(result){
-                  if((new Date()).getDate() <= 2){
-                    expect(result.thisMonth).to.equal(1/0);
-                    expect(result.lastMonth).to.equal(-100);
-                    expect(result.last3Months).to.equal(-100);
-                    expect(result.last12Months).to.equal(-100);
-                  }else{
-                    var thisMonthCount = _.last(result.byDay[1].values).y;
-                    var lastDayOfLastMonth = new Date();lastDayOfLastMonth.setDate(0);
-                    expect(lastDayOfLastMonth.getDate()).to.be.at.least(28);
-                    expect(lastDayOfLastMonth.getDate()).to.be.at.most(31);
+    it('should calculate the growth rates',function(done){
+      return googleBigQueryService
+              .getActiveDisplaysForLineChart()
+              .then(function(result){
+                if((new Date()).getDate() <= 2){
+                  expect(result.thisMonth).to.equal(1/0);
+                  expect(result.lastMonth).to.equal(-100);
+                  expect(result.last3Months).to.equal(-100);
+                  expect(result.last12Months).to.equal(-100);
+                }else{
+                  var thisMonthCount = _.last(result.byDay[1].values).y;
+                  var lastDayOfLastMonth = new Date();lastDayOfLastMonth.setDate(0);
+                  expect(lastDayOfLastMonth.getDate()).to.be.at.least(28);
+                  expect(lastDayOfLastMonth.getDate()).to.be.at.most(31);
 
-                    var endOfLastMonthCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                         return (i.x.getFullYear() === lastDayOfLastMonth.getFullYear() &&
-                                                                  i.x.getMonth() === lastDayOfLastMonth.getMonth() &&
-                                                                  i.x.getDate() === lastDayOfLastMonth.getDate());;
-                                                      })).y;
-                    expect(result.thisMonth).to.equal((thisMonthCount-endOfLastMonthCount)/endOfLastMonthCount * 100);
+                  var endOfLastMonthCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                       return (i.x.getFullYear() === lastDayOfLastMonth.getFullYear() &&
+                                                                i.x.getMonth() === lastDayOfLastMonth.getMonth() &&
+                                                                i.x.getDate() === lastDayOfLastMonth.getDate());;
+                                                    })).y;
+                  expect(result.thisMonth).to.equal((thisMonthCount-endOfLastMonthCount)/endOfLastMonthCount * 100);
 
-                    var lastDayOf2MonthsAgo = new Date();lastDayOf2MonthsAgo.setMonth(lastDayOf2MonthsAgo.getMonth()-1);lastDayOf2MonthsAgo.setDate(0);
-                    var endOf2MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                         return (i.x.getFullYear() === lastDayOf2MonthsAgo.getFullYear() &&
-                                                                  i.x.getMonth() === lastDayOf2MonthsAgo.getMonth() &&
-                                                                  i.x.getDate() === lastDayOf2MonthsAgo.getDate());;
-                                                      })).y;
-                    expect(result.lastMonth).to.equal((endOfLastMonthCount-endOf2MonthsAgoCount)/endOf2MonthsAgoCount * 100);
+                  var lastDayOf2MonthsAgo = new Date();lastDayOf2MonthsAgo.setMonth(lastDayOf2MonthsAgo.getMonth()-1);lastDayOf2MonthsAgo.setDate(0);
+                  var endOf2MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                       return (i.x.getFullYear() === lastDayOf2MonthsAgo.getFullYear() &&
+                                                                i.x.getMonth() === lastDayOf2MonthsAgo.getMonth() &&
+                                                                i.x.getDate() === lastDayOf2MonthsAgo.getDate());;
+                                                    })).y;
+                  expect(result.lastMonth).to.equal((endOfLastMonthCount-endOf2MonthsAgoCount)/endOf2MonthsAgoCount * 100);
 
-                    var lastDayOf4MonthsAgo = new Date();lastDayOf4MonthsAgo.setMonth(lastDayOf4MonthsAgo.getMonth()-3);lastDayOf4MonthsAgo.setDate(0);
-                    var endOf4MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                         return (i.x.getFullYear() === lastDayOf4MonthsAgo.getFullYear() &&
-                                                                  i.x.getMonth() === lastDayOf4MonthsAgo.getMonth() &&
-                                                                  i.x.getDate() === lastDayOf4MonthsAgo.getDate());;
-                                                      })).y;
-                    expect(result.last3Months).to.equal((endOfLastMonthCount-endOf4MonthsAgoCount)/endOf4MonthsAgoCount * 100);
+                  var lastDayOf4MonthsAgo = new Date();lastDayOf4MonthsAgo.setMonth(lastDayOf4MonthsAgo.getMonth()-3);lastDayOf4MonthsAgo.setDate(0);
+                  var endOf4MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                       return (i.x.getFullYear() === lastDayOf4MonthsAgo.getFullYear() &&
+                                                                i.x.getMonth() === lastDayOf4MonthsAgo.getMonth() &&
+                                                                i.x.getDate() === lastDayOf4MonthsAgo.getDate());;
+                                                    })).y;
+                  expect(result.last3Months).to.equal((endOfLastMonthCount-endOf4MonthsAgoCount)/endOf4MonthsAgoCount * 100);
 
 
 
-                    var lastDayOf13MonthsAgo = new Date();lastDayOf13MonthsAgo.setMonth(lastDayOf13MonthsAgo.getMonth()-12);lastDayOf13MonthsAgo.setDate(0);
-                    var endOf13MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
-                                                         return (i.x.getFullYear() === lastDayOf13MonthsAgo.getFullYear() &&
-                                                                  i.x.getMonth() === lastDayOf13MonthsAgo.getMonth() &&
-                                                                  i.x.getDate() === lastDayOf13MonthsAgo.getDate());;
-                                                      })).y;
-                    expect(result.last12Months).to.equal((endOfLastMonthCount-endOf13MonthsAgoCount)/endOf13MonthsAgoCount * 100);
-                  }
-                  done();
-                })
-                .then(null,done);
+                  var lastDayOf13MonthsAgo = new Date();lastDayOf13MonthsAgo.setMonth(lastDayOf13MonthsAgo.getMonth()-12);lastDayOf13MonthsAgo.setDate(0);
+                  var endOf13MonthsAgoCount = _.first(_.filter(result.byDay[1].values,function(i){
+                                                       return (i.x.getFullYear() === lastDayOf13MonthsAgo.getFullYear() &&
+                                                                i.x.getMonth() === lastDayOf13MonthsAgo.getMonth() &&
+                                                                i.x.getDate() === lastDayOf13MonthsAgo.getDate());;
+                                                    })).y;
+                  expect(result.last12Months).to.equal((endOfLastMonthCount-endOf13MonthsAgoCount)/endOf13MonthsAgoCount * 100);
+                }
+                done();
+              })
+              .then(null,done);
       });
     });//getActiveDisplaysForLineChart
 
@@ -387,10 +413,33 @@ describe("Service: BigQuery", function() {
                 .then(null,done);
       });
     });//getActiveDisplaysForMap
+    describe('getDisplaysPerCompany',function(){
+      it('should make the query',function(done){
+        return googleBigQueryService
+                  .getDisplaysPerCompany()
+                  .then(function(result){
+                    expect(result).to.be.an('Array');
+                    expect(result).to.have.length(2);
+                    for(var i=0; i < 2; i++){
+                      expect(result[i].company).to.be.a('string');
+                      expect(result[i].displays).to.be.an('object');
+                      for(var key in result[i].displays){
+                        expect(result[i].displays[key]).to.be.a('number');
+                      }
+                    }
+                    done();
+                  })
+                  .then(null,done);
+      });
+    });//getDisplaysPerCompany
+
   });//successful
 
-  describe('(failed queries)',function(){
+
+
+  describe('(failed queries)', function() {
     var expectedError = 'reason';
+
     beforeEach(module(function ($provide) {
       $provide.service('$http',function(){
         return{
@@ -402,6 +451,7 @@ describe("Service: BigQuery", function() {
         }
       });
     }));
+
     beforeEach(function(){
       inject(function($injector){
         googleBigQueryService = $injector.get('googleBigQueryService');
@@ -428,16 +478,15 @@ describe("Service: BigQuery", function() {
               });
     });
 
-    it('getNewCompaniesByDay should handle failures',function(done){
+    it('getDisplaysPerCompany should handle failures',function(done){
       return googleBigQueryService
-              .getNewCompaniesByDay()
+              .getDisplaysPerCompany()
               .then(done,function(e){
                 expect(e).to.be.truely;
                 expect(e).to.equal(expectedError)
                 done();
               });
     });
-
   });//failed
 
 });//service

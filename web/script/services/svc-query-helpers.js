@@ -34,9 +34,8 @@ angular.module('dashboard')
       if(typeof now === 'undefined' || !now){
         now = new Date();
       }
-      var shortMonthNames = [ "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec" ];
       var currentYear = now.getFullYear();
-      var year = now.getMonth() >= shortMonthNames.indexOf(shortMonth.toLowerCase()) ? currentYear : currentYear - 1;
+      var year = now.getMonth() >= this.shortMonthNames.indexOf(shortMonth) ? currentYear : currentYear - 1;
       return new Date(shortMonth +' 1 ' + year);
     },
 
@@ -50,6 +49,19 @@ angular.module('dashboard')
       else {
         return new Date(parts[0], parts[1]-1, 1,0,0,0,0);
       }
+    },
+
+    shortMonthNames : [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
+
+    //returns an array of Short Month - Year going back from the current month to {{numOfMonths}}
+    generateShortMonthDates : function(numOfMonths) {
+      var result=[];
+      var date = new Date(); date.setDate(1);
+      for(var i = 0; i < numOfMonths; i++){
+        result.push(this.shortMonthNames[date.getMonth()] + ' '+date.getFullYear());
+        date.setMonth(date.getMonth() - 1);
+      }
+      return result;
     },
 
     //transforms an array in the form [{x:__,y:___}] into an object in the form

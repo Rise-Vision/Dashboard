@@ -345,5 +345,42 @@ angular.module('dashboard')
     return deferred.promise;
   };//getActiveCompaniesByDay
 
+  service.getDisplaysPerCompany = function() {
+     var deferred = $q.defer();
+
+   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:60000})
+       .then(function(response){
+
+          if(response.data.error|| !response.data.jobComplete){
+            deferred.reject(response.data.error || 'big query job failed to complete');
+            return;
+          }
+          var result = _.chain(response.data.rows)
+                        .map(function(row){
+                          return {
+                            company: row.f[2].v ,
+                            displays: parseInt(row.f[3].v),
+                            date: queryHelpersService.shortMonthNames[parseInt(row.f[1].v)-1] + ' ' + row.f[0].v
+                          };
+                        })
+                        .groupBy('company')
+                        .map(function(row){
+                          var displays = {};
+                          _.forEach(row,function(i){
+                            displays[i.date] = i.displays;
+                          });
+                          return {
+                            company : _.first(row).company,
+                            displays : displays
+                          };
+
+                        })
+                        .value();
+          deferred.resolve(result);
+        })
+       .then(null,deferred.reject);
+    return deferred.promise;
+  };////getDisplaysPerCompany
+
   return service;
 }]);
