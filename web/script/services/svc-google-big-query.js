@@ -348,7 +348,7 @@ angular.module('dashboard')
   service.getDisplaysPerCompany = function() {
      var deferred = $q.defer();
 
-   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:60000})
+   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:120000})
        .then(function(response){
 
           if(response.data.error|| !response.data.jobComplete){
