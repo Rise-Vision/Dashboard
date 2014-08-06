@@ -233,7 +233,7 @@ describe("Service: BigQuery", function() {
               .then(null,done);
     });
 
-    xit('should calculate the growth rates',function(done){
+    it('should calculate the growth rates',function(done){
       return googleBigQueryService
               .getActiveDisplaysForLineChart()
               .then(function(result){
