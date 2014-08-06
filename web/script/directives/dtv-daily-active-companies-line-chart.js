@@ -15,20 +15,20 @@ angular.module('dashboard')
             scope.showSpinner = true;
             googleBigQueryService.getActiveCompaniesByDay()
               .then(function(result){
-                scope.growthStats = commonMetricService.generateGrowthStats('Active Companies',result);
-                
+                scope.growthStats = commonMetricService.generateGrowthStats('Active Companies Growth',result);
+
                 var colours = commonMetricService.getChartColours();
                 for(var i = 0; i < result.byDay.length; i++){
-                  result.byDay[i].color = colours[i];                  
+                  result.byDay[i].color = colours[i];
                 }
-                nv.addGraph(function() {  
+                nv.addGraph(function() {
                   var chart = nv.models.lineChart()
                                 .x(function (d) { return d.x; })
                                 .y(function (d) { return d.y; })
                                 .useInteractiveGuideline(true)
                                 .options(commonMetricService.getCommonChartOptions());
-                                
-    
+
+
                   chart.xAxis
                    .tickFormat(commonMetricService.dateD3Format);
 
@@ -51,7 +51,7 @@ angular.module('dashboard')
               })
               .finally(function(){
                 scope.showSpinner = false;
-              });//getActiveDisplaysForLineChart      
+              });//getActiveDisplaysForLineChart
             }//LINK
     };//return
   }]);//directive
