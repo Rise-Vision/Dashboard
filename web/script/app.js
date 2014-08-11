@@ -9,7 +9,19 @@ angular.module('dashboard', ['ngRoute'])
 .config(function($routeProvider) {
   $routeProvider
    .when('/', {
-    templateUrl: 'view/main.html',
-    //controller: 'mainController'
-  });
+      redirectTo: '/displays',
+    })
+   .when('/displays',{
+      templateUrl: 'view/displays.html',caseInsensitiveMatch: true
+   })
+   .when('/software',{
+      templateUrl: 'view/software.html',caseInsensitiveMatch: true
+   })
+   .when('/companies',{
+      templateUrl: 'view/companies.html',caseInsensitiveMatch: true
+   })
+   .when('/support',{
+      templateUrl: 'view/support.html',caseInsensitiveMatch: true
+   })
+   ;
 });
