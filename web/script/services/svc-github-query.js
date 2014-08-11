@@ -13,7 +13,7 @@ angular.module('dashboard')
   service.getStats = function() {
     var deferred = $q.defer();
 
-    $http.get(API_ROOT + '/query/github/getStats',{timeout:60000})
+    $http.get(API_ROOT + '/query/github/getStats',{timeout:45000})
     .then(function(result){
       deferred.resolve(result.data);
     })
@@ -25,7 +25,7 @@ angular.module('dashboard')
   //get a chartable array of releases per day starting at the date of the first release
   service.getDailyReleases = function() {
     var deferred = $q.defer();
-    $http.get(API_ROOT + '/query/github/getReleasesByDay',{timeout:60000})
+    $http.get(API_ROOT + '/query/github/getReleasesByDay',{timeout:45000})
     .then(function(result){
       var todayCount = 0
       , yesterdayCount = 0
