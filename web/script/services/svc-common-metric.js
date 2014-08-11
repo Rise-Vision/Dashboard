@@ -17,6 +17,8 @@ angular.module('dashboard')
       var message = 'Failed To Load Metric';
       if(error.status === 0){
         message +=' ( Request Timed Out )';
+      } else if (error.status === 404){
+        message += '404 Not Found.';
       } else if (error.data){
         message +=' ( ' + error.status+' '+error.data.toString()+' )';
       } else if (typeof error === 'string'){
