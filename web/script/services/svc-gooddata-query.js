@@ -17,7 +17,7 @@ angular.module('dashboard')
     var queryAPI = function (urlPath, key, expectShortMonth) {
       var deferred = $q.defer();
 
-      $http.get(API_ROOT + '/query/gooddata/' + urlPath)
+      $http.get(API_ROOT + '/query/gooddata/' + urlPath,{cache:true})
       .then(function(result) {
         //since gooddata gives the values as a string in csv, we need to strip out the extra "" at the begining and end using split
         if(typeof result.data !== 'string'){

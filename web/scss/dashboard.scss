@@ -4,7 +4,12 @@
   padding-bottom: 10px;
   background-color: #FCFCFC;
   border-color: #F3F3F3;
+
+  .tabs{
+    margin-left: 26px;
+  }
 }
+
 
 #loginModal{
   .modal-dialog{
@@ -62,7 +67,9 @@
   }
 }
 
-.newCompanies {
+.lineChartWithGrowthStats {
+  min-height: 870px;
+
   .statsTable {
     width: 84%;
     margin-left: 71px;
@@ -85,4 +92,8 @@
 
     }
   }
+}
+
+.commonLineChart {
+  min-height: 500px;
 }

@@ -15,7 +15,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForMap = function() {
     var deferred = $q.defer();
 
-    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap',{timeout:60000})
+    $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForMap',{timeout:60000,cache:true})
       .then(function(response){
         var result = response.data;
         if(result.error || !result.jobComplete){
@@ -55,7 +55,7 @@ angular.module('dashboard')
   service.getActiveDisplaysForLineChart = function(){
     var deferred = $q.defer();
 
-   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:60000})
+   $http.get(API_ROOT+'/query/googleBigQuery/getActiveDisplaysForLineChart',{timeout:60000,cache:true})
        .then(function(response){
           var result = response.data;
           if(result.error|| !result.jobComplete){
@@ -148,8 +148,8 @@ angular.module('dashboard')
   service.getNewCompaniesByDay = function() {
     var deferred = $q.defer();
     $q.all([
-            $http.get(API_ROOT + '/query/googleBigQuery/getNewCompaniesByDay',{timeout:45000}),
-            $http.get(API_ROOT + '/query/googleBigQuery/getTotalCompaniesByMonth',{timeout:45000}),
+            $http.get(API_ROOT + '/query/googleBigQuery/getNewCompaniesByDay',{timeout:45000,cache:true}),
+            $http.get(API_ROOT + '/query/googleBigQuery/getTotalCompaniesByMonth',{timeout:45000,cache:true}),
           ])
       .then(function(results) {
         var res = results[0];
@@ -269,8 +269,8 @@ angular.module('dashboard')
     var deferred = $q.defer();
 
    $q.all([
-      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000}),
-      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByMonth',{timeout:60000})
+      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000,cache:true}),
+      $http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByMonth',{timeout:60000,cache:true})
     ])
    .then(function(response){
       var activeCompaniesByDay = response[0].data;
@@ -356,7 +356,7 @@ angular.module('dashboard')
   service.getDisplaysPerCompany = function() {
      var deferred = $q.defer();
 
-   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:120000})
+   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:120000,cache:true})
        .then(function(response){
 
           if(response.data.error|| !response.data.jobComplete){

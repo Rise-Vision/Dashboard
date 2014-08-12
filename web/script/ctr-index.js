@@ -2,32 +2,13 @@
 
 // Create a module for our core Store services
 angular.module('dashboard')
-.controller('indexController',['authenticationService','$scope','$window',
-  function(authenticationService,$scope,$window) {
+.controller('indexController',['authenticationService','$scope','$window','activeTabService',
+  function(authenticationService,$scope,$window,activeTabService) {
     $scope.currentYear = new Date().getFullYear();
     $scope.isAuthenticated = false;
     $scope.logingIn = false;
-
-    //when the user is authenticated, hide the login screen and
-    authenticationService
-    .whenAuthenticated()
-    .then(function(){
-      $scope.logingIn = true;
-      return authenticationService.getProfile();
-    })
-    .then(function(result){
-        //TODO: once delievered, remove the rangle.io domain from below.
-
-          $scope.userName = result.displayName;
-
-          $scope.isAuthenticated = true;
-    })
-    .then(null,function(error){
-      console.error(error);
-    })
-    .finally(function(){
-      $scope.logingIn = false;
-    });
+    $scope.tabs = ['Displays','Software','Companies','Support'];
+    $scope.activeTab = activeTabService;
 
     //log the user out of the system
     $scope.logout = function(){
@@ -40,7 +21,6 @@ angular.module('dashboard')
     //login the user and set display scope variables for the header
     $scope.login = function(){
       $scope.logingIn = true;
-
       authenticationService.login()
       .then(null, function(error){
         $scope.logingIn = false;
@@ -52,6 +32,7 @@ angular.module('dashboard')
       });
     };
 
+    //see if the user is already authenticated
     authenticationService.makeAuthCheck()
     .then(null,function(e){
       $scope.logingIn = false;
@@ -60,6 +41,24 @@ angular.module('dashboard')
       }else if(e.status !== 401){
         $scope.loginErrorMessage = 'Failed to login: ' + e.toString();
       }
+    });
+
+    //when the user becomes autheniticated, update the UI
+    authenticationService
+    .whenAuthenticated()
+    .then(function(){
+      $scope.logingIn = true;
+      return authenticationService.getProfile();
+    })
+    .then(function(result){
+      $scope.userName = result.displayName;
+      $scope.isAuthenticated = true;
+    })
+    .then(null,function(error){
+      console.error(error);
+    })
+    .finally(function(){
+      $scope.logingIn = false;
     });
   }
 ]); //mainController
