@@ -39,8 +39,13 @@ describe("Services: table helpers", function() {
       expect(result).to.deep.equal([{company:3},{company:2},{company:1}]);
     });
 
-    it('should order the display columns',function(){
-      var result = tableHelperService.orderBy('display.Feb 2014','somthing',[
+    it('should order the country column',function(){
+      var result = tableHelperService.orderBy('country','somthing',[{country:1},{country:2},{country:3}]);
+      expect(result).to.deep.equal([{country:3},{country:2},{country:1}]);
+    });
+
+    it('should order the displays columns',function(){
+      var result = tableHelperService.orderBy('displays.Feb 2014','somthing',[
         {displays:{'Feb 2014':1}},
         {displays:{'Feb 2014':1000}},
         {displays:{'March 2014':1}},

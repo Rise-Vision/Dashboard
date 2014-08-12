@@ -19,14 +19,15 @@ angular.module('dashboard')
   };
 
   service.orderBy = function(key,orderByField,data) {
+    //todo
     if(key !== orderByField){
-      if(key === 'company'){
-        data = _.sortBy(data,'company');
-      }else {
-        key= key.split('.')[1];
+      var splitKey = key.split('.');
+      if(splitKey.length === 1){
+        data = _.sortBy(data,key);
+      }else if(splitKey.length === 2) {
         data = _.sortBy(data,
           function(row) {
-           return row.displays[key] ? row.displays[key] : 0;
+           return row[splitKey[0]][splitKey[1]] ? row[splitKey[0]][splitKey[1]] : 0;
         });
       }
     }
