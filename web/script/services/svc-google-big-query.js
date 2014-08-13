@@ -390,5 +390,51 @@ angular.module('dashboard')
     return deferred.promise;
   };////getDisplaysPerCompany
 
+  //get the average number of displays per month for 12 months for each country where risevision is issued
+  // and include the growth over the stats period
+  service.getDisplaysPerCountry = function() {
+     var deferred = $q.defer();
+
+   $http.get(API_ROOT+'/query/googleBigQuery/displaysPerCountryForLast12Months',{timeout:120000,cache:true})
+       .then(function(response){
+
+          if(response.data.error|| !response.data.jobComplete){
+            deferred.reject(response.data.error || 'big query job failed to complete');
+            return;
+          }
+          var result = _.chain(response.data.rows)
+                        .map(function(row){
+                          return {
+                            country: row.f[2].v ,
+                            displays: Math.ceil(parseFloat(row.f[3].v)),
+                            date: queryHelpersService.shortMonthNames[parseInt(row.f[1].v)-1] + ' ' + row.f[0].v
+                          };
+                        })
+                        .groupBy('country')
+                        .map(function(row){
+                          var displays = {};
+                          var first,last,rowLength=row.length;
+                          _.forEach(row,function(i,k){
+                            if(k === 0 ) {
+                              last = i.displays;
+                            } if(k === rowLength - 1) {
+                              first = i.displays;
+                            }
+                            displays[i.date] = i.displays;
+                          });
+                          return {
+                            country : _.first(row).country,
+                            displays : displays,
+                            growth : Math.round((first - last) / last*100)
+                          };
+
+                        })
+                        .value();
+          deferred.resolve(result);
+        })
+       .then(null,deferred.reject);
+    return deferred.promise;
+  };////getDisplaysPerCompany
+
   return service;
 }]);

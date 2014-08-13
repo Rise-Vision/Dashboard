@@ -116,6 +116,7 @@ describe("Service: BigQuery", function() {
             /* jshint ignore:end */
             break;
             case '/query/googleBigQuery/getDisplaysPerCompanyForLast12Months':
+            case '/query/googleBigQuery/displaysPerCountryForLast12Months':
               /* jshint ignore:start */
               var rows = [];
               for(var i = 1; i < 12; i++){
@@ -433,6 +434,27 @@ describe("Service: BigQuery", function() {
       });
     });//getDisplaysPerCompany
 
+    describe('getDisplaysPerCountry',function(){
+      it('should make the query',function(done){
+        return googleBigQueryService
+                  .getDisplaysPerCountry()
+                  .then(function(result){
+                    expect(result).to.be.an('Array');
+                    expect(result).to.have.length(2);
+                    for(var i=0; i < 2; i++){
+                      expect(result[i].country).to.be.a('string');
+                      expect(result[i].displays).to.be.an('object');
+                      for(var key in result[i].displays){
+                        expect(result[i].displays[key]).to.be.a('number');
+                      }
+                      expect(result[i].growth).to.equal(1000);
+                    }
+                    done();
+                  })
+                  .then(null,done);
+      });
+    });//getDisplaysPerCountry
+
   });//successful
 
 
@@ -481,6 +503,15 @@ describe("Service: BigQuery", function() {
     it('getDisplaysPerCompany should handle failures',function(done){
       return googleBigQueryService
               .getDisplaysPerCompany()
+              .then(done,function(e){
+                expect(e).to.be.truely;
+                expect(e).to.equal(expectedError)
+                done();
+              });
+    });
+    it('getDisplaysPerCountry should handle failures',function(done){
+      return googleBigQueryService
+              .getDisplaysPerCountry()
               .then(done,function(e){
                 expect(e).to.be.truely;
                 expect(e).to.equal(expectedError)

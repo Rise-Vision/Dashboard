@@ -3,26 +3,38 @@
 "use strict";
 
 angular.module('dashboard')
-  .directive('activeDisplaysByCompanyTable',
+  .directive('activeDisplaysTable',
    ['googleBigQueryService','commonMetricService','queryHelpersService','tableHelperService',
     function(googleBigQueryService,commonMetricService,queryHelpersService,tableHelperService){
       return {
       restrict: 'E',
-      scope: {},
-      templateUrl: 'view/active-displays-company-table.html',
+      scope: {groupingTitle : '=grouping'},
+      templateUrl: 'view/active-displays-table.html',
       link: function (scope) {
         scope.showSpinner = true;
         scope.reverseSort = true;
         var pageSize = 100;
+        var data = [];
         scope.page = 0;
         scope.pages = 0;
         scope.dates = queryHelpersService.generateShortMonthDates(12);
-        scope.orderByField = 'displays.'+_.first(scope.dates);
 
-        var data = [];
-        googleBigQueryService.getDisplaysPerCompany()
+        var query;
+        switch(scope.groupingTitle ? scope.groupingTitle.toLowerCase():''){
+          case 'company':
+            query = googleBigQueryService.getDisplaysPerCompany;
+          break;
+          case 'country':
+            query = googleBigQueryService.getDisplaysPerCountry;
+          break;
+          default:
+            throw new Error('Unknown grouping: '+scope.groupingTitle);
+        }
+
+        query()
         .then(function(result){
           data = result;
+          scope.orderBy('displays.'+_.first(scope.dates));
           scope.pages = Math.ceil(data.length/pageSize);
           applyPagination(0);
         })
@@ -65,6 +77,7 @@ angular.module('dashboard')
             scope.reverseSort = true;
           }
           applyPagination(scope.page);
+
         };
 
         scope.sumColumn = function(date) {

@@ -1,15 +1,24 @@
 
 <div class="statsTable" >
-  <h3>Active Displays by Company</h3>
+  <h3>Active Displays by {{::groupingTitle}}</h3>
   <br>
   <div class="table-responsive col-lg-offset-1 col-lg-10" ng-show="!errorMessage && !showSpinner">
     <table class="table table-bordered" >
       <thead>
         <tr class="columHeaders">
-          <th href="" ng-click="orderBy('company')">
+          <th href="" ng-click="orderBy(groupingTitle.toLowerCase())">
             <a >
-              Company
-              <span ng-show="orderByField === 'company'">
+              {{::groupingTitle}}
+              <span ng-show="orderByField === groupingTitle.toLowerCase()">
+                <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
+                <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
+              </span>
+            </a>
+          </th>
+          <th href="" ng-click="orderBy('growth')">
+            <a >
+              Growth
+              <span ng-show="orderByField === 'growth'">
                 <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
                 <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
               </span>
@@ -18,7 +27,7 @@
 
           <th ng-repeat='date in dates' ng-click="orderBy('displays.'+date);">
               <a >
-                {{date}}
+                {{::date}}
                 <span ng-show="orderByField === 'displays.'+date">
                   <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
                   <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
@@ -29,15 +38,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="repo in data">
-          <td >{{repo.company}}</td>
-          <td ng-repeat='date in dates'>{{(repo.displays[date]?repo.displays[date]:0)|number}}</td>
+        <tr ng-repeat="row in data">
+          <td >{{row[groupingTitle.toLowerCase()]}}</td>
+          <td >{{row.growth|growthNumber:'%'}}</td>
+          <td ng-repeat='date in dates'>{{(row.displays[date]?row.displays[date]:0)|number}}</td>
         </tr>
       </tbody>
       <tfoot style="font-weight: bolder">
         <tr>
           <td>Totals</td>
-          <td ng-repeat='date in dates'>{{sumColumn(date)|number}}</td>
+          <td>-</td>
+          <td ng-repeat='date in dates'>{{::sumColumn(date)|number}}</td>
         </tr>
       </tfoot>
 
@@ -45,7 +56,7 @@
     <div>
       <a ng-show="page > 1" ng-click="prevPage(true)"><i class="icon ion-chevron-left"></i><i class="icon ion-chevron-left"></i> FIRST</a>
       <a ng-show="page" ng-click="prevPage()"><i class="icon ion-chevron-left"></i> PREVIOUS</a>
-      <span ng-show="pages">{{page + 1}} of {{pages}}</span>
+      <span ng-show="pages">{{page + 1}} of {{::pages}}</span>
       <a ng-show="pages > (page+1)" ng-click="nextPage()">NEXT <i class="icon ion-chevron-right"></i></a>
       <a ng-show="pages > (page+2)" ng-click="nextPage(true)">LAST <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
 
@@ -56,6 +67,6 @@
     <i class="icon ion-loading-b" ></i>
   </div>
   <div class="bg-danger" ng-show="errorMessage" >
-    <h5>{{errorMessage}}</h5>
+    <h5>{{::errorMessage}}</h5>
   </div>
 </div>

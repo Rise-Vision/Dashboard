@@ -1,14 +1,16 @@
 {
   "name": "rv-dashboard",
   "dependencies": {
-    "angular": "1.2.4",
-    "angular-mocks": "1.2.4",
-    "angular-route": "1.2.4",
+    "angular": "1.3.0-beta.17 ",
+    "angular-mocks": "1.3.0-beta.17 ",
+    "angular-route": "1.3.0-beta.17 ",
     "jQuery": ">=2.1.1",
-    "angular-bootstrap": "~0.11.0",
     "bootstrap": ">=3",
     "q": "1.0.1",
     "lodash": "~2.4.1",
     "nvd3": "~1.1.15-beta"
+  },
+  "resolutions": {
+    "angular": "1.3.0-beta.17"
   }
 }
