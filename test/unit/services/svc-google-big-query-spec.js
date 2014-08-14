@@ -427,6 +427,8 @@ describe("Service: BigQuery", function() {
                       for(var key in result[i].displays){
                         expect(result[i].displays[key]).to.be.a('number');
                       }
+                      expect(result[i].growth).to.equal(-91);
+
                     }
                     done();
                   })
@@ -447,7 +449,7 @@ describe("Service: BigQuery", function() {
                       for(var key in result[i].displays){
                         expect(result[i].displays[key]).to.be.a('number');
                       }
-                      expect(result[i].growth).to.equal(1000);
+                      expect(result[i].growth).to.equal(-91);
                     }
                     done();
                   })

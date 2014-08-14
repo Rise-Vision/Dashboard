@@ -353,88 +353,77 @@ angular.module('dashboard')
     return deferred.promise;
   };//getActiveCompaniesByDay
 
-  service.getDisplaysPerCompany = function() {
-     var deferred = $q.defer();
-
-   $http.get(API_ROOT+'/query/googleBigQuery/getDisplaysPerCompanyForLast12Months',{timeout:120000,cache:true})
-       .then(function(response){
-
-          if(response.data.error|| !response.data.jobComplete){
-            deferred.reject(response.data.error || 'big query job failed to complete');
-            return;
-          }
-          var result = _.chain(response.data.rows)
-                        .map(function(row){
-                          return {
-                            company: row.f[2].v ,
-                            displays: parseInt(row.f[3].v),
-                            date: queryHelpersService.shortMonthNames[parseInt(row.f[1].v)-1] + ' ' + row.f[0].v
-                          };
-                        })
-                        .groupBy('company')
-                        .map(function(row){
-                          var displays = {};
-                          _.forEach(row,function(i){
-                            displays[i.date] = i.displays;
-                          });
-                          return {
-                            company : _.first(row).company,
-                            displays : displays
-                          };
-
-                        })
-                        .value();
-          deferred.resolve(result);
-        })
-       .then(null,deferred.reject);
-    return deferred.promise;
-  };////getDisplaysPerCompany
-
-  //get the average number of displays per month for 12 months for each country where risevision is issued
+  ////get the average number of active displays per month for 12 months for each grouping where
   // and include the growth over the stats period
-  service.getDisplaysPerCountry = function() {
-     var deferred = $q.defer();
+  var getDisplaysPerGrouping = function(grouping) {
+    var deferred = $q.defer();
+    var url = API_ROOT;
+    switch(grouping){
+      case 'company':
+        url += '/query/googleBigQuery/getDisplaysPerCompanyForLast12Months';
+        break;
+      case 'country':
+        url += '/query/googleBigQuery/displaysPerCountryForLast12Months';
+        break;
+      default:
+        throw new Error('Unknown grouping: '+grouping);
+    }//switch
 
-   $http.get(API_ROOT+'/query/googleBigQuery/displaysPerCountryForLast12Months',{timeout:120000,cache:true})
+   $http.get(url,{timeout:120000,cache:true})
        .then(function(response){
 
           if(response.data.error|| !response.data.jobComplete){
             deferred.reject(response.data.error || 'big query job failed to complete');
             return;
           }
+
           var result = _.chain(response.data.rows)
                         .map(function(row){
-                          return {
-                            country: row.f[2].v ,
+                          //note this assumes that query results are returned in the form {YEAR, MONTH, NAME, DISPLAY_COUNT}
+                          var result = {
                             displays: Math.ceil(parseFloat(row.f[3].v)),
                             date: queryHelpersService.shortMonthNames[parseInt(row.f[1].v)-1] + ' ' + row.f[0].v
                           };
+                          result[grouping] = row.f[2].v;
+                          return result;
                         })
-                        .groupBy('country')
+                        .groupBy(grouping)
                         .map(function(row){
                           var displays = {};
-                          var first,last,rowLength=row.length;
+                          var first //most recent count
+                            , last; //oldest count
                           _.forEach(row,function(i,k){
-                            if(k === 0 ) {
-                              last = i.displays;
-                            } if(k === rowLength - 1) {
-                              first = i.displays;
+                            var iDate = new Date('1 ' + i.date );
+                            if(k === 0 || first.date < iDate) {
+                              first = {date:iDate,displays:i.displays};
+                            }
+                            if(k === 0 || last.date > iDate) {
+                              last = {date:iDate,displays:i.displays};
                             }
                             displays[i.date] = i.displays;
                           });
-                          return {
-                            country : _.first(row).country,
-                            displays : displays,
-                            growth : Math.round((first - last) / last*100)
-                          };
 
+                          var result = {
+                            displays : displays,
+                            growth : Math.round((first .displays - last.displays) / last.displays * 100)
+                          };
+                          result[grouping] = _.first(row)[grouping];
+                          return result;
                         })
                         .value();
           deferred.resolve(result);
         })
        .then(null,deferred.reject);
     return deferred.promise;
-  };////getDisplaysPerCompany
+  };////getDisplaysPerGrouping
+
+  service.getDisplaysPerCompany = function() {
+    return getDisplaysPerGrouping('company');
+  };
+
+  service.getDisplaysPerCountry = function() {
+    return getDisplaysPerGrouping('country');
+  };
 
   return service;
 }]);

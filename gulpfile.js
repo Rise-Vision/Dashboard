@@ -24,7 +24,7 @@ var env = process.env.NODE_ENV || "dev",
     sass = require("gulp-sass"),
     minifyCSS = require("gulp-minify-css"),
     concat = require("gulp-concat"),
-    clean = require("gulp-clean"),
+    clean = require("gulp-rimraf"),
     rename = require("gulp-rename"),
     connect = require("gulp-connect"),
     protractor = require("gulp-protractor").protractor,
@@ -165,7 +165,7 @@ gulp.task("config", function() {
     .pipe(gulp.dest("./web/script/config"));
 });
 
-gulp.task("build", ["clean", "config", "html", "view", "img", "css", "lint-throw"]);
+gulp.task("build", [ "html", "view", "img", "css", "lint-throw"]);
 
 
 gulp.task("test", function() {
