@@ -48,7 +48,7 @@
         <tr>
           <td>Totals</td>
           <td>-</td>
-          <td ng-repeat='date in dates'>{{::sumColumn(date)|number}}</td>
+          <td ng-repeat='date in dates'>{{sumColumn(date)|number}}</td>
         </tr>
       </tfoot>
 
@@ -56,7 +56,7 @@
     <div>
       <a ng-show="page > 1" ng-click="prevPage(true)"><i class="icon ion-chevron-left"></i><i class="icon ion-chevron-left"></i> FIRST</a>
       <a ng-show="page" ng-click="prevPage()"><i class="icon ion-chevron-left"></i> PREVIOUS</a>
-      <span ng-show="pages">{{page + 1}} of {{::pages}}</span>
+      <span ng-show="pages">{{page + 1}} of {{pages}}</span>
       <a ng-show="pages > (page+1)" ng-click="nextPage()">NEXT <i class="icon ion-chevron-right"></i></a>
       <a ng-show="pages > (page+2)" ng-click="nextPage(true)">LAST <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
 
