@@ -2,7 +2,7 @@
 <div class="statsTable" >
   <h3>Active Displays by {{::groupingTitle}}</h3>
   <br>
-  <div class="table-responsive col-lg-offset-1 col-lg-10" ng-show="!errorMessage && !showSpinner">
+  <div class="table-responsive col-lg-offset-1 col-lg-10" ng-if="!errorMessage && !showSpinner">
     <table class="table table-bordered" >
       <thead>
         <tr class="columHeaders">
