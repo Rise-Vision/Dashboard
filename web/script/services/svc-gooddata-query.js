@@ -94,7 +94,18 @@ angular.module('dashboard')
       return deferred.promise;
     };
 
+    service.getResponseTimeByMonth = function() {
+      var deferred = $q.defer();
 
+      $q.all([
+               service.getAverageTopicResponseTimesPerDay(),
+               service.getZendeskResponseTimeForLineGraph()
+              ])
+              .then(function(results){
+                deferred.resolve(_.flatten(results,true));
+              });
+      return deferred.promise;
+    };
 
 
 
