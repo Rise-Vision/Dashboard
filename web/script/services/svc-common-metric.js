@@ -22,7 +22,7 @@ angular.module('dashboard')
       } else if (error.data){
         message +=' ( ' + error.status+' '+error.data.toString()+' )';
       } else if (typeof error === 'string'){
-        message +=' ( '+error.status+' '+error+' )';
+        message +=' ( '+error+' )';
       }
 
       return message;

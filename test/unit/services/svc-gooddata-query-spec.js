@@ -81,6 +81,7 @@ describe("Services: Gooddata Query", function() {
     expect(gooddataQueryService.getAverageTopicResponseTimesPerDay).to.be.defined;
     expect(gooddataQueryService.getFullResolutionTimesPerMonth).to.be.defined;
     expect(gooddataQueryService.getTouchesByDay).to.be.defined;
+    expect(gooddataQueryService.getResponseTimeByMonth).to.be.defined;
     /* jshint ignore:end */
 
   });
@@ -164,6 +165,28 @@ describe('getTouchesByDay',function(){
     });
   });
 
+describe('getResponseTimeByMonth',function(){
+    it('should parse the returned csv into a JS object',function(done){
+      return gooddataQueryService.getResponseTimeByMonth()
+      .then(function(result){
+
+        expect(result).to.be.an('Array');
+        expect(result).to.have.length(2);
+
+        for (var i = 0; i <  result.length; i++) {
+          expect(result[i].values[0].x).to.be.a('Date');
+          /* jshint ignore:start */
+          expect(result[i].values[0].x).to.be.truely;
+          /* jshint ignore:end */
+          expect(result[i].values[0].y).to.be.a('Number');
+          expect(result[i].values[0].y).to.be.least(0);
+
+        }
+        done();
+      })
+      .then(null,done);
+    });
+  });
 
 
 });
