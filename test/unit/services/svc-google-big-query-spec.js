@@ -144,6 +144,33 @@ describe("Service: BigQuery", function() {
               }});
             /* jshint ignore:end */
             break;
+            case '/query/googleBigQuery/getActiveCompaniesByDay':
+            case '/query/googleBigQuery/totalCompaniesByDay':
+              /* jshint ignore:start */
+              var rows = []
+               , count = 1
+               , today = new Date()
+               , startDate = new Date(); startDate.setDate(startDate.getDate() - 60);
+              for(var i = startDate; i <= today; i.setDate(i.getDate() + 1)) {
+                //test that if a value is not provided, that 0 will be used in its place
+                if(count===2){
+                  count++;
+                  continue;
+                }
+                rows.push({
+                  f:[
+                    {v:i.getFullYear()+'-'+(i.getMonth()+1) + '-' + i.getDate()},
+                    {v:count++}
+                  ]
+                });
+              }
+              deferred.resolve({data:{
+                jobComplete:true,
+                rows:rows
+              }});
+            /* jshint ignore:end */
+            break;
+
             default:
               deferred.reject('unexpected url: '+url);
               break;
@@ -456,7 +483,28 @@ describe("Service: BigQuery", function() {
                   .then(null,done);
       });
     });//getDisplaysPerCountry
+    describe('getRetention',function(){
+      it('should complete',function(done){
+        return googleBigQueryService
+                .getRetention()
+                .then(function(result){
+                  expect(result).to.be.an('Array');
+                  expect(result).to.have.length.above(0);
+                  for(var y = 0; y < result.length; y++){
+                    expect(result[y].values).to.have.length(61);
+                    for(var i =0; i < result[0].values.length; i++){
+                      expect(result[y].values[i].y).to.be.a('number');
+                      expect(result[y].values[i].x).to.be.a('Date');
+                      if(i === 0) continue;
 
+                      expect(result[y].values[i].y).to.be.at.least(result[y].values[i].y)
+                    }
+                  }
+                  done();
+                })
+                .then(null,done);
+      });
+    });//getRetention
   });//successful
 
 
@@ -514,6 +562,24 @@ describe("Service: BigQuery", function() {
     it('getDisplaysPerCountry should handle failures',function(done){
       return googleBigQueryService
               .getDisplaysPerCountry()
+              .then(done,function(e){
+                expect(e).to.be.truely;
+                expect(e).to.equal(expectedError)
+                done();
+              });
+    });
+    it('getActiveCompaniesByDay should handle failures',function(done){
+      return googleBigQueryService
+              .getActiveCompaniesByDay()
+              .then(done,function(e){
+                expect(e).to.be.truely;
+                expect(e).to.equal(expectedError)
+                done();
+              });
+    });
+    it('getRetention should handle failures',function(done){
+      return googleBigQueryService
+              .getRetention()
               .then(done,function(e){
                 expect(e).to.be.truely;
                 expect(e).to.equal(expectedError)

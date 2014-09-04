@@ -414,5 +414,91 @@ angular.module('dashboard')
     return getDisplaysPerGrouping('country');
   };
 
+  //Retention plotted as a line graph, by day, as of as of 24-Apr-2014, calculated as
+  //the increase in the # of avg active companies for the last 60 days
+  //(# of avg active companies today - # of avg active companies as of 60 days ago)
+  // / the increase in the # of new companies for the last 60 days
+  //(# of total companies today - # of total companies as of 60 days ago)
+  // * 100
+  service.getRetention = function() {
+    var deferred = $q.defer();
+
+    $q.all([$http.get(API_ROOT+'/query/googleBigQuery/getActiveCompaniesByDay',{timeout:60000,cache:true}),
+      $http.get(API_ROOT+'/query/googleBigQuery/totalCompaniesByDay',{timeout:60000,cache:true})])
+      .then(function(results){
+        var today = new Date()
+          , startDate
+          , avgResult = []
+          , avgActiveCompaniesByDay = {}
+          , totalCompaniesByDay = {};
+
+        var averageCompanies = queryHelpersService.calculateNormalizedValues(_.map(results[0].data.rows,
+                        function(item){
+                           return {
+                              x : queryHelpersService.parseSlashDate(item.f[0].v),
+                              y : parseInt(item.f[1].v)
+                            };
+                        }),60);
+        for(var x=0; x < averageCompanies.length; x++) {
+          var item = averageCompanies[x];
+          avgActiveCompaniesByDay[item.x] = item.y;
+        }
+
+
+        for(var y=0; y < results[1].data.rows.length; y++) {
+          var item2 = results[1].data.rows[y];
+          if(y === 0){
+            //since the get total companies by day endpoint is set to start on the start of this metric, use it as the start date
+            startDate = queryHelpersService.parseSlashDate(item2.f[0].v);
+          }
+
+          totalCompaniesByDay[queryHelpersService.parseSlashDate(item2.f[0].v)] = parseInt(item2.f[1].v);
+        }
+
+        var i = new Date(startDate);
+        for(; i <= today; i.setDate(i.getDate() + 1)) {
+
+          var sixtyDaysAgo = new Date(i);sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+          var avgCurrentActiveCompanies = avgActiveCompaniesByDay[i]
+            , avgActiveCompanies60DaysAgo = sixtyDaysAgo > startDate ? avgActiveCompaniesByDay[sixtyDaysAgo]:avgActiveCompaniesByDay[startDate]
+            , currentTotalCompanies = totalCompaniesByDay[i]
+            , totalCompanies60DaysAgo = sixtyDaysAgo > startDate ? totalCompaniesByDay[sixtyDaysAgo]:totalCompaniesByDay[startDate];
+
+          // if no data was returned for a day, assign the associated count to 0
+          if(_.isUndefined(avgCurrentActiveCompanies)){
+            avgCurrentActiveCompanies = 0;
+          }if(_.isUndefined(avgActiveCompanies60DaysAgo)){
+            avgActiveCompanies60DaysAgo = 0;
+          }
+
+          if(_.isUndefined(currentTotalCompanies)){
+            currentTotalCompanies = 0;
+          }if(_.isUndefined(totalCompanies60DaysAgo)){
+            totalCompanies60DaysAgo = 0;
+          }
+          //prevent division by zero. see https://trello.com/c/NVE0tUBc/68-retention-line-graph
+          if(totalCompanies60DaysAgo === currentTotalCompanies ) {
+            if(i > startDate){
+              console.debug('current total companies === total companies 60 days previous for ',i);
+            }
+            currentTotalCompanies++;
+          }
+
+          avgResult.push({
+            x:new Date(i),
+            y :(avgCurrentActiveCompanies - avgActiveCompanies60DaysAgo) / (currentTotalCompanies - totalCompanies60DaysAgo)
+          });
+
+
+
+        }// for i
+        deferred.resolve([{key:'average',values:avgResult}]);
+      })
+      .then(null,deferred.reject);
+
+    return deferred.promise;
+  };//retention
+
+
   return service;
 }]);
