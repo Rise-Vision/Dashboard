@@ -136,6 +136,12 @@ angular.module('dashboard')
     isDateWithinMonth : function(d,monthsAgo) {
       var d2 = this.getMonthsAgo(monthsAgo);
       return (d.getFullYear() === d2.getFullYear() && d.getMonth() === d2.getMonth());
+    },
+
+    //round {{val}} to {{d}} number of decimal places
+    roundDecimales : function (val,d){
+      var shift = Math.pow(10,d);
+      return Math.round(val * shift) / shift;
     }
   };//return
 }]);

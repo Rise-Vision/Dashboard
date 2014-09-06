@@ -20,8 +20,15 @@ describe('Services: Query Helpers', function(){
     expect(queryHelpersService).to.respondTo('getMonthsAgo');
     expect(queryHelpersService).to.respondTo('isDateWithinMonths');
     expect(queryHelpersService).to.respondTo('isDateWithinMonth');
+    expect(queryHelpersService).to.respondTo('roundDecimales');
   });
 
+  describe('roundDecimales',function(){
+    it('should round to the nearest decimal place',function(){
+      expect(queryHelpersService.roundDecimales(10.45,1)).to.equal(10.5);
+      expect(queryHelpersService.roundDecimales(10.44,1)).to.equal(10.4);
+    });
+  });
 
   describe('awesomeMonthDateParser',function(){
     var testDate = new Date('June 1 2014');

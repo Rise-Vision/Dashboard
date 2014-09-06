@@ -3,29 +3,38 @@
 /*global d3:false */
 
 angular.module('dashboard')
-  .directive('lineGraph', ['gooddataQueryService','commonMetricService','$q',
-    function(gooddataQueryService,commonMetricService,$q){
+  .directive('lineGraph', ['gooddataQueryService','commonMetricService','$q','googleBigQueryService',
+    function(gooddataQueryService,commonMetricService,$q,googleBigQueryService){
      return {
       restrict: 'E',
       scope: {graph:'=graph'},
       templateUrl: 'view/common-line-chart.html',
       link: function (scope) {
-        var query, yAxisLabel;
+        var query, yAxisLabel,yAxisFormat;
         switch(scope.graph){
           case 'Touch Index':
             query = gooddataQueryService.getTouchesByDay;
             yAxisLabel = 'Touches';
+            yAxisFormat = '';
             scope.id = commonMetricService.generateChartId('dailyTouchesLineGraph');
             break;
           case 'Average Response Time':
             query = gooddataQueryService.getResponseTimeByMonth;
             scope.id = commonMetricService.generateChartId('responseTimeChart');
+            yAxisFormat = '';
             yAxisLabel = 'Minutes';
           break;
           case 'Zendesk Resolution Time':
             query = gooddataQueryService.getFullResolutionTimesPerMonth;
             yAxisLabel = 'Hours';
+            yAxisFormat = '.1';
             scope.id = commonMetricService.generateChartId('zendeskResolutionTimeChart');
+          break;
+          case 'Retention':
+            scope.id = commonMetricService.generateChartId('retentionLineChart');
+            query = googleBigQueryService.getRetention;
+            yAxisLabel = 'Retention %';
+            yAxisFormat = '.2%';
           break;
           default:
             query = function(){
@@ -56,7 +65,7 @@ angular.module('dashboard')
 
             chart.yAxis
               .axisLabel(yAxisLabel)
-              .tickFormat(d3.format(',.f.2'));
+              .tickFormat(d3.format(yAxisFormat));
 
             d3.select('#'+scope.id)
               .datum(result)
