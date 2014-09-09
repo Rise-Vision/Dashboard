@@ -24,6 +24,10 @@ To run unit test for a single run, do
 gulp test-ci
 ```
 
+Facilator
+------
+[Simon Ramsay](https://github.com/nexus-uw)
+
 Continuous Deployment
 ----
 ### Monitoring CI Builds
