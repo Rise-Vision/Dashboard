@@ -90,6 +90,15 @@
               </span>
             </a>
           </th>
+          <th ng-click="orderByField='maintainer'; reverseSort = !reverseSort">
+            <a >
+              Maintainer
+              <span ng-show="orderByField == 'maintainer'">
+                <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
+                <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
+              </span>
+            </a>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -102,6 +111,7 @@
           <td >{{repo.starred}}</td>
           <td >{{(repo.openIssues !== null ? repo.openIssues : '-')}}</td>
           <td >{{(repo.tests !== null ? repo.tests : '-')}}</td>
+          <td >{{(repo.maintainer !== null ? repo.maintainer : '-')}}</td>
         </tr>
       </tbody>
       <tfoot>
@@ -114,6 +124,7 @@
           <td>{{data|filter:exposure.filter|sumByKey:'starred'}}</td>
           <td>{{data|filter:exposure.filter|sumByKey:'openIssues'}}</td>
           <td>{{data|filter:exposure.filter|sumByKey:'tests'}}</td>
+          <td></td>
         </tr>
       </tfoot>
 
