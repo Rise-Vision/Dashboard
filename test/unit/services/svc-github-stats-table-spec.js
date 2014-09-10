@@ -67,7 +67,7 @@ describe("Services: githubQueryService", function() {
                   "starred" : 0,
                   'openIssues' : 0,
                   'tests':0,
-                  'maintainer':'tim cook'
+                  'facilitator':{displayName:'OctoCat',url:'http://github.com/OcotoCat',isGuess:false}
                 }
               ]});
             break;//getStats
@@ -116,7 +116,7 @@ describe("Services: githubQueryService", function() {
               .then(function(result){
                 expect(result).to.be.an('Array');
                 expect(result).to.have.length.above(0);
-                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues','tests','maintainer'];
+                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues','tests','facilitator'];
                 for(var i = 0; i < expectedProperties.length; i++) {
                   expect(result[0]).to.have.property(expectedProperties[i]);
                 }

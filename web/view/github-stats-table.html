@@ -2,7 +2,7 @@
 <div class="statsTable" >
   <h3>Github Stats</h3>
   <br>
-  <div class="table-responsive col-lg-offset-2 col-lg-8" ng-show="!errorMessage && !showSpinner">
+  <div class="table-responsive col-lg-offset-1 col-lg-10" ng-show="!errorMessage && !showSpinner">
     <table class="table table-bordered" style="margin-bottom: 0">
       <thead>
         <tr>
@@ -90,10 +90,10 @@
               </span>
             </a>
           </th>
-          <th ng-click="orderByField='maintainer'; reverseSort = !reverseSort">
+          <th ng-click="orderByField='facilitator.displayName'; reverseSort = !reverseSort">
             <a >
-              Maintainer
-              <span ng-show="orderByField == 'maintainer'">
+              Facilitator
+              <span ng-show="orderByField == 'facilitator.displayName'">
                 <i class="icon ion-arrow-up-a" ng-show="!reverseSort"></i>
                 <i class="icon ion-arrow-down-a" ng-show="reverseSort"></i>
               </span>
@@ -111,7 +111,12 @@
           <td >{{repo.starred}}</td>
           <td >{{(repo.openIssues !== null ? repo.openIssues : '-')}}</td>
           <td >{{(repo.tests !== null ? repo.tests : '-')}}</td>
-          <td >{{(repo.maintainer !== null ? repo.maintainer : '-')}}</td>
+          <td ng-if="repo.facilitator !== null">
+            <a ng-href="{{repo.facilitator.url}}" target="_blank">
+              {{repo.facilitator.displayName}}
+            </a>
+          </td>
+          <td ng-if="repo.facilitator === null">-</td>
         </tr>
       </tbody>
       <tfoot>
