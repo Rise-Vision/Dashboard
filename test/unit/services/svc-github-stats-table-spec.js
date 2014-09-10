@@ -66,7 +66,8 @@ describe("Services: githubQueryService", function() {
                   "watched" : 0,
                   "starred" : 0,
                   'openIssues' : 0,
-                  'tests':0
+                  'tests':0,
+                  'maintainer':'tim cook'
                 }
               ]});
             break;//getStats
@@ -115,7 +116,7 @@ describe("Services: githubQueryService", function() {
               .then(function(result){
                 expect(result).to.be.an('Array');
                 expect(result).to.have.length.above(0);
-                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues','tests'];
+                var expectedProperties = ['name','fullName','isPrivate','authors','commits','forked','watched','starred','releases','pullRequests','timelines','openIssues','tests','maintainer'];
                 for(var i = 0; i < expectedProperties.length; i++) {
                   expect(result[0]).to.have.property(expectedProperties[i]);
                 }
