@@ -24,7 +24,7 @@ To run unit test for a single run, do
 gulp test-ci
 ```
 
-Facilator
+Facilitator
 ------
 [Simon Ramsay](https://github.com/nexus-uw)
 
