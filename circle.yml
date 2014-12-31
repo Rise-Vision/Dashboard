@@ -1,6 +1,6 @@
 general:
   artifacts:
-    - dist.tar.gz
+    - dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz
 dependencies:
   pre:
     - npm install -g gulp
@@ -20,8 +20,8 @@ deployment:
       - NODE_ENV=stage gulp config
       - NODE_ENV=stage gulp sass
       - NODE_ENV=stage gulp build
-      - tar czfv dist.tar.gz dist
-      - sleep 10
+      - tar czfv dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz dist
+      - rsync --chmod=u+rwx,g+rwx,o+rwx "dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz" $DEPLOYMENT_SERVER_USERNAME@$DEPLOYMENT_SERVER:/tmp/artifacts
       - ./call-rundeck-job.sh $RUNDECK_SERVER $RUNDECK_PR_JOB_ID $RUNDECK_TOKEN "-buildNumber $CIRCLE_BUILD_NUM"
   production:
     branch: master
