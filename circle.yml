@@ -1,6 +1,9 @@
 general:
   artifacts:
     - dist.tar.gz
+dependencies:
+  post:
+    - bower install --force-latest
 test:
   override:
     - gulp config
