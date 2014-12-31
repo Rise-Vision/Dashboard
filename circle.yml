@@ -12,7 +12,8 @@ deployment:
   staging:
     branch: /(feature|fix|chore).*/
     commands:
-
+      - echo "Should deploy to staging here"
   production:
     branch: master
     commands:
+      - echo "Should deploy to master here"
