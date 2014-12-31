@@ -3,7 +3,7 @@ general:
     - dist.tar.gz
 dependencies:
   pre:
-    npm install -g gulp
+    - npm install -g gulp
   post:
     - bower install --force-latest
 test:
