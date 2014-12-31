@@ -1,0 +1,18 @@
+general:
+  artifacts:
+    - dist.tar.gz
+test:
+  override:
+    - gulp config
+    - gulp sass
+    - gulp lint
+    - gulp test-ci
+    - gulp metrics
+deployment:
+  staging:
+    branch: /(feature|fix|chore).*/
+    commands:
+
+  production:
+    branch: master
+    commands:
