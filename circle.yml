@@ -21,6 +21,7 @@ deployment:
       - NODE_ENV=stage gulp sass
       - NODE_ENV=stage gulp build
       - tar czfv dist.tar.gz dist
+      - sleep 10
       - ./call-rundeck-job.sh $RUNDECK_SERVER $RUNDECK_PR_JOB_ID $RUNDECK_TOKEN "-buildNumber $CIRCLE_BUILD_NUM"
   production:
     branch: master
