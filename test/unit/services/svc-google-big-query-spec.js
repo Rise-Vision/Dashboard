@@ -380,7 +380,7 @@ describe("Service: BigQuery", function() {
                 .getNewCompaniesByDay()
                 .then(function(result){
                   if((new Date()).getDate() === 2)
-                    expect(result.today).to.equal(5);
+                    expect(result.yesterday).to.equal(5);
                   else
                     expect(result.yesterday).to.equal(2);
                   done();
