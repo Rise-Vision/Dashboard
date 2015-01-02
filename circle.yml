@@ -1,0 +1,33 @@
+general:
+  artifacts:
+    - dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz
+dependencies:
+  pre:
+    - npm install -g gulp
+  post:
+    - bower install --force-latest
+test:
+  override:
+    - gulp config
+    - gulp sass
+    - gulp lint
+    - gulp test-ci
+    - gulp metrics
+deployment:
+  staging:
+    branch: /(feature|fix|chore).*/
+    commands:
+      - NODE_ENV=stage gulp config
+      - NODE_ENV=stage gulp sass
+      - NODE_ENV=stage gulp build
+      - tar czfv dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz dist
+      - rsync --chmod=u+rwx,g+rwx,o+rwx "dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz" $DEPLOYMENT_SERVER_USERNAME@$DEPLOYMENT_SERVER:/tmp/artifacts
+      - ./call-rundeck-job.sh $RUNDECK_SERVER $RUNDECK_PR_JOB_ID $RUNDECK_TOKEN "-buildNumber $CIRCLE_BUILD_NUM"
+  production:
+    branch: master
+    commands:
+      - NODE_ENV=prod gulp test-ci
+      - NODE_ENV=prod gulp build
+      - tar czfv dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz dist
+      - rsync --chmod=u+rwx,g+rwx,o+rwx "dist.$CIRCLE_PROJECT_REPONAME.$CIRCLE_BUILD_NUM.tar.gz" $DEPLOYMENT_SERVER_USERNAME@$DEPLOYMENT_SERVER:/tmp/artifacts
+      - ./call-rundeck-job.sh $RUNDECK_SERVER $RUNDECK_MASTER_JOB_ID $RUNDECK_TOKEN "-buildNumber $CIRCLE_BUILD_NUM"
